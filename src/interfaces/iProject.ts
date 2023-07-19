@@ -4,6 +4,14 @@ export interface IProject {
     id: number;
     name: string;
     description: string;
-    deadline: string;
+    deadline: Date;
     submissions: Submission[];
+}
+
+export const IProjectDefaults = {
+    id: -1,
+    name: "",
+    description: "",
+    deadline: new Date(),
+    submissions: []
 }

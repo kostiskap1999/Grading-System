@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import '../styles/login.css';
+import '../styles/login.scss';
 import { User } from '../model/user';
 import { Student } from '../model/student';
 import { Professor } from '../model/professor';
@@ -9,13 +9,13 @@ export default function Login() {
   const [value, useValue] = useState(0)
 
   const handleSubmit = () => {
-    var user = new User({id: 0, username: "lala", role: "admin"})
+    var user = new User()
     console.log(user)
-    var student = new Student({id: 0, username: "lala", role: "admin"}, {subjects: [], projects: []})
+    var student = new Student()
     console.log(student)
-    var professor = new Professor({id: 0, username: "lala", role: "admin"}, {subjects: [], projects: []}, {test: "aaa"})
+    var professor = new Professor()
     console.log(professor)
-    var admin = new Admin({id: 0, username: "lala", role: "admin"}, {subjects: [], projects: []}, {test: "sus"})
+    var admin = new Admin()
     console.log(admin)
     admin.joinClass()
   }
@@ -25,15 +25,15 @@ export default function Login() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="login">
+      <header className="login-header">
 
         <form onSubmit={handleSubmit}>
           <div>
             <label>
               <div>Username</div>
               <input
-                type="password"
+                type="text"
                 value={value}
                 onChange={handleChange}
               />

@@ -1,5 +1,5 @@
-import { IProject } from "../interfaces/iProject";
-import { ISubject } from "../interfaces/iSubject";
+
+import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { Project } from "./project";
 
 export class Subject {
@@ -8,7 +8,7 @@ export class Subject {
     description: string;
     projects: Project[];
 
-    constructor({id, name, description, projects}: ISubject) {
+    constructor({id, name, description, projects}: ISubject = ISubjectDefaults) {
         this.id = id
         this.name = name
         this.description = description

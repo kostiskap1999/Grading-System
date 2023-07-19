@@ -3,3 +3,9 @@ export interface IUser {
     username: string;
     role: string;
 }
+
+export const IUserDefaults = {
+    id: -1,
+    username: "",
+    role: ""
+}

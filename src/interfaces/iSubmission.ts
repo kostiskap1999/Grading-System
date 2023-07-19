@@ -1,9 +1,17 @@
-import { User } from "../model/user";
+import { Student } from "../model/student";
 
 export interface ISubmission {
     id: number;
-    student: User;
+    student: Student;
     code: string;
-    date: string;
+    date: Date;
     grade: number;
+}
+
+export const ISubmissionDefaults = {
+    id: -1,
+    student: new Student(),
+    code: "",
+    date: new Date(),
+    grade: 0
 }

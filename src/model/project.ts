@@ -1,14 +1,14 @@
-import { IProject } from "../interfaces/iProject";
+import { IProject, IProjectDefaults } from "../interfaces/iProject";
 import { Submission } from "./submission";
 
 export class Project {
     id: number;
     name: string;
     description: string;
-    deadline: string;
+    deadline: Date;
     submissions: Submission[];
 
-    constructor({id, name, description, deadline, submissions}: IProject) {
+    constructor({id, name, description, deadline, submissions}: IProject = IProjectDefaults) {
         this.id = id
         this.name = name
         this.description = description

@@ -6,3 +6,10 @@ export interface ISubject {
     description: string;
     projects: Project[];
 }
+
+export const ISubjectDefaults = {
+    id: -1,
+    name: "",
+    description: "",
+    projects: []
+}
