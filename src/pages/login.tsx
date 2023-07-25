@@ -1,41 +1,37 @@
 import React, {useState} from 'react';
 import '../styles/login.scss';
-import { User } from '../model/user';
-import { Student } from '../model/student';
-import { Professor } from '../model/professor';
-import { Admin } from '../model/admin';
+import { login } from '../fetches/login';
 
 export default function Login() {
-  const [value, useValue] = useState(0)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [isEnabled, setEnabled] = useState(true)
 
-  const handleSubmit = () => {
-    var user = new User()
+  const handleSubmit = async () => {
+    const user = await login({username, password})
     console.log(user)
-    var student = new Student()
-    console.log(student)
-    var professor = new Professor()
-    console.log(professor)
-    var admin = new Admin()
-    console.log(admin)
-    admin.joinClass()
   }
 
-  const handleChange = () => {
-    console.log('changed')
-  }
+  const handleKeyUp = () => {
+    if (username.length > 0 && password.length > 0)
+      setEnabled(false);
+    else
+      setEnabled(true);
+  };
 
   return (
     <div className="login">
       <header className="login-header">
 
-        <form onSubmit={handleSubmit}>
+        <form action="#" onSubmit={handleSubmit}>
           <div>
             <label>
               <div>Username</div>
               <input
                 type="text"
-                value={value}
-                onChange={handleChange}
+                value={username}
+                onKeyUp={handleKeyUp}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </label>
           </div>
@@ -47,17 +43,17 @@ export default function Login() {
               <div>Password</div>
               <input
                 type="password"
-                value={value}
-                onChange={handleChange}
+                value={password}
+                onKeyUp={handleKeyUp}
+                onChange={(event) => setPassword(event.target.value)}
               />
             </label>
           </div>
-          
-          <input type="submit" value="Submit" />
+          <button disabled={isEnabled}>
+            Log In
+          </button>  
         </form>
-        <button
-          onClick={handleSubmit}
-        >Test</button>
+        
       
       </header>
     </div>

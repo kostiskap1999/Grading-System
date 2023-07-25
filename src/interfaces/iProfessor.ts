@@ -1,7 +1,3 @@
-export interface IProfessor {
-    test: string
-}
+export interface IProfessor {}
 
-export const IProfessorDefaults = {
-    test: "Default"
-}
+export const IProfessorDefaults = {}

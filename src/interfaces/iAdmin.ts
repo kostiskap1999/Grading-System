@@ -1,2 +1,3 @@
-export interface IAdmin {
-}
+export interface IAdmin {}
+
+export const IAdminDefaults = {}

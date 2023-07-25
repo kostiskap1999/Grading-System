@@ -1,0 +1,14 @@
+[
+    {
+        "id": 12,
+        "name": "Maths",
+        "description": "We do maths here",
+        "projects": []  
+    },
+    {
+        "id": 34,
+        "name": "Programming",
+        "description": "We learn C here",
+        "projects": [2345]
+    }
+]

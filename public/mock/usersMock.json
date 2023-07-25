@@ -1,0 +1,22 @@
+[
+    {
+        "id" : 123,
+        "username": "John Adminson",
+        "role": "admin"
+    },
+    {
+        "id" : 456,
+        "username": "Maria Professorlin",
+        "role": "professor"
+    },
+    {
+        "id" : 789,
+        "username": "Jacob Students",
+        "role": "student"
+    },
+    {
+        "id" : 0,
+        "username": "Nate Guest",
+        "role": "user"
+    }
+]

@@ -1,0 +1,18 @@
+{ "data": [
+    {
+        "username": "admin",
+        "password": "123"
+    },
+    {
+        "username": "professor",
+        "password": "456"
+    },
+    {
+        "username": "student",
+        "password": "789"
+    },
+    {
+        "username": "guest",
+        "password": "0"
+    }
+]}

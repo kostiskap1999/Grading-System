@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1357,
+        "student": 123,
+        "code": "alert('Hello World');",
+        "date": "20230724",
+        "grade": 10,
+        "comment": "Perfect."
+    },
+    {
+        "id": 2468,
+        "student": 789,
+        "code": "alert('Hello World')",
+        "date": "20230725",
+        "grade": 9.5,
+        "comment": "Forgot semicolon."
+    }
+]

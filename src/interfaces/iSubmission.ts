@@ -6,6 +6,7 @@ export interface ISubmission {
     code: string;
     date: Date;
     grade: number;
+    comment: string;
 }
 
 export const ISubmissionDefaults = {
@@ -13,5 +14,6 @@ export const ISubmissionDefaults = {
     student: new Student(),
     code: "",
     date: new Date(),
-    grade: 0
+    grade: 0,
+    comment: ""
 }

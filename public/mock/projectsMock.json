@@ -1,0 +1,9 @@
+[
+    {
+        "id": 2345,
+        "name": "Programming Project 1",
+        "description": "How do we alert a message on screen? For the sake of this project, semicolons are mandatory.",
+        "deadline": "2024",
+        "submissions": [1357, 2468]
+    }  
+]
