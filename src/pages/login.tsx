@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
 import '../styles/login.scss';
 import { login } from '../fetches/login';
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function LoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [isEnabled, setEnabled] = useState(true)
+  const navigate = useNavigate()
 
   const handleSubmit = async () => {
     const user = await login({username, password})
-    console.log(user)
+    
+    if (user.id != -1){
+      navigate("/home", { state: user })
+    }
   }
 
   const handleKeyUp = () => {
@@ -53,8 +58,6 @@ export default function Login() {
             Log In
           </button>  
         </form>
-        
-      
       </header>
     </div>
   );
