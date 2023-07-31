@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
-import React, { Profiler, useState } from "react";
+import React from "react";
 import reportWebVitals from "./reportWebVitals";
-import App from "./pages/app";
+import App from "./routing/app";
 
 
 const root = ReactDOM.createRoot(
@@ -17,5 +17,3 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-
