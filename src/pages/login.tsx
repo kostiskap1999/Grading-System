@@ -2,17 +2,27 @@ import React, {useState} from 'react';
 import '../styles/login.scss';
 import { login } from '../fetches/login';
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from 'universal-cookie';
+
+import { LOGIN_USER } from "../store/types";
+import { useDispatch } from 'react-redux';
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [isEnabled, setEnabled] = useState(true)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
     const user = await login({username, password})
     
     if (user.id != -1){
+      // const cookies = new Cookies();
+      // cookies.set('user', JSON.stringify(user), { path: '/' });
+      dispatch({ type: LOGIN_USER });
       navigate("/home", { state: user })
     }
   }
@@ -28,7 +38,7 @@ export default function LoginPage() {
     <div className="login">
       <header className="login-header">
 
-        <form action="#" onSubmit={handleSubmit}>
+        <form action="#" onSubmit={(e) => handleSubmit(e)}>
           <div>
             <label>
               <div>Username</div>

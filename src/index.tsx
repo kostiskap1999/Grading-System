@@ -1,23 +1,8 @@
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, Outlet, redirect } from "react-router-dom";
-import LoginPage from "./pages/login";
-import HomePage from "./pages/home";
-import React from "react";
+import React, { Profiler, useState } from "react";
 import reportWebVitals from "./reportWebVitals";
+import App from "./pages/app";
 
-export default function App() {
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Outlet />}>
-          <Route index element={<LoginPage />} />
-          <Route path="home" element={<HomePage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
-}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
