@@ -3,6 +3,7 @@ import '../styles/login.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LOGOUT_USER } from '../store/types';
+import Cookies from 'universal-cookie';
 
 export default function HomePage() {
   const [isEnabled, setEnabled] = useState(true)
@@ -10,7 +11,8 @@ export default function HomePage() {
   const dispatch = useDispatch()
 
   const { state } = useLocation();
-  const user = state
+  const cookies = new Cookies();
+  const user = cookies.get('user')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

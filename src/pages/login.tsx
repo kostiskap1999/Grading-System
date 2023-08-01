@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { LOGIN_USER } from "../store/types";
 import { useDispatch } from 'react-redux';
+import Cookies from 'universal-cookie';
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -19,6 +20,8 @@ export default function LoginPage() {
     const user = await login({username, password})
     
     if (user.id != -1){
+      const cookies = new Cookies();
+      cookies.set('user', JSON.stringify(user), { path: '/' });
       dispatch({ type: LOGIN_USER });
       navigate("/home", { state: user })
     }
