@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export type RouteType = {
     index?: boolean,
-    element: JSX.Element,
+    element: ReactNode,
     protected: boolean,
     path: string,
     sidebarProps?: {

@@ -7,6 +7,7 @@ import ProtectedRoute from "./protectedRoute";
 import { PersistGate } from "redux-persist/integration/react";
 import PublicRoute from "./publicRoute";
 import appRoutes from "./appRoutes";
+import DashboardItem from "../components/dashboardItem";
 
 export default function App() {
     return (
@@ -19,14 +20,14 @@ export default function App() {
                           route.index ? (
                             <Route index element={
                                 route.protected ?
-                                    <ProtectedRoute>{route.element}</ProtectedRoute>
+                                    <ProtectedRoute><DashboardItem item={route.element}/></ProtectedRoute>
                                 :
                                     <PublicRoute>{route.element}</PublicRoute>
                             } />
                           ) : (
                             <Route path={route.path} element={
                                 route.protected ?
-                                    <ProtectedRoute>{route.element}</ProtectedRoute>
+                                    <ProtectedRoute><DashboardItem item={route.element}/></ProtectedRoute>
                                 :
                                     <PublicRoute>{route.element}</PublicRoute>
                             }/>
