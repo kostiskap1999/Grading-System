@@ -6,6 +6,7 @@ import store, { persistor } from "../store/store";
 import ProtectedRoute from "./protectedRoute";
 import { PersistGate } from "redux-persist/integration/react";
 import PublicRoute from "./publicRoute";
+import appRoutes from "./appRoutes";
 
 export default function App() {
     return (
@@ -14,16 +15,24 @@ export default function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Outlet />} />
-                        <Route index element={
-                            <PublicRoute>
-                                <LoginPage />
-                            </PublicRoute>
-                        } />
-                        <Route path="/home" element={
-                            <ProtectedRoute>
-                                <HomePage />
-                            </ProtectedRoute>}
-                        />
+                        {appRoutes.map((route, index) => (
+                          route.index ? (
+                            <Route index element={
+                                route.protected ?
+                                    <ProtectedRoute>{route.element}</ProtectedRoute>
+                                :
+                                    <PublicRoute>{route.element}</PublicRoute>
+                            } />
+                          ) : (
+                            <Route path={route.path} element={
+                                route.protected ?
+                                    <ProtectedRoute>{route.element}</ProtectedRoute>
+                                :
+                                    <PublicRoute>{route.element}</PublicRoute>
+                            }/>
+                          )
+                        ))}
+                        
                     </Routes>
                 </BrowserRouter>
             </PersistGate>
