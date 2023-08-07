@@ -27,7 +27,7 @@ export default function HomePage() {
       <form action="#" onSubmit={(event) => handleSubmit(event)}>
           <button>
             Log Out
-          </button>  
+          </button>
       </form>
     </div>
     

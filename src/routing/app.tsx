@@ -3,8 +3,9 @@ import LoginPage from "../pages/login";
 import HomePage from "../pages/home";
 import { Provider } from "react-redux";
 import store, { persistor } from "../store/store";
-import ProtectedRoute from "./protect";
+import ProtectedRoute from "./protectedRoute";
 import { PersistGate } from "redux-persist/integration/react";
+import PublicRoute from "./publicRoute";
 
 export default function App() {
     return (
@@ -13,7 +14,11 @@ export default function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Outlet />} />
-                        <Route index element={<LoginPage />} />
+                        <Route index element={
+                            <PublicRoute>
+                                <LoginPage />
+                            </PublicRoute>
+                        } />
                         <Route path="/home" element={
                             <ProtectedRoute>
                                 <HomePage />
