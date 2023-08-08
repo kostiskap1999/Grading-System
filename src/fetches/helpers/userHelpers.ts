@@ -7,7 +7,7 @@ import { Student } from "../../model/student";
 import { User } from "../../model/user";
 import { fetchUsers } from "../fetchUsers";
 
-export async function fetchUserRole( id: number) {
+export async function fetchUserRole(id: number) {
     const users: IUser[] = await fetchUsers()
     var role: string = ""
 

@@ -16,14 +16,14 @@ export default function App() {
                         <Route path="/" element={<Outlet />} />
                         {appRoutes.map((route, index) => (
                           route.index ? (
-                            <Route index element={
+                            <Route index key={index} element={
                                 route.protected ?
                                     <ProtectedRoute><DashboardItem item={route.element}/></ProtectedRoute>
                                 :
                                     <PublicRoute>{route.element}</PublicRoute>
                             } />
                           ) : (
-                            <Route path={route.path} element={
+                            <Route path={route.path} key={index} element={
                                 route.protected ?
                                     <ProtectedRoute><DashboardItem item={route.element}/></ProtectedRoute>
                                 :

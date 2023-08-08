@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { LOGIN_USER } from "../store/types";
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
+import { fetchToken } from '../fetches/helpers/tokenHelpers';
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -17,13 +18,15 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const user = await login({username, password})
+    const loggedData = await login({username, password})
+    const user = loggedData.loggedUser
+    const token = loggedData.token
     
     if (user.id !== -1){
       const cookies = new Cookies();
-      cookies.set('user', JSON.stringify(user), { path: '/' });
+      cookies.set('token', JSON.stringify(token), { path: '/' });
       dispatch({ type: LOGIN_USER });
-      navigate("/home", { state: user })
+      navigate("/home")
     }
   }
 
