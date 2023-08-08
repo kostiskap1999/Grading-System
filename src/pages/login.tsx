@@ -19,7 +19,7 @@ export default function LoginPage() {
 
     const user = await login({username, password})
     
-    if (user.id != -1){
+    if (user.id !== -1){
       const cookies = new Cookies();
       cookies.set('user', JSON.stringify(user), { path: '/' });
       dispatch({ type: LOGIN_USER });

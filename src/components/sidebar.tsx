@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles/login.scss';
-import { Drawer, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Drawer, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import appRoutes from '../routing/appRoutes';
 import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from '@mui/icons-material';

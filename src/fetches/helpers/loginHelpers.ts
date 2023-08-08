@@ -25,7 +25,7 @@ export async function checkUserbase({username, password}: ICredentials) {
 
     //Extract user from userbase
     userbase.forEach((user: ICredentialsWithID) => {
-        if(user.username == username && user.password == password)
+        if(user.username === username && user.password === password)
             loggedID = user.id
     });
 

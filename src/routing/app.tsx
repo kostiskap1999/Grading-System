@@ -1,6 +1,4 @@
-import { BrowserRouter, Routes, Route, Outlet, redirect } from "react-router-dom";
-import LoginPage from "../pages/login";
-import HomePage from "../pages/home";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import store, { persistor } from "../store/store";
 import ProtectedRoute from "./protectedRoute";

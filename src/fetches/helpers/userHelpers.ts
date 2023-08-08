@@ -13,7 +13,7 @@ export async function fetchUserRole( id: number) {
 
     //Extract role from users
     users.forEach((user: IUser) => {
-        if(user.id == id)
+        if(user.id === id)
             role = user.role
     });
 
@@ -26,12 +26,12 @@ export async function fetchUser(id: number) {
 
     //Extract user from users
     users.forEach((user: IUser) => {
-        if(user.id == id){
-            if(user.role == "admin")
+        if(user.id === id){
+            if(user.role === "admin")
                 loggedUser = new Admin(user)
-            else if(user.role == "professor")
+            else if(user.role === "professor")
                 loggedUser = new Professor(user)
-            else if(user.role == "student")
+            else if(user.role === "student")
                 loggedUser = new Student(user)
             else
                 loggedUser = new User(user)
