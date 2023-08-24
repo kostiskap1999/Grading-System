@@ -37,6 +37,24 @@ export async function fetchToken(id: number) {
     return token
 }
 
+export async function fetchIdFromToken() {
+    const tokens: IToken[] = await fetchTokens()
+    var id: number = -1
+
+    const cookies: Cookies = new Cookies();
+    const token: string = cookies.get('token')
+
+    //Extract token from users
+    tokens.forEach((t: IToken) => {
+        if(t.token === token)
+            id = t.id
+    });
+
+    if (id == -1)
+        alert("Error on assigning ID from token.")
+    return id
+}
+
 export async function CheckToken() {
     const tokens: IToken[] = await fetchTokens()
     var isValid: boolean = false

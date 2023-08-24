@@ -1,7 +1,6 @@
-export interface IStudent {
-    subjects: string[];
-    projects: string[];
-}
+import { IUser } from "./iUser";
+
+export interface IStudent extends IUser{}
 
 export const IStudentDefaults = {
     subjects: [],

@@ -3,14 +3,9 @@ import { IUser, IUserDefaults } from "../interfaces/iUser"
 import { User } from "./user"
 
 export class Student extends User{
-    subjects: string[] = []
-    projects: string[] = []
 
-    constructor(props: IUser = IUserDefaults, {subjects, projects}: IStudent = IStudentDefaults) {
+    constructor(props: IUser = IUserDefaults) {
         super(props)
-
-        this.subjects = subjects
-        this.projects = projects
     }
 
     joinClass(){

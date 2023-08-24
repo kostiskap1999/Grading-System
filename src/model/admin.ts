@@ -5,8 +5,8 @@ import { IUser, IUserDefaults } from "../interfaces/iUser"
 import { Professor } from "./professor"
 
 export class Admin extends Professor {
-    constructor(props: IUser = IUserDefaults, studProps: IStudent = IStudentDefaults, profProps: IProfessor = IProfessorDefaults, {}: IAdmin = IAdminDefaults) {
-        super(props, studProps, profProps)
+    constructor(props: IUser = IUserDefaults) {
+        super(props)
         
     }
 

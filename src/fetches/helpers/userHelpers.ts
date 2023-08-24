@@ -6,6 +6,7 @@ import { Professor } from "../../model/professor";
 import { Student } from "../../model/student";
 import { User } from "../../model/user";
 import { fetchUsers } from "../fetchUsers";
+import { fetchIdFromToken } from "./tokenHelpers";
 
 export async function fetchUserRole(id: number) {
     const users: IUser[] = await fetchUsers()
@@ -20,13 +21,19 @@ export async function fetchUserRole(id: number) {
     return role
 }
 
-export async function fetchUser(id: number) {
+export async function fetchUser(id?: number) {
     const users: IUser[] = await fetchUsers()
     var loggedUser: IUser = new User()
+    var loggedID: number
+
+    if(id == null)
+        loggedID = await fetchIdFromToken()
+    else
+        loggedID = id
 
     //Extract user from users
     users.forEach((user: IUser) => {
-        if(user.id === id){
+        if(user.id === loggedID){
             if(user.role === "admin")
                 loggedUser = new Admin(user)
             else if(user.role === "professor")

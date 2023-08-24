@@ -1,3 +1,5 @@
-export interface IAdmin {}
+import { IProfessor, IProfessorDefaults } from "./iProfessor";
 
-export const IAdminDefaults = {}
+export interface IAdmin extends IProfessor{}
+
+export const IAdminDefaults = {...IProfessorDefaults}
