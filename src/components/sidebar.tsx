@@ -36,7 +36,7 @@ export default function Sidebar() {
           }}
         >
             {appRoutes.map((route, index) => (
-                route.index ? <></> :
+                route.index ? <span key={index}></span> :
                     <ListItemButton
                         component={Link}
                         to={route.path}

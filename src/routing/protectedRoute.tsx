@@ -11,7 +11,6 @@ const ProtectedRoute = ({children}: IProtectedRouteProps) => {
   var isAuthorised = false
   const auth = useSelector((store: any) => store.authenticated);
 
-  console.log("2")
   useEffect(() => {
     async function checkAuthorization() {
       const authorized = await CheckToken()

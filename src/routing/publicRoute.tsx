@@ -9,7 +9,6 @@ interface IPublicRouteProps{
 const PublicRoute = ({children}: IPublicRouteProps) => {
   const auth = useSelector((store: any) => store.authenticated);
 
-  console.log("1")
   if (auth) {
     return <Navigate to="/home" replace />;
   }
