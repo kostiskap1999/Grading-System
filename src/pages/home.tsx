@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { IUser, IUserDefaults } from "../interfaces/iUser";
-import { fetchUser } from "../fetches/helpers/userHelpers";
-import { IAdmin, IAdminDefaults } from "../interfaces/iAdmin";
-import { IProfessor, IProfessorDefaults } from "../interfaces/iProfessor";
-import { IStudent, IStudentDefaults } from "../interfaces/iStudent";
+import { IUserDefaults } from "../interfaces/iUser";
+import { User } from "../model/user";
+import { fetchAllUserData } from "../fetches/helpers/massFetching";
 
 export default function HomePage() {
 
@@ -11,12 +9,14 @@ export default function HomePage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const userOBJ: IUser = await fetchUser()
+      const userOBJ: User = await fetchAllUserData()
+      
       setUser(userOBJ)
+      console.log(userOBJ)
     }
 
     fetchData()
-  })
+  }, [])
 
   return (
     <div style={{height: "100vh", display: "flex", flexDirection: "column"}}>

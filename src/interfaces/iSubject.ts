@@ -7,9 +7,19 @@ export interface ISubject {
     projects: Project[];
 }
 
+export interface ISubjectExtraData {
+    id: number,
+    projects: number[]
+}
+
 export const ISubjectDefaults = {
     id: -1,
     name: "",
     description: "",
+    projects: []
+}
+
+export const ISubjectExtraDataDefaults = {
+    id: -1,
     projects: []
 }

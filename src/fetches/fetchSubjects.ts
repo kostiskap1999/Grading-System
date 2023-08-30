@@ -1,9 +1,9 @@
-import { IUserExtraData } from "../interfaces/iUser";
-import { User } from "../model/user";
+import { ISubjectExtraData } from "../interfaces/iSubject";
+import { Subject } from "../model/subject";
 import { errorHandling } from "../util/error";
 
-export async function fetchUsers() {
-    const users: User[] = await fetch("mock/usersMock.json")
+export async function fetchSubjects() {
+    const subjects: Subject[] = await fetch("mock/subjectsMock.json")
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -12,11 +12,11 @@ export async function fetchUsers() {
         errorHandling(error)
     });
 
-    return users
+    return subjects
 }
 
-export async function fetchUsersExtraData() {
-    const usersExtraData: IUserExtraData[] = await fetch("mock/usersExtraDataMock.json")
+export async function fetchSubjectsExtraData() {
+    const subjectsExtraData: ISubjectExtraData[] = await fetch("mock/subjectsExtraDataMock.json")
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -25,5 +25,5 @@ export async function fetchUsersExtraData() {
         errorHandling(error)
     });
 
-    return usersExtraData
+    return subjectsExtraData
 }

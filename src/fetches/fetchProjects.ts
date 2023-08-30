@@ -1,9 +1,9 @@
-import { IUserExtraData } from "../interfaces/iUser";
-import { User } from "../model/user";
+import { IProjectExtraData } from "../interfaces/iProject";
+import { Project } from "../model/project";
 import { errorHandling } from "../util/error";
 
-export async function fetchUsers() {
-    const users: User[] = await fetch("mock/usersMock.json")
+export async function fetchProjects() {
+    const projects: Project[] = await fetch("mock/projectsMock.json")
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -12,11 +12,11 @@ export async function fetchUsers() {
         errorHandling(error)
     });
 
-    return users
+    return projects
 }
 
-export async function fetchUsersExtraData() {
-    const usersExtraData: IUserExtraData[] = await fetch("mock/usersExtraDataMock.json")
+export async function fetchProjectsExtraData() {
+    const projectsExtraData: IProjectExtraData[] = await fetch("mock/projectsExtraDataMock.json")
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -25,5 +25,6 @@ export async function fetchUsersExtraData() {
         errorHandling(error)
     });
 
-    return usersExtraData
+    return projectsExtraData
 }
+

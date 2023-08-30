@@ -1,9 +1,8 @@
 import { ISubmission, ISubmissionDefaults } from "../interfaces/iSubmission";
-import { Student } from "./student";
 
 export class Submission {
     id: number;
-    student: Student;
+    student: string;
     code: string;
     date: Date;
     grade: number;

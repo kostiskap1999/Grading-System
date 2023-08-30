@@ -8,10 +8,20 @@ export interface IProject {
     submissions: Submission[];
 }
 
+export interface IProjectExtraData {
+    id: number,
+    submissions: number[]
+}
+
 export const IProjectDefaults = {
     id: -1,
     name: "",
     description: "",
     deadline: new Date(),
+    submissions: []
+}
+
+export const IProjectExtraDataDefaults = {
+    id: -1,
     submissions: []
 }

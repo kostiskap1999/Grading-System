@@ -1,19 +1,19 @@
 // This is a list of helper functions to succinctly do the work that a hypothetical back-end would do
 
-import { IUser } from "../../interfaces/iUser";
+import { IUserExtraData, IUserExtraDataDefaults } from "../../interfaces/iUser";
 import { Admin } from "../../model/admin";
 import { Professor } from "../../model/professor";
 import { Student } from "../../model/student";
 import { User } from "../../model/user";
-import { fetchUsers } from "../fetchUsers";
+import { fetchUsers, fetchUsersExtraData } from "../fetchUsers";
 import { fetchIdFromToken } from "./tokenHelpers";
 
 export async function fetchUserRole(id: number) {
-    const users: IUser[] = await fetchUsers()
+    const users: User[] = await fetchUsers()
     var role: string = ""
 
     //Extract role from users
-    users.forEach((user: IUser) => {
+    users.forEach((user: User) => {
         if(user.id === id)
             role = user.role
     });
@@ -22,17 +22,18 @@ export async function fetchUserRole(id: number) {
 }
 
 export async function fetchUser(id?: number) {
-    const users: IUser[] = await fetchUsers()
-    var loggedUser: IUser = new User()
+    const users: User[] = await fetchUsers()
+    var loggedUser: User = new User()
     var loggedID: number
 
+    console.log(loggedUser instanceof User)
     if(id == null)
         loggedID = await fetchIdFromToken()
     else
         loggedID = id
 
     //Extract user from users
-    users.forEach((user: IUser) => {
+    users.forEach((user: User) => {
         if(user.id === loggedID){
             if(user.role === "admin")
                 loggedUser = new Admin(user)
@@ -47,3 +48,24 @@ export async function fetchUser(id?: number) {
 
     return loggedUser
 }
+
+export async function fetchUserExtraData(id?: number) {
+    const usersExtraData: IUserExtraData[] = await fetchUsersExtraData()
+    var loggedUserExtraData: IUserExtraData = IUserExtraDataDefaults
+    var loggedID: number
+
+    if(id == null)
+        loggedID = await fetchIdFromToken()
+    else
+        loggedID = id
+
+    //Extract user from users
+    usersExtraData.forEach((userExtraData: IUserExtraData) => {
+        if(userExtraData.id === loggedID){
+            loggedUserExtraData = userExtraData
+        }
+    });
+
+    return loggedUserExtraData
+}
+
