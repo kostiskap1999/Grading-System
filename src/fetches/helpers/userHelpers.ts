@@ -27,7 +27,6 @@ export async function fetchUser(id?: number) {
     var loggedUser: User = new User()
     var loggedID: number
 
-    console.log(loggedUser instanceof User)
     if(id == null)
         loggedID = await fetchIdFromToken()
     else
@@ -37,10 +36,10 @@ export async function fetchUser(id?: number) {
     users.forEach((user: User) => {
         if(user.id === loggedID){
             if(user.role === "admin")
-            //     loggedUser = new Admin(user)
-            // else if(user.role === "professor")
-            //     loggedUser = new Professor(user)
-            // else if(user.role === "student")
+                loggedUser = new Admin(user)
+            else if(user.role === "professor")
+                loggedUser = new Professor(user)
+            else if(user.role === "student")
                 loggedUser = new Student(user)
             else
                 loggedUser = new User(user)

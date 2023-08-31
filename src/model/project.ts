@@ -38,6 +38,7 @@ export class Project {
     }
 
     setSubmissions(submissions: Submission[]){
+        this.submissions = []
         submissions.forEach(submission => {
             this.submissions.push(new Submission(submission))
         });

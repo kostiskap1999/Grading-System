@@ -12,7 +12,6 @@ export default function HomePage() {
       const userOBJ: User = await fetchAllUserData()
       
       setUser(userOBJ)
-      console.log(userOBJ)
     }
 
     fetchData()

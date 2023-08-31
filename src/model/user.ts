@@ -20,7 +20,7 @@ export class User {
     }
 
     async setup(){
-        this.setSubjects(await this.getSubjects())
+        await this.setSubjects(await this.getSubjects())
     }
 
     async getSubjects() {
@@ -38,11 +38,12 @@ export class User {
         return userSubjectObjects
     }
 
-    setSubjects(subjects: Subject[]){
-        subjects.forEach(subject => {
+    async setSubjects(subjects: Subject[]){
+        this.subjects = []
+        for(const subject of subjects){
             var subjectOBJ = new Subject(subject)
-            subjectOBJ.setup()
+            await subjectOBJ.setup()
             this.subjects.push(subjectOBJ)
-        });
+        }
     }
 }

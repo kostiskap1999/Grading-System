@@ -37,8 +37,8 @@ export class Subject {
     }
 
     setProjects(projects: Project[]){
-        projects.forEach(project => {
+        this.projects = []
+        for(const project of projects)
             this.projects.push(new Project(project))
-        });
     }
 }
