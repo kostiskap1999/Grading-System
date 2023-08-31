@@ -1,27 +1,27 @@
 [
     {
         "id" : 123,
-        "username": "John Adminson",
+        "username": "Test Admin",
         "role": "admin",
         "subjects": [12]
     },
     {
         "id" : 456,
-        "username": "Maria Professorlin",
+        "username": "Test Professor",
         "role": "professor",
         "subjects": [12, 34]
 
     },
     {
         "id" : 789,
-        "username": "Jacob Students",
+        "username": "Test Student",
         "role": "student",
         "subjects": [12, 34]
 
     },
     {
         "id" : 0,
-        "username": "Nate Guest",
+        "username": "Test Guest",
         "role": "user",
         "subjects": []
     }

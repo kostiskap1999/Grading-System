@@ -1,14 +1,72 @@
 [
     {
-        "id": 12,
-        "name": "Maths",
-        "description": "We do maths here",
+        "id": 1,
+        "name": "Calculus I",
+        "description": "Here, we learn the basics of calculus, complex numbers and equations, and sequences.",
+        "semester": 1,
         "projects": []  
     },
     {
-        "id": 34,
-        "name": "Programming",
-        "description": "We learn C here",
-        "projects": [2345]
+        "id": 2,
+        "name": "Programming I",
+        "description": "The programming language C as well as the basics of programming as a concept. Introducing if and for loops, functions and files.",
+        "semester": 1,
+        "projects": [1, 2]
+    },
+    {
+        "id": 3,
+        "name": "Calculus II",
+        "description": "We delve deeper into calculus, where the true pain starts and you start overdosing on coffee.",
+        "semester": 1,
+        "projects": []  
+    },
+    {
+        "id": 4,
+        "name": "Programming II",
+        "description": "A peak into Java and OOP (Object Oriented Programming). If you don't like it, you have no taste.",
+        "semester": 2,
+        "projects": []  
+    },
+    {
+        "id": 5,
+        "name": "Databases",
+        "description": "MySQL, Databases, Rows, Columns, Tables, Chairs and how to use of phpMyAdmin",
+        "semester": 4,
+        "projects": []  
+    },
+    {
+        "id": 8,
+        "name": "Calculus III",
+        "description": "As if Calculus II wasn't enough, get ready for triple integrals and a million ways to solve differential equations.",
+        "semester": 3,
+        "projects": []  
+    },
+    {
+        "id": 9,
+        "name": "Data Structures",
+        "description": "Delve deeper into C, learning about Loops, Trees, Graphs, Sequences.",
+        "semester": 3,
+        "projects": []  
+    },
+    {
+        "id": 10,
+        "name": "Computer Architecture",
+        "description": "If you thought calculus was hard, by the end of this semester you would have preferred more.",
+        "semester": 3,
+        "projects": []  
+    },
+    {
+        "id": 11,
+        "name": "Compilers",
+        "description": "Oh, so you know C? Make a compiler for it. You have one semester to learn it and a lifetime to regret your career path.",
+        "semester": 5,
+        "projects": []
+    },
+    {
+        "id": 12,
+        "name": "Game Development",
+        "description": "Unreal Engine 4, Blender, and a lot of YouTube tutorials",
+        "semester": 5,
+        "projects": []
     }
 ]
