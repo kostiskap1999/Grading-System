@@ -9,14 +9,12 @@ export class User {
     username: string; // unique username
     role: string; // admin, professor, student
     subjects: Subject[];
-    projects: Project[];
 
-    constructor({id, username, role, subjects = [], projects = []}: IUser = IUserDefaults) {
+    constructor({id, username, role, subjects = []}: IUser = IUserDefaults) {
         this.id = id
         this.username = username
         this.role = role
         this.subjects = subjects
-        this.projects = projects
     }
 
     async setup(){
@@ -45,5 +43,14 @@ export class User {
             await subjectOBJ.setup()
             this.subjects.push(subjectOBJ)
         }
+    }
+
+    getProjects(){
+        var projects: Project[] = []
+        for(const subject of this.subjects){
+            for(const project of subject.projects)
+            projects.push(project)
+        }
+        return projects
     }
 }

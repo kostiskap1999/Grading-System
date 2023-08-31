@@ -5,8 +5,7 @@ export interface IUser {
     id: number,
     username: string,
     role: string,
-    subjects: Subject[],
-    projects: Project[]
+    subjects: Subject[]
 }
 
 export interface IUserExtraData {
@@ -18,8 +17,7 @@ export const IUserDefaults = {
     id: -1,
     username: "",
     role: "",
-    subjects: new Array(),
-    projects: new Array()
+    subjects: new Array()
 }
 
 export const IUserExtraDataDefaults = {
