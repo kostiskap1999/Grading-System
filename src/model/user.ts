@@ -1,5 +1,5 @@
 import { fetchSubjects } from "../fetches/fetchSubjects";
-import { fetchUserExtraData } from "../fetches/helpers/userHelpers";
+import { fetchUserExtraData } from "../fetches/helpers/userExtraHelpers";
 import { IUser, IUserDefaults } from "../interfaces/iUser";
 import { Project } from "./project";
 import { Subject } from "./subject";
@@ -17,10 +17,6 @@ export class User {
         this.role = role
         this.subjects = subjects
         this.projects = projects
-    }
-
-    hi(){
-        console.log("ho")
     }
 
     async setup(){

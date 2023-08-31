@@ -7,11 +7,11 @@ export async function fetchAllUserData(id?: number) {
     const user: User = await fetchUser(id)
     user.setup()
 
-    // if (user instanceof User){
+    if (user instanceof User){
         user.projects.forEach(project => {
             project.setup()
         });
-    // }
+    }
 
     return user
 }
