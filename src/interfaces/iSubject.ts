@@ -4,6 +4,7 @@ export interface ISubject {
     id: number;
     name: string;
     description: string;
+    semester: number;
     projects: Project[];
 }
 
@@ -16,6 +17,7 @@ export const ISubjectDefaults = {
     id: -1,
     name: "",
     description: "",
+    semester: -1,
     projects: []
 }
 

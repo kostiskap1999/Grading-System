@@ -8,12 +8,14 @@ export class Subject {
     id: number;
     name: string;
     description: string;
+    semester: number;
     projects: Project[];
 
-    constructor({id, name, description, projects}: ISubject = ISubjectDefaults) {
+    constructor({id, name, description, semester, projects}: ISubject = ISubjectDefaults) {
         this.id = id
         this.name = name
         this.description = description
+        this.semester = semester
         this.projects = projects
     }
 

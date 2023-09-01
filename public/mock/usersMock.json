@@ -2,27 +2,22 @@
     {
         "id" : 123,
         "username": "Test Admin",
-        "role": "admin",
-        "subjects": [2, 5, 6, 7, 9, 12]
+        "role": "admin"
     },
     {
         "id" : 456,
         "username": "Test Professor",
-        "role": "professor",
-        "subjects": [1, 2, 3, 4, 8, 10, 11]
+        "role": "professor"
 
     },
     {
         "id" : 789,
         "username": "Test Student",
-        "role": "student",
-        "subjects": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
+        "role": "student"
     },
     {
         "id" : 0,
         "username": "Test Guest",
-        "role": "user",
-        "subjects": []
+        "role": "user"
     }
 ]
