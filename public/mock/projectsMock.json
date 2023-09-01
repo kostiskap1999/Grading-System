@@ -3,24 +3,24 @@
         "id": 1,
         "name": "Programming Project 1",
         "description": "How do we print a message on the console on C?",
-        "deadline": "2024"
+        "deadline": "20231231"
     },
     {
         "id": 2,
         "name": "Programming Project 2",
         "description": "How do we scan a variable on C?",
-        "deadline": "2024"
+        "deadline": "20230930"
     },
     {
         "id": 3,
         "name": "Java Basics",
         "description": "Make a program that reads 5 integers and returns their sum",
-        "deadline": "2024"
+        "deadline": "20230831"
     },
     {
         "id": 4,
         "name": "Dropping a Database",
         "description": "What's the command to drop a database named DB?",
-        "deadline": "2024"
+        "deadline": "20231015"
     }  
 ]

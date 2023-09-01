@@ -1,0 +1,24 @@
+@import './variables/colors.scss';
+@import './variables/typography.scss';
+
+.user {
+	background-color: $background-color;
+}
+
+.uppear-content {
+	height: 30vh;
+}
+
+.lower-content {
+	height: 70vh;
+}
+
+.container {
+	border-width: 2px;
+	border-color: black;
+	border-style: solid;
+}
+
+.header-title {
+	padding: 10px;
+}

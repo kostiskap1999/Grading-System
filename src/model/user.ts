@@ -45,6 +45,16 @@ export class User {
         }
     }
 
+    
+    getSubjectsWithProjects(){
+        var subjects: Subject[] = []
+        for(const subject of this.subjects){
+            if(subject.projects.length > 0)
+            subjects.push(subject)
+        }
+        return subjects
+    }
+
     getProjects(){
         var projects: Project[] = []
         for(const subject of this.subjects){

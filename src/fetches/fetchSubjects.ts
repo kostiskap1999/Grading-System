@@ -12,7 +12,11 @@ export async function fetchSubjects() {
         errorHandling(error)
     });
 
-    return subjects
+    var returnedSubjects: Subject[] = []
+    for(const subject of subjects)
+        returnedSubjects.push(new Subject(subject))
+
+    return returnedSubjects
 }
 
 export async function fetchSubjectsExtraData() {

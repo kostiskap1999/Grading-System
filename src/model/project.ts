@@ -7,7 +7,7 @@ export class Project {
     id: number;
     name: string;
     description: string;
-    deadline: Date;
+    deadline: Date | string;
     submissions: Submission[];
 
     constructor({id, name, description, deadline, submissions}: IProject = IProjectDefaults) {

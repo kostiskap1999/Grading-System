@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { IUserDefaults } from "../interfaces/iUser";
 import { User } from "../model/user";
 import { fetchAllUserData } from "../fetches/helpers/massFetching";
-import { Subject } from "../model/subject";
 import { Project } from "../model/project";
+
+import '../styles/general.scss';
+import '../styles/home.scss';
+import '../styles/button.scss';
+import { Subject } from "../model/subject";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
 
+  const navigate = useNavigate();
   const [user, setUser] = useState<User>(new User())
   
   useEffect(() => {
@@ -19,23 +24,33 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div style={{height: "100vh", display: "flex", flexDirection: "column"}}>
-      <div style={{backgroundColor: "red", flex: 1, display: "flex", flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
-        <div>Welcome {user.username}</div>
-        <div style={{display: "flex", flexDirection: "row"}}>
-          <div>You have {user.subjects.length}</div>
+    <div className="page column" style={{overflow: 'hidden'}}>
+      <div className="header-title text upper-content center column" style={{flex: 1}}>
+        <div>{user.username}</div>
+        <div className="row">
+          <div>There are {user.getProjects().length} pending projects from {user.getSubjectsWithProjects().length} subjects.</div>
         </div>
       </div>
-      <div style={{display: "flex", flexDirection: "row", flex: 5}}>
-        <div style={{backgroundColor: "green", flex: 1}}>
-          {user.subjects.map((subject) => (
-                <div>{subject.name}</div>
+      <div className="row lower-content" style={{flex: 5}}>
+        <div className="column container" style={{flex: 1}}>
+          <div className="text center header-title">My Subjects</div>
+          <div className="column" style={{overflow:'scroll'}}>
+            {user.subjects.map((subject: Subject, index: number) => (
+                  <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
+                    {subject.name}
+                  </button>
             ))}
+          </div>
         </div>
-        <div style={{backgroundColor: "blue", flex: 1}}>
-          {user.getProjects().map((project: Project) => (
-              <div>{project.name}</div>
-          ))}
+        <div className="column container" style={{flex: 1}}>
+          <div className="text center header-title">My Projects</div>
+          <div className="column" style={{overflow:'scroll'}}>
+            {user.getProjects().map((project: Project, index: number) => (
+                <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
+                  {project.name}
+                </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
