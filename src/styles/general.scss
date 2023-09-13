@@ -43,3 +43,9 @@
 	font-size: $small-text;
 	color: $text-color;
 }
+
+.dropdown-menu {
+	position: relative;
+	background-color: $background-color;
+	width: inherit;
+}

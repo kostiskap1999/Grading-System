@@ -1,9 +1,12 @@
 import { useEffect, ChangeEvent, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Project } from "../model/project"
-import { fetchAllProjectData } from "../fetches/helpers/massFetching"
+import { fetchAllProjectData, fetchAllUserData } from "../fetches/helpers/massFetching"
 import FileUpload from "../components/fileUpload";
 import { fetchUserRole } from "../fetches/helpers/userHelpers";
+import ReactDropdown, { Option } from "react-dropdown";
+import { Filter, FilterAlt, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { User } from "../model/user";
 
 export default function ProjectsPage() {
 
@@ -12,16 +15,26 @@ export default function ProjectsPage() {
 
   const [projects, setProjects] = useState<Project[]>([new Project()])
   const [selectedProject, setSelectedProject] = useState<Project>(new Project())
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([new Project()])
   
+  const [user, setUser] = useState<User>(new User())
+
   const [rerender, setRerender] = useState<number>(0)
 
   const [userRole, setUserRole] = useState<string>("")
 
+  const filterOptions = [
+    {value: "all", label: "University Projects"},
+    {value: "my", label: "My Projects"},
+    {value: "supervising", label: "Supervising Projects"}]  // my = my projects, all = all projects, supervising = for profs and admins
+  const [filter, setFilter] = useState<string>("")
+
+  
   useEffect(() => {
     const fetchData = async () => {
       const projectsOBJ: Project[] = await fetchAllProjectData()
       setProjects(projectsOBJ)
-
+      setFilter(filterOptions[0].value)
       const parsedID: string = (params.get('id') == null) ? "" : params.get('id')!.toString()
       for(const project of projectsOBJ){
         if(project.id === parseInt(parsedID)){
@@ -42,13 +55,46 @@ export default function ProjectsPage() {
     fetchRole()
   }, [userRole])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const userOBJ: User = await fetchAllUserData()
+      setUser(userOBJ)
+    }
+
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    console.log("filteredProjects")
+    if (filter === "my")
+      setFilteredProjects(user.getProjects())
+    else if (filter === "all")
+      setFilteredProjects(projects)
+    else if (filter === "supervising")
+      setFilteredProjects([])
+    else
+      console.log("ti")
+
+  }, [filter])
+
   return (
     <div className="page row">
       <div style={{flex: 0.8}}>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">University Projects</div>
+          <div className="text center header-title">
+            <ReactDropdown
+              controlClassName="row center"
+              menuClassName="dropdown-menu"        
+              options={filterOptions}
+              onChange={(option) => {console.log(option); setFilter(option.value);}}
+              value={"University Projects"}
+              placeholder={filter}
+              arrowClosed={<KeyboardArrowDown/>}
+              arrowOpen={<KeyboardArrowUp/>}
+            />
+          </div>
           <div className="column" style={{overflow:'scroll'}}>
-            {projects.map((project, index) => (
+            {filteredProjects.map((project, index) => (
               <button key={index} className="button"
                 onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
               >
