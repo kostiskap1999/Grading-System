@@ -9,15 +9,20 @@ import { fetchUsers } from "../fetchUsers";
 import { fetchUsersExtraData } from "../fetchUsers";
 import { fetchIdFromToken } from "./tokenHelpers";
 
-export async function fetchUserRole(id: number) {
+export async function fetchUserRole(id?: number) {
     const users: User[] = await fetchUsers()
     var role: string = ""
+    var loggedID: number
+
+    if(id == null)
+        loggedID = await fetchIdFromToken()
+    else
+        loggedID = id
 
     //Extract role from users
-    users.forEach((user: User) => {
-        if(user.id === id)
+    for(const user of users)
+        if(user.id === loggedID)
             role = user.role
-    });
 
     return role
 }

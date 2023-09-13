@@ -28,3 +28,11 @@
 .button:active {
 	background-color: $button-color2
 }
+
+.file-upload {
+	background-color: white;
+    border: 1px solid #ccc;
+    // display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
