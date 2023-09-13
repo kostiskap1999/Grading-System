@@ -19,11 +19,14 @@ export default function ProjectsPage() {
       setProjects(projectsOBJ)
 
       const parsedID: string = (params.get('id') == null) ? "" : params.get('id')!.toString()
-      for(const project of projectsOBJ)
+      for(const project of projectsOBJ){
+        // console.log(project)
         if(project.id === parseInt(parsedID)){
           setSelectedProject(project)
           break;
         }
+      }
+        
     }
 
     fetchData()
@@ -32,7 +35,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="page row">
-      <div style={{flex: 1.3}}>
+      <div style={{flex: 0.8}}>
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">University Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
@@ -57,7 +60,7 @@ export default function ProjectsPage() {
             {selectedProject.submissions.map((submission, index) => (
               <button key={index} className="button"
               >
-                {submission.student}
+                {submission?.student?.username}
               </button>
             ))}
           </div>
