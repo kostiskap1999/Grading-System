@@ -51,7 +51,7 @@ export async function fetchIdFromToken() {
     });
 
     if (id == -1)
-        alert("Error on assigning ID from token.")
+        console.log("Error on assigning ID from token.")
     return id
 }
 

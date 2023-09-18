@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from '@mui/icons-material';
 import { LOGOUT_USER } from '../store/types';
 import { useDispatch } from 'react-redux';
+import Cookies from 'universal-cookie';
 
 export default function Sidebar() {
 
@@ -16,6 +17,8 @@ export default function Sidebar() {
         e.preventDefault()
 
         dispatch({ type: LOGOUT_USER });
+        const cookies: Cookies = new Cookies();
+        cookies.remove("token")
         navigate("/home")
         }
 
@@ -36,7 +39,7 @@ export default function Sidebar() {
           }}
         >
             {appRoutes.map((route, index) => (
-                route.index ? <span key={index}></span> :
+                (route.index || !route.sidebarProps) ? <span key={index}></span> :
                     <ListItemButton
                         component={Link}
                         to={route.path}

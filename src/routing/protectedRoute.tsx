@@ -1,26 +1,32 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { CheckToken } from "../fetches/helpers/tokenHelpers";
+import Cookies from "universal-cookie";
+import { fetchUserRole } from "../fetches/helpers/userHelpers";
 
 interface IProtectedRouteProps{
-  children: ReactNode
+  children: ReactNode,
+  protectionLevel: number
 }
 
-const ProtectedRoute = ({children}: IProtectedRouteProps) => {
-  var isAuthorised = false
+const ProtectedRoute = ({children, protectionLevel}: IProtectedRouteProps) => {
+  
   const auth = useSelector((store: any) => store.authenticated);
+  // var isUnauthorised = true
+  // var userRole = ""
+  //   useEffect(() => {
+  //   async function getUserRole() {
+  //     userRole = await fetchUserRole()
+  //   }
 
-  useEffect(() => {
-    async function checkAuthorization() {
-      const authorized = await CheckToken()
-      isAuthorised = authorized
-    }
+  //   getUserRole();
+  // });
+  
+  // if(((userRole === "user" && protectionLevel <= 1) ) || (userRole === "student" && protectionLevel <= 1) || (userRole === "professor" && protectionLevel <= 2) || (userRole === "admin" && protectionLevel <= 3))
+  //   isUnauthorised = false
 
-    checkAuthorization();
-  }, []);
-
-  if (!auth || isAuthorised) {
+  if (!auth) {
     return <Navigate to="/" replace />;
   }
   return children;

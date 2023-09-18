@@ -3,6 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Subject } from "../model/subject"
 import { fetchAllSubjectData } from "../fetches/helpers/massFetching"
 
+import '../styles/general.scss';
+import '../styles/home.scss';
+import '../styles/button.scss';
+
 export default function SubjectsPage() {
 
   const navigate = useNavigate()
@@ -31,8 +35,14 @@ export default function SubjectsPage() {
 
 
   return (
-    <div className="page row">
-      <div style={{flex: 1.3}}>
+    <div className="page column" style={{overflow: 'hidden'}}>
+      <div className="header-title text center column" style={{flex: 1}}>
+        <div>This is a list of all the subjects</div>
+        <div className="row">
+          <div>There are pending projects from subjects.</div>
+        </div>
+      </div>
+      <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">University Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
@@ -45,24 +55,24 @@ export default function SubjectsPage() {
             ))}
           </div>
         </div>
-      </div>
-      <div className="column" style={{flex: 1, padding:"10px"}}>
-          {selectedSubject.id == -1 ? <></> : <>
-          <div className="center" style={{padding:"30px"}}>
-            <div className="header-text">{selectedSubject.name}</div>
-            <div className="small-text">Semester: {selectedSubject.semester}</div>
-          </div>
-          <div className="small-text">{selectedSubject.description}</div>
-          <div className="column" style={{overflow:'scroll'}}>
-            {selectedSubject.projects.map((project, index) => (
-              <button key={index} className="button"
-                onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
-              >
-                {project.name}
-              </button>
-            ))}
-          </div>
-          </>}
+        <div className="column container" style={{flex: 1, padding:"10px"}}>
+            {selectedSubject.id == -1 ? <></> : <>
+            <div className="center" style={{padding:"30px"}}>
+              <div className="header-text">{selectedSubject.name}</div>
+              <div className="small-text">Semester: {selectedSubject.semester}</div>
+            </div>
+            <div className="small-text">{selectedSubject.description}</div>
+            <div className="column" style={{overflow:'scroll'}}>
+              {selectedSubject.projects.map((project, index) => (
+                <button key={index} className="button"
+                  onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                >
+                  {project.name}
+                </button>
+              ))}
+            </div>
+            </>}
+        </div>
       </div>
     </div>
   );

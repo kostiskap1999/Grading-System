@@ -7,16 +7,17 @@ import Home from '@mui/icons-material/Home';
 import ProjectsPage from "../pages/projects";
 import SubjectsPage from "../pages/subjects";
 import { Class, Code } from "@mui/icons-material";
+import NewProjectPage from "../pages/newProject";
 
 const appRoutes: RouteType[] = [
   {
     index: true,
-    protected: false,
+    protected: 0,
     element: <LoginPage/>,
     path: "/"
   },
   {
-    protected: true,
+    protected: 1,
     element: <HomePage/>,
     path: "/home",
     sidebarProps: {
@@ -25,7 +26,7 @@ const appRoutes: RouteType[] = [
     }
   },
   {
-    protected: true,
+    protected: 1,
     element: <SubjectsPage/>,
     path: "/subjects",
     sidebarProps: {
@@ -34,13 +35,18 @@ const appRoutes: RouteType[] = [
     }
   },
   {
-    protected: true,
+    protected: 1,
     element: <ProjectsPage/>,
     path: "/projects",
     sidebarProps: {
       displayText: "Projects",
       icon: <Code/>
     }
+  },
+  {
+    protected: 2,
+    element: <NewProjectPage/>,
+    path: "/new-project"
   }
 ]
 

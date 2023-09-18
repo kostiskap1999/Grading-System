@@ -25,6 +25,7 @@ export default function LoginPage() {
     if (user.id !== -1){
       const cookies = new Cookies();
       cookies.set('token', JSON.stringify(token), { path: '/' });
+      cookies.set('role-temp', user.role, { path: '/' });
       dispatch({ type: LOGIN_USER });
       navigate("/home")
     }

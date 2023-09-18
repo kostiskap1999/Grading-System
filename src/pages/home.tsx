@@ -25,13 +25,13 @@ export default function HomePage() {
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="header-title text upper-content center column" style={{flex: 1}}>
+      <div className="header-title text center column" style={{flex: 1}}>
         <div>{user.username}</div>
         <div className="row">
           <div>There are {user.getProjects().length} pending projects from {user.getSubjectsWithProjects().length} subjects.</div>
         </div>
       </div>
-      <div className="row lower-content" style={{flex: 5}}>
+      <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
