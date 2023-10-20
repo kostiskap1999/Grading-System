@@ -103,13 +103,20 @@ export default function SubjectsPage() {
             ))}
           </div>
         </div>
-        <div className="column container" style={{flex: 1, padding:"10px"}}>
+        <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
             {selectedSubject.id == -1 ? <></> : <>
-            <div className="center" style={{padding:"30px"}}>
-              <div className="header-text">{selectedSubject.name}</div>
-              <div className="small-text">Semester: {selectedSubject.semester}</div>
+            <div>
+              <div className="center">
+                <div className="header-text">{selectedSubject.name}</div>
+                <div className="small-text">Semester: {selectedSubject.semester}</div>
+              </div>
+              <div className="small-text">{selectedSubject.description}</div>
             </div>
-            <div className="small-text">{selectedSubject.description}</div>
+            {user.hasSubject(selectedSubject.id) ?
+              <button className="button">Leave Subject</button>
+            :
+              <button className="button">Join Subject</button>
+            }
             <div className="column" style={{overflow:'scroll'}}>
               {selectedSubject.projects.map((project, index) => (
                 <button key={index} className="button"

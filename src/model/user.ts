@@ -45,6 +45,9 @@ export class User {
         }
     }
 
+    hasSubject(id: number){
+        return this.subjects.some((subject) => subject.id == id)
+    }
     
     getSubjectsWithProjects(){
         var subjects: Subject[] = []
