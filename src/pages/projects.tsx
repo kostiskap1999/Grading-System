@@ -15,7 +15,7 @@ export default function ProjectsPage() {
 
   const [projects, setProjects] = useState<Project[]>([new Project()])
   const [selectedProject, setSelectedProject] = useState<Project>(new Project())
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([new Project()])
+
   
   const [user, setUser] = useState<User>(new User())
 
@@ -28,7 +28,7 @@ export default function ProjectsPage() {
     {value: "all", label: "Available Projects"},
     {value: "supervising", label: "Supervising Projects"}]  // my = my projects, all = all projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
-
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([new Project()])
   
   useEffect(() => {
     const fetchData = async () => {

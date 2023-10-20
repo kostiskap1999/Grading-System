@@ -1,21 +1,33 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Subject } from "../model/subject"
-import { fetchAllSubjectData } from "../fetches/helpers/massFetching"
+import { fetchAllSubjectData, fetchAllUserData } from "../fetches/helpers/massFetching"
 
 import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/button.scss';
+import { User } from "../model/user";
+import ReactDropdown from "react-dropdown";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
 export default function SubjectsPage() {
 
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
+  const [user, setUser] = useState<User>(new User())
+
   const [subjects, setSubjects] = useState<Subject[]>([new Subject()])
   const [selectedSubject, setSelectedSubject] = useState<Subject>(new Subject())
   
   const [rerender, setRerender] = useState<number>(0)
+
+  const filterOptions = [
+    {value: "my", label: "My Subjects"},
+    {value: "all", label: "Available Subjects"},
+    {value: "supervising", label: "Supervising Subjects"}]  // my = my subjects, all = all subjects, supervising = for profs and admins
+  const [filter, setFilter] = useState<string>("")
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([new Subject()])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +45,31 @@ export default function SubjectsPage() {
     fetchData()
   }, [rerender])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const userOBJ: User = await fetchAllUserData()
+      setUser(userOBJ)
+      setFilter(filterOptions[0].value)
+    }
+
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    const setFilter = async () => {
+      console.log("filteredProjects")
+      if (filter === "my")
+      setFilteredSubjects(await user.getSubjects())
+      else if (filter === "all")
+      setFilteredSubjects(subjects)
+      else if (filter === "supervising")
+      setFilteredSubjects([])
+      else
+        console.log("ti")
+    }
+
+    setFilter()
+  }, [filter])
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
@@ -44,9 +81,20 @@ export default function SubjectsPage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">University Subjects</div>
+        <div className="text center header-title">
+            <ReactDropdown
+              controlClassName="row center"
+              menuClassName="dropdown-menu"        
+              options={filterOptions}
+              onChange={(option) => {console.log(option); setFilter(option.value);}}
+              value={"My Subjects"}
+              placeholder={filter}
+              arrowClosed={<KeyboardArrowDown/>}
+              arrowOpen={<KeyboardArrowUp/>}
+            />
+          </div>
           <div className="column" style={{overflow:'scroll'}}>
-            {subjects.map((subject, index) => (
+            {filteredSubjects.map((subject, index) => (
               <button key={index} className="button"
                 onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
               >
