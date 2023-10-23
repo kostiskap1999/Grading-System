@@ -24,7 +24,8 @@ export default function SubjectsPage() {
 
   const filterOptions = [
     {value: "my", label: "My Subjects"},
-    {value: "all", label: "Available Subjects"},
+    {value: "available", label: "Available Subjects"},
+    {value: "all", label: "All Subjects"},
     {value: "supervising", label: "Supervising Subjects"}]  // my = my subjects, all = all subjects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([new Subject()])
@@ -56,19 +57,16 @@ export default function SubjectsPage() {
   }, [])
 
   useEffect(() => {
-    const setFilter = async () => {
-      console.log("filteredProjects")
-      if (filter === "my")
-      setFilteredSubjects(await user.getSubjects())
-      else if (filter === "all")
+    if (filter === "my")
+      setFilteredSubjects(user.subjects)
+    else if (filter === "available")
+      setFilteredSubjects(subjects.filter(subject => !user.subjects.map(subject => subject.id).includes(subject.id))) //get user subjects' ids and if they are included in the total subjects list, filter them out
+    else if (filter === "all")
       setFilteredSubjects(subjects)
-      else if (filter === "supervising")
+    else if (filter === "supervising")
       setFilteredSubjects([])
-      else
-        console.log("ti")
-    }
-
-    setFilter()
+    else
+      console.log("ti")
   }, [filter])
 
   return (

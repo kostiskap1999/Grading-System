@@ -48,6 +48,10 @@ export class User {
     hasSubject(id: number){
         return this.subjects.some((subject) => subject.id == id)
     }
+
+    hasProject(id: number){
+        return this.getProjects().some((project) => project.id == id)
+    }
     
     getSubjectsWithProjects(){
         var subjects: Subject[] = []

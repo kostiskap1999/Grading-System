@@ -25,7 +25,8 @@ export default function ProjectsPage() {
 
   const filterOptions = [
     {value: "my", label: "My Projects"},
-    {value: "all", label: "Available Projects"},
+    {value: "available", label: "Available Projects"},
+    {value: "all", label: "All Projects"},
     {value: "supervising", label: "Supervising Projects"}]  // my = my projects, all = all projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([new Project()])
@@ -68,6 +69,8 @@ export default function ProjectsPage() {
     console.log("filteredProjects")
     if (filter === "my")
       setFilteredProjects(user.getProjects())
+    else if (filter === "available")
+      setFilteredProjects(projects.filter(project => !user.getProjects().map(project => project.id).includes(project.id))) //get user project' ids and if they are included in the total projects list, filter them out
     else if (filter === "all")
       setFilteredProjects(projects)
     else if (filter === "supervising")
@@ -115,18 +118,24 @@ export default function ProjectsPage() {
             ))}
           </div>
         </div>
-        <div className="column container" style={{flex: 1, padding:"10px"}}>
+        <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
             {selectedProject.id == -1 ? <></> : <>
-            <div className="center" style={{padding:"30px"}}>
-              <div className="header-text">{selectedProject.name}</div>
-              <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
+            <div>
+              <div className="center" style={{padding:"30px"}}>
+                <div className="header-text">{selectedProject.name}</div>
+                <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
+              </div>
+              <div style={{margin: "20px"}}>
+                <div className="large-text center">Project Description</div>
+                <div className="small-text">{selectedProject.description}</div>
+              </div>
             </div>
-            <div style={{margin: "20px"}}>
-              <div className="large-text center">Project Description</div>
-              <div className="small-text">{selectedProject.description}</div>
-            </div>
+            {user.hasProject(selectedProject.id) ?
+              <FileUpload />
+            :
+              <div className="button">You can not upload a submission for a subject you are not joined. Please join subject and try again.</div>
+            }
             
-            <FileUpload />
             
             {userRole == "professor" || userRole == "admin" ? <>
               <div className="large-text center" style={{margin: "20px"}}>List of Submissions</div>
