@@ -77,18 +77,107 @@ export default function NewProjectPage() {
 
   }, [filter])
 
+  const placeholderText = "Line 1\n Line 2\nLine 3\n\nLine 4";
   return (
-    <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="header-title row">
-      <div style={{flex: 1}}></div>
-        <div className="text center column" style={{flex: 4}}>
-          <div>New Project Page.</div>
-          <div className="row">
-            <div>There are pending projects from subjects.</div>
-          </div>
-        </div>
-        <div style={{flex: 1}}></div>
+    <div className="page column">
+      <div className="header-title text center column">
+        New Project Page
       </div>
+      <form className="form text">
+        <section>
+          <header className="header-text">Characteristics</header>
+          <div>
+            <label>
+              <span>Name</span>
+              <input placeholder="Enter project here" />
+            </label>
+            <label>
+              <span>Description</span>
+              <textarea rows={5} cols={30} placeholder="Enter description here" />
+            </label>
+            <label>
+              <span>Subject (TODO)</span>
+              <input placeholder="Pick a supervising subject" />
+            </label>
+            <label>
+              <span>Deadline</span>
+              <input type="date" />
+            </label>
+          </div>
+        </section>
+        <section>
+          <header className="header-text">Technical Details</header>
+          <section>
+            <header className="large-text">Desired Outcomes</header>
+            <div>
+              <label>
+                <span>Mandatory Terms (separate with comma)</span>
+                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
+              </label>
+              <label>
+                <span>Wanted Terms (separate with comma)</span>
+                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
+              </label>
+            </div>
+            <div>
+              <label>
+                <span>Mandatory code (separate with empty line)</span>
+                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
+              </label>
+              <label>
+                <span>Wanted code (separate with empty line)</span>
+                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
+              </label>
+            </div>
+            <div>
+              <label>
+                <span>Mandatory return value</span>
+                <input placeholder="0" />
+              </label>
+              <label>
+                <span>Wanted return value</span>
+                <input placeholder="1" />
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <header className="large-text">Undesired Outcomes</header>
+            <div>
+              <label>
+                <span>Forbidden Terms (separate with comma)</span>
+                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
+              </label>
+              <label>
+                <span>Unwanted Terms (separate with comma)</span>
+                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
+              </label>
+            </div>
+            <div>
+              <label>
+                <span>Forbidden code (separate with empty line)</span>
+                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
+              </label>
+              <label>
+                <span>Unwanted code (separate with empty line)</span>
+                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
+              </label>
+            </div>
+            <div>
+              <label>
+                <span>Forbidden return value</span>
+                <input placeholder="0" />
+              </label>
+              <label>
+                <span>Unwanted return value</span>
+                <input placeholder="1" />
+              </label>
+            </div>
+          </section>
+
+        </section>
+        <input type="submit" value={"Create Project"}/>
+      </form>
     </div>
   );
 }

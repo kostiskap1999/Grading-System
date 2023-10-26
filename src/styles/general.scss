@@ -3,6 +3,7 @@
 
 .page {
 	height: 100vh;
+	overflow: scroll;
 }
 
 .column {
@@ -22,6 +23,10 @@
 	align-items: center;
 	text-align: center;
 	align-content: center;
+}
+
+.header-title {
+	padding: 10px;
 }
 
 .header-text {

@@ -1,0 +1,74 @@
+@import './variables/colors.scss';
+@import './variables/typography.scss';
+@import './general.scss';
+@import './button.scss';
+
+.form {
+	@extend .column;
+	padding: 30px;
+	justify-content:"space-between";
+	flex-wrap: wrap;
+}
+
+.form > section {
+	padding: 40px 0;
+	border-top: solid #000;
+	border-width: 3px
+}
+
+.form > section > header {
+	@extend .center;
+	padding-bottom: 30px;
+}
+
+.form > section > div {
+	@extend .row;
+	justify-content:"space-between";
+	flex-wrap: wrap;
+	border-top: solid #000;
+	border-width: 1px
+}
+
+.form > section > div > * {
+	@extend .column;
+	align-items: center;
+	flex: 1 0 30%;
+	margin: 15px;
+}
+
+.form > section > div > * > span {
+	padding-bottom: 10px;
+}
+
+.form > section > section {
+	padding: 20px 0;
+	// border-bottom: solid #000;
+	border-top: solid #000;
+	border-width: 1px
+}
+
+.form > section > section > header {
+	@extend .center;
+	padding-bottom: 30px;
+}
+
+.form > section > section > div {
+	@extend .row;
+	justify-content:"space-between";
+	flex-wrap: wrap;
+}
+
+.form > section > section > div > * {
+	@extend .column;
+	align-items: center;
+	flex: 1 0 30%;
+	margin: 15px;
+}
+
+.form > section > section > div > * > span {
+	padding-bottom: 10px;
+}
+
+.form > input[type=submit] {
+	@extend .button;
+}

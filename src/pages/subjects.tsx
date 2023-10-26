@@ -79,27 +79,27 @@ export default function SubjectsPage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-        <div className="text center header-title">
-            <ReactDropdown
-              controlClassName="row center"
-              menuClassName="dropdown-menu"        
-              options={filterOptions}
-              onChange={(option) => {console.log(option); setFilter(option.value);}}
-              value={"My Subjects"}
-              placeholder={filter}
-              arrowClosed={<KeyboardArrowDown/>}
-              arrowOpen={<KeyboardArrowUp/>}
-            />
-          </div>
-          <div className="column" style={{overflow:'scroll'}}>
-            {filteredSubjects.map((subject, index) => (
-              <button key={index} className="button"
-                onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
-              >
-                {subject.name}
-              </button>
-            ))}
-          </div>
+          <div className="text center header-title">
+              <ReactDropdown
+                controlClassName="row center"
+                menuClassName="dropdown-menu"        
+                options={filterOptions}
+                onChange={(option) => {console.log(option); setFilter(option.value);}}
+                value={"My Subjects"}
+                placeholder={filter}
+                arrowClosed={<KeyboardArrowDown/>}
+                arrowOpen={<KeyboardArrowUp/>}
+              />
+            </div>
+            <div className="column" style={{overflow:'scroll'}}>
+              {filteredSubjects.map((subject, index) => (
+                <button key={index} className="button"
+                  onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
+                >
+                  {subject.name}
+                </button>
+              ))}
+            </div>
         </div>
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
             {selectedSubject.id == -1 ? <></> : <>

@@ -6,6 +6,7 @@ import { Project } from "../model/project";
 import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/button.scss';
+import '../styles/newProject.scss';
 import { Subject } from "../model/subject";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +25,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="page column" style={{overflow: 'hidden'}}>
+    <div className="page column">
       <div className="header-title text center column" style={{flex: 1}}>
         <div>{user.username}</div>
         <div className="row">
