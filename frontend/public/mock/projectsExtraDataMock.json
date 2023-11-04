@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "submissions": [1, 2]
+    },
+    {
+        "id": 2,
+        "submissions": [3]
+    },
+    {
+        "id": 3,
+        "submissions": []
+    },
+    {
+        "id": 4,
+        "submissions": [5, 6, 7]
+    }  
+]

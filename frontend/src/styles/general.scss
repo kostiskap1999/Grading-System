@@ -1,0 +1,56 @@
+@import './variables/colors.scss';
+@import './variables/typography.scss';
+
+.page {
+	height: 100vh;
+	overflow: scroll;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+	background-color: $background-color;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	background-color: $background-color;
+}
+
+.center {
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	align-content: center;
+}
+
+.header-title {
+	padding: 10px;
+}
+
+.header-text {
+	font-size: $header-text;
+	color: $text-color;
+}
+
+.large-text {
+	font-size: $large-text;
+	color: $text-color;
+}
+
+.text {
+	font-size: $text;
+	color: $text-color;
+}
+
+.small-text {
+	font-size: $small-text;
+	color: $text-color;
+}
+
+.dropdown-menu {
+	position: relative;
+	background-color: $background-color;
+	width: inherit;
+}

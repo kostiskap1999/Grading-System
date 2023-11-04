@@ -1,0 +1,21 @@
+@import './variables/colors.scss';
+@import './variables/typography.scss';
+
+.login-screen {
+	text-align: center;
+}
+
+.sidebar-margin {
+	margin-left: 200px;
+}
+
+.login-header {
+	background-color: $background-color;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: $dynamic-text;
+	color: $text-color;
+}
