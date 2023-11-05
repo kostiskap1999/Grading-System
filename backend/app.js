@@ -21,8 +21,6 @@ var dbusers = require('./routes/users');
 var dbsubjects = require('./routes/subjects');
 var dbprojects = require('./routes/projects');
 var dbsubmissions = require('./routes/submissions');
-var dbusersubjects = require('./routes/usersubjects');
-var dbuserprojects = require('./routes/userprojects');
 
 
 // LOGIN ROUTER
@@ -50,6 +48,17 @@ router.route('/users').get(async (request, response) => {
   }
 });
 
+// USER ROUTER
+router.route('/user:userid').get(async (request, response) => {
+  try {
+    const data = await dbusers.getUser(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
 
 // SUBJECTS ROUTER
 router.route('/subjects').get(async (request, response) => {
@@ -91,9 +100,9 @@ router.route('/submissions').get(async (request, response) => {
 
 
 // USER-SUBJECTS ROUTER
-router.route('/usersubjects').get(async (request, response) => {
+router.route('/subjects:userid').get(async (request, response) => {
   try {
-    const data = await dbusersubjects.getUserSubjects(request);
+    const data = await dbsubjects.getUserSubjects(request);
     response.json(data);
   } catch (err) {
     console.error(err);
@@ -104,9 +113,9 @@ router.route('/usersubjects').get(async (request, response) => {
 
 
 // USER-PROJECTS ROUTER
-router.route('/userprojects').get(async (request, response) => {
+router.route('/projects:userid').get(async (request, response) => {
   try {
-    const data = await dbuserprojects.getUserProjects(request);
+    const data = await dbprojects.getUserProjects(request);
     response.json(data);
   } catch (err) {
     console.error(err);
