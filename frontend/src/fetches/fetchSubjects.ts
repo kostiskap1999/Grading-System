@@ -1,9 +1,10 @@
 import { ISubjectExtraData } from "../interfaces/iSubject";
 import { Subject } from "../model/subject";
+import { GETHEADERS, HOSTNAME, SUBJECTS, USERSUBJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchSubjects() {
-    const subjects: Subject[] = await fetch("mock/subjectsMock.json")
+    const subjects: [] = await fetch(HOSTNAME + SUBJECTS, GETHEADERS())
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -12,15 +13,15 @@ export async function fetchSubjects() {
         errorHandling(error)
     });
 
-    var returnedSubjects: Subject[] = []
+    const returnedSubjects: Subject[] = []
     for(const subject of subjects)
         returnedSubjects.push(new Subject(subject))
 
     return returnedSubjects
 }
 
-export async function fetchSubjectsExtraData() {
-    const subjectsExtraData: ISubjectExtraData[] = await fetch("mock/subjectsExtraDataMock.json")
+export async function fetchUserSubjects(userId: number) {
+    const userSubjects: [] = await fetch(HOSTNAME + USERSUBJECTS, GETHEADERS())
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -29,5 +30,5 @@ export async function fetchSubjectsExtraData() {
         errorHandling(error)
     });
 
-    return subjectsExtraData
+    return userSubjects
 }

@@ -7,9 +7,9 @@ import { Subject } from "../../model/subject";
 import { User } from "../../model/user";
 import { fetchProjects } from "../fetchProjects";
 import { fetchSubjects } from "../fetchSubjects";
-import { fetchUser } from "./userHelpers";
+import { fetchUser } from "../fetchUsers";
 
-export async function fetchAllUserData(id?: number) {
+export async function fetchAllUserData(id: number) {
     const user: User = await fetchUser(id)
     await user.setup()
 

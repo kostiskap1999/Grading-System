@@ -8,34 +8,19 @@ import { fetchToken } from "./helpers/tokenHelpers";
 import { fetchUser } from "./helpers/userHelpers";
 
 
-export async function loginNew(credentials: ICredentials) {
+export async function login(credentials: ICredentials) {
     
     const user: User = await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))
     .then(response => {
-        if(!response.ok) {console.log(response); throw new Error(JSON.stringify(response.status));}
+        if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
     })
     .catch((error) => {
-        console.log(error)
-        // errorHandling(error)
+        errorHandling(error)
     });
     
     console.log(user)
-    // var loggedUser: IUser = new User(user)
-    // var token: string = ""
+    var loggedUser: IUser = new User(user)
 
-    // return {loggedUser, token}
-}
-
-export async function login(credentials: ICredentials) {
-    const loggedID: number = await checkUserbase(credentials)
-    var loggedUser: IUser = new User()
-    var token: string = ""
-
-    if (loggedID !== -1){
-        loggedUser = await fetchUser(loggedID)
-        token = await fetchToken(loggedID)
-    }
-
-    return {loggedUser, token}
+    return loggedUser
 }

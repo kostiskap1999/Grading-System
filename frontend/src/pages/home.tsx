@@ -9,6 +9,7 @@ import '../styles/button.scss';
 import '../styles/newProject.scss';
 import { Subject } from "../model/subject";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 export default function HomePage() {
 
@@ -17,7 +18,9 @@ export default function HomePage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const userOBJ: User = await fetchAllUserData()
+      const cookies: Cookies = new Cookies();
+      const userID: number = cookies.get('user_id')
+      const userOBJ: User = await fetchAllUserData(userID)
       setUser(userOBJ)
     }
 

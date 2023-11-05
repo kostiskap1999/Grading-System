@@ -1,4 +1,4 @@
-import { fetchSubjects } from "../fetches/fetchSubjects";
+import { fetchSubjects, fetchUserSubjects } from "../fetches/fetchSubjects";
 import { fetchUserExtraData } from "../fetches/helpers/userExtraHelpers";
 import { IUser, IUserDefaults } from "../interfaces/iUser";
 import { Project } from "./project";
@@ -18,28 +18,18 @@ export class User {
     }
 
     async setup(){
-        await this.setSubjects(await this.getSubjects())
+        await this.setSubjects(await fetchUserSubjects(this.id))
     }
 
-    async getSubjects() {
-        const subjects: Subject[] = await fetchSubjects()
-        var userSubjectObjects: Subject[] = []
-    
-        const userSubjectIDs: number[] = (await fetchUserExtraData(this.id)).subjects
-    
-        subjects.forEach(async (subject: Subject) => {
-            if(userSubjectIDs.includes(subject.id)){
-                userSubjectObjects.push(subject)
-            }
-        });
-    
-        return userSubjectObjects
-    }
+    // async getSubjects() {
+    //     const subjects: [] = await fetchUserSubjects(this.id)
+    //     return subjects
+    // }
 
-    async setSubjects(subjects: Subject[]){
+    async setSubjects(subjects: []){
         this.subjects = []
         for(const subject of subjects){
-            var subjectOBJ = new Subject(subject)
+            const subjectOBJ = new Subject(subject)
             await subjectOBJ.setup()
             this.subjects.push(subjectOBJ)
         }

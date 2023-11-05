@@ -1,5 +1,5 @@
 
-import { fetchProjects } from "../fetches/fetchProjects";
+import { fetchProjects, fetchUserProjects } from "../fetches/fetchProjects";
 import { fetchSubjectExtraData } from "../fetches/helpers/subjectHelpers";
 import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { Project } from "./project";
@@ -20,23 +20,23 @@ export class Subject {
     }
 
     async setup(){
-        this.setProjects(await this.getProjects())
+        this.setProjects(await fetchUserProjects(this.id))
     }
 
-    async getProjects() {
-        const projects: Project[] = await fetchProjects()
-        var subjectProjectObjects: Project[] = []
+    // async getProjects(id: number) {
+    //     const projects: Project[] = await fetchUserProjects(id)
+    //     var subjectProjectObjects: Project[] = []
     
-        const subjectProjectIDs: number[] = (await fetchSubjectExtraData(this.id)).projects
+    //     const subjectProjectIDs: number[] = (await fetchSubjectExtraData(this.id)).projects
     
-        projects.forEach(async (project: Project) => {
-            if(subjectProjectIDs.includes(project.id)){
-                subjectProjectObjects.push(project)
-            }
-        });
+    //     projects.forEach(async (project: Project) => {
+    //         if(subjectProjectIDs.includes(project.id)){
+    //             subjectProjectObjects.push(project)
+    //         }
+    //     });
     
-        return subjectProjectObjects
-    }
+    //     return subjectProjectObjects
+    // }
 
     setProjects(projects: Project[]){
         this.projects = []

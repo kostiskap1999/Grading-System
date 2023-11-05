@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import '../styles/login.scss';
-import { login, loginNew } from '../fetches/login';
+import { login } from '../fetches/login';
 import { useNavigate } from "react-router-dom";
 
 import { LOGIN_USER } from "../store/types";
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
 import { fetchToken } from '../fetches/helpers/tokenHelpers';
+import { IUser } from '../interfaces/iUser';
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -18,19 +19,18 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    await loginNew({username, password})
-    // const loggedData = await login({username, password})
+    const user: IUser = await login({username, password})
+    // const token = ""
+
     
-    // const user = loggedData.loggedUser
-    // const token = loggedData.token
-    
-    // if (user.id !== -1){
-    //   const cookies = new Cookies();
-    //   cookies.set('token', JSON.stringify(token), { path: '/' });
-    //   cookies.set('role-temp', user.role, { path: '/' });
-    //   dispatch({ type: LOGIN_USER });
-    //   navigate("/home")
-    // }
+    if (user.id !== -1){
+      const cookies = new Cookies();
+      cookies.set('user_id', JSON.stringify(user.id), { path: '/' }); //temporary solution, will implement proper token later
+      // cookies.set('token', JSON.stringify(token), { path: '/' });
+      // cookies.set('role-temp', user.role, { path: '/' });
+      dispatch({ type: LOGIN_USER });
+      navigate("/home")
+    }
   }
 
   const handleKeyUp = () => {

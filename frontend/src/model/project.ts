@@ -20,24 +20,24 @@ export class Project {
     }
 
     async setup(){
-        this.setSubmissions(await this.getSubmissions())
+        this.setSubmissions(await fetchSubmissions())
     }
 
-    async getSubmissions() {
-        const submissions: Submission[] = await fetchSubmissions()
-        var projectSubmissionObjects: Submission[] = []
+    // async getSubmissions() {
+    //     const submissions: Submission[] = await fetchSubmissions()
+    //     var projectSubmissionObjects: Submission[] = []
     
-        const projectSubmissionIDs: number[] = (await fetchProjectExtraData(this.id)).submissions    
-        for (const submission of submissions){
-            if(projectSubmissionIDs.includes(submission.id)){
-                var studentID: string = submission?.student?.toString() == undefined ? "0" : submission.student.toString() //hansaplast method
-                submission.student = await fetchUserRef(parseInt(studentID)) //hansaplast method
-                projectSubmissionObjects.push(submission)
-            }
-        };
+    //     const projectSubmissionIDs: number[] = (await fetchProjectExtraData(this.id)).submissions    
+    //     for (const submission of submissions){
+    //         if(projectSubmissionIDs.includes(submission.id)){
+    //             var studentID: string = submission?.student?.toString() == undefined ? "0" : submission.student.toString() //hansaplast method
+    //             submission.student = await fetchUserRef(parseInt(studentID)) //hansaplast method
+    //             projectSubmissionObjects.push(submission)
+    //         }
+    //     };
     
-        return projectSubmissionObjects
-    }
+    //     return projectSubmissionObjects
+    // }
 
     setSubmissions(submissions: Submission[]){
         this.submissions = []
