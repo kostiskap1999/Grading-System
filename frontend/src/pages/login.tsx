@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../styles/login.scss';
-import { login } from '../fetches/login';
+import { login, loginNew } from '../fetches/login';
 import { useNavigate } from "react-router-dom";
 
 import { LOGIN_USER } from "../store/types";
@@ -18,17 +18,19 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const loggedData = await login({username, password})
-    const user = loggedData.loggedUser
-    const token = loggedData.token
+    await loginNew({username, password})
+    // const loggedData = await login({username, password})
     
-    if (user.id !== -1){
-      const cookies = new Cookies();
-      cookies.set('token', JSON.stringify(token), { path: '/' });
-      cookies.set('role-temp', user.role, { path: '/' });
-      dispatch({ type: LOGIN_USER });
-      navigate("/home")
-    }
+    // const user = loggedData.loggedUser
+    // const token = loggedData.token
+    
+    // if (user.id !== -1){
+    //   const cookies = new Cookies();
+    //   cookies.set('token', JSON.stringify(token), { path: '/' });
+    //   cookies.set('role-temp', user.role, { path: '/' });
+    //   dispatch({ type: LOGIN_USER });
+    //   navigate("/home")
+    // }
   }
 
   const handleKeyUp = () => {

@@ -26,13 +26,14 @@ var dbuserprojects = require('./routes/userprojects');
 
 
 // LOGIN ROUTER
-router.route('/login').get(async (request, response) => {
+router.route('/login').post(async (request, response) => {
   try {
     const data = await dblogin.login(request);
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 
@@ -44,7 +45,8 @@ router.route('/users').get(async (request, response) => {
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 
@@ -56,7 +58,8 @@ router.route('/subjects').get(async (request, response) => {
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 
@@ -68,7 +71,8 @@ router.route('/projects').get(async (request, response) => {
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 
@@ -80,7 +84,8 @@ router.route('/submissions').get(async (request, response) => {
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 
@@ -92,7 +97,8 @@ router.route('/usersubjects').get(async (request, response) => {
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 
@@ -104,7 +110,8 @@ router.route('/userprojects').get(async (request, response) => {
     response.json(data);
   } catch (err) {
     console.error(err);
-    response.status(500).json({ error: 'Internal Server Error' });
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
   }
 });
 

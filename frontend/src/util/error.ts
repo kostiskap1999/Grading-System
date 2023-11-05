@@ -1,6 +1,7 @@
 //The logic here is that after some point the messages will be different per error
 
 export const errorHandling = (error: Error) => {
+    
     if(error.message === "401")
         console.log(error)
     else if(error.message === "403")
