@@ -1,6 +1,5 @@
-import { IProjectExtraData } from "../interfaces/iProject";
 import { Project } from "../model/project";
-import { GETHEADERS, HOSTNAME, PROJECTS, USERPROJECTS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, PROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 import '../util/yymmdd'
@@ -25,8 +24,8 @@ export async function fetchProjects() {
     return returnedProjects
 }
 
-export async function fetchUserProjects(id: number) {
-    const userProjects: Project[] = await fetch(HOSTNAME + USERPROJECTS, GETHEADERS())
+export async function fetchUserProjects(userID: number) {
+    const userProjects: Project[] = await fetch(HOSTNAME + PROJECTS + "/" + userID, GETHEADERS())
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();

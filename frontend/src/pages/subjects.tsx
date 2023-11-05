@@ -9,6 +9,7 @@ import '../styles/button.scss';
 import { User } from "../model/user";
 import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import Cookies from "universal-cookie";
 
 export default function SubjectsPage() {
 
@@ -48,7 +49,9 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userOBJ: User = await fetchAllUserData()
+      const cookies: Cookies = new Cookies();
+      const userID: number = cookies.get('user_id')
+      const userOBJ: User = await fetchAllUserData(userID)
       setUser(userOBJ)
       setFilter(filterOptions[0].value)
     }

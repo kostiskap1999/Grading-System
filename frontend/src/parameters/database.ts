@@ -8,8 +8,6 @@ export const USER: string = '/user'
 export const SUBJECTS: string = '/subjects'
 export const PROJECTS: string = '/projects'
 export const SUBMISSIONS: string = '/submissions'
-export const USERSUBJECTS: string = '/usersubjects'
-export const USERPROJECTS: string = '/userprojects'
 
 
 export const LOGINHEADERS = (credentials: ICredentials) => (

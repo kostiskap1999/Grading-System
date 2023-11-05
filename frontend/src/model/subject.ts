@@ -1,6 +1,5 @@
 
 import { fetchProjects, fetchUserProjects } from "../fetches/fetchProjects";
-import { fetchSubjectExtraData } from "../fetches/helpers/subjectHelpers";
 import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { Project } from "./project";
 

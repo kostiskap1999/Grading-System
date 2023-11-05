@@ -3,10 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Project } from "../model/project"
 import { fetchAllProjectData, fetchAllUserData } from "../fetches/helpers/massFetching"
 import FileUpload from "../components/fileUpload";
-import { fetchUserRole } from "../fetches/helpers/userHelpers";
 import ReactDropdown, { Option } from "react-dropdown";
 import { Filter, FilterAlt, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { User } from "../model/user";
+import Cookies from "universal-cookie";
 
 export default function ProjectsPage() {
 
@@ -50,14 +50,18 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     const fetchRole = async () => {
-      setUserRole(await fetchUserRole())
+      const cookies: Cookies = new Cookies();
+      const userRole: string = cookies.get('role-temp')
+      setUserRole(userRole)
     }
     fetchRole()
   }, [userRole])
 
   useEffect(() => {
     const fetchData = async () => {
-      const userOBJ: User = await fetchAllUserData()
+      const cookies: Cookies = new Cookies();
+      const userID: number = cookies.get('user_id')
+      const userOBJ: User = await fetchAllUserData(userID)
       setUser(userOBJ)
       setFilter(filterOptions[0].value)
     }

@@ -3,9 +3,6 @@ import { IUser } from "../interfaces/iUser";
 import { User } from "../model/user";
 import { HOSTNAME, LOGIN, LOGINHEADERS } from "../parameters/database";
 import { errorHandling } from "../util/error";
-import { checkUserbase } from "./helpers/loginHelpers";
-import { fetchToken } from "./helpers/tokenHelpers";
-import { fetchUser } from "./helpers/userHelpers";
 
 
 export async function login(credentials: ICredentials) {

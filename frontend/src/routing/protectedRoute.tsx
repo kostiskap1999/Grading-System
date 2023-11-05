@@ -1,9 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ReactNode, useEffect } from "react";
-import { CheckToken } from "../fetches/helpers/tokenHelpers";
-import Cookies from "universal-cookie";
-import { fetchUserRole } from "../fetches/helpers/userHelpers";
 
 interface IProtectedRouteProps{
   children: ReactNode,

@@ -1,6 +1,4 @@
 import { fetchSubmissions } from "../fetches/fetchSubmissions";
-import { fetchProjectExtraData } from "../fetches/helpers/projectHelpers";
-import { fetchUserRef } from "../fetches/helpers/submissionHelpers";
 import { IProject, IProjectDefaults } from "../interfaces/iProject";
 import { Submission } from "./submission";
 

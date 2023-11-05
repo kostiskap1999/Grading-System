@@ -1,6 +1,5 @@
-import { ISubjectExtraData } from "../interfaces/iSubject";
 import { Subject } from "../model/subject";
-import { GETHEADERS, HOSTNAME, SUBJECTS, USERSUBJECTS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, SUBJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchSubjects() {
@@ -20,8 +19,8 @@ export async function fetchSubjects() {
     return returnedSubjects
 }
 
-export async function fetchUserSubjects(userId: number) {
-    const userSubjects: [] = await fetch(HOSTNAME + USERSUBJECTS, GETHEADERS())
+export async function fetchUserSubjects(userID: number) {
+    const userSubjects: [] = await fetch(HOSTNAME + SUBJECTS + "/" + userID, GETHEADERS())
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();

@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { LOGIN_USER } from "../store/types";
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
-import { fetchToken } from '../fetches/helpers/tokenHelpers';
 import { IUser } from '../interfaces/iUser';
 
 export default function LoginPage() {
@@ -25,11 +24,13 @@ export default function LoginPage() {
     
     if (user.id !== -1){
       const cookies = new Cookies();
+      console.log(user)
       cookies.set('user_id', JSON.stringify(user.id), { path: '/' }); //temporary solution, will implement proper token later
+      cookies.set('role-temp', JSON.stringify(user.role), { path: '/' }); //temporary solution, will implement proper token later
+
       // cookies.set('token', JSON.stringify(token), { path: '/' });
-      // cookies.set('role-temp', user.role, { path: '/' });
       dispatch({ type: LOGIN_USER });
-      navigate("/home")
+      // navigate("/home")
     }
   }
 
