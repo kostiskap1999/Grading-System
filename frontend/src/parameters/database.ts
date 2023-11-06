@@ -1,6 +1,6 @@
 import { ICredentials } from "../interfaces/iCredentials"
 
-export const HOSTNAME: string = 'http://localhost:3000'
+export const HOSTNAME: string = 'http://localhost:8000'
 
 export const LOGIN: string = '/login'
 export const USERS: string = '/users'
