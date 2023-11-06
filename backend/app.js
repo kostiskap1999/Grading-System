@@ -12,7 +12,7 @@ app.use(cors());
 app.use('/', router);
 
 router.use((request, response, next) => {
-  console.log('middleware');
+  console.log(request.originalUrl);
   next();
 });
 
@@ -49,7 +49,7 @@ router.route('/users').get(async (request, response) => {
 });
 
 // USER ROUTER
-router.route('/user:userid').get(async (request, response) => {
+router.route('/user/:userid').get(async (request, response) => {
   try {
     const data = await dbusers.getUser(request);
     response.json(data);
@@ -100,7 +100,7 @@ router.route('/submissions').get(async (request, response) => {
 
 
 // USER-SUBJECTS ROUTER
-router.route('/subjects:userid').get(async (request, response) => {
+router.route('/subjects/:userid').get(async (request, response) => {
   try {
     const data = await dbsubjects.getUserSubjects(request);
     response.json(data);
@@ -113,7 +113,7 @@ router.route('/subjects:userid').get(async (request, response) => {
 
 
 // USER-PROJECTS ROUTER
-router.route('/projects:userid').get(async (request, response) => {
+router.route('/projects/:userid').get(async (request, response) => {
   try {
     const data = await dbprojects.getUserProjects(request);
     response.json(data);

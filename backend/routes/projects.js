@@ -46,16 +46,19 @@ async function getUserProjects(request) {
     var sqlSelect = `SELECT project_id FROM user_project WHERE user_id='${request.params.userid}';`;
     const projectIDs = await query(sqlSelect);
     
-    sqlSelect = `SELECT * FROM projects WHERE`
-    for(let i=0; i<projectIDs.length; i++){
-      sqlSelect += ` id=${projectIDs[i]}`
-      
-      if(i < projectIDs.length-1)
-        sqlSelect += ` OR`
+    var result = []
+    if (projectIDs.length != 0){
+      sqlSelect = `SELECT * FROM projects WHERE`
+      for(let i=0; i<projectIDs.length; i++){
+        sqlSelect += ` id=${projectIDs[i].project_id}`
+        
+        if(i < projectIDs.length-1)
+          sqlSelect += ` OR`
+      }
+      sqlSelect += `;`
+      result = await query(sqlSelect);
     }
-    sqlSelect += `;`
-    const result = await query(sqlSelect);
-
+    
     util.promisify(config.end);
     return result
     
