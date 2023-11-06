@@ -19,7 +19,8 @@ export class Subject {
     }
 
     async setup(){
-        this.setProjects(await fetchUserProjects(this.id))
+        this.projects = await fetchUserProjects(this.id)
+        // this.setProjects(await fetchUserProjects(this.id))
     }
 
     // async getProjects(id: number) {

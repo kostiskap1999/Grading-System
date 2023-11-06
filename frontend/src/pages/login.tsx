@@ -24,7 +24,6 @@ export default function LoginPage() {
     
     if (user.id !== -1){
       const cookies = new Cookies();
-      console.log(user)
       cookies.set('user_id', JSON.stringify(user.id), { path: '/' }); //temporary solution, will implement proper token later
       cookies.set('role-temp', JSON.stringify(user.role), { path: '/' }); //temporary solution, will implement proper token later
 

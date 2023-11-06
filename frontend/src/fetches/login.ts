@@ -7,7 +7,7 @@ import { errorHandling } from "../util/error";
 
 export async function login(credentials: ICredentials) {
     
-    const user: User = await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))
+    const user: IUser = await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -16,8 +16,5 @@ export async function login(credentials: ICredentials) {
         errorHandling(error)
     });
     
-    console.log(user)
-    var loggedUser: IUser = new User(user)
-
-    return loggedUser
+    return new User(user)
 }

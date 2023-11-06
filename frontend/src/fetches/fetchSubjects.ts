@@ -29,5 +29,12 @@ export async function fetchUserSubjects(userID: number) {
         errorHandling(error)
     });
 
-    return userSubjects
+    console.log("userSubjects")
+    console.log(userSubjects)
+    console.log("userSubjects")
+    const returnedSubjects: Subject[] = []
+    for(const subject of userSubjects)
+        returnedSubjects.push(new Subject(subject))
+
+    return returnedSubjects
 }

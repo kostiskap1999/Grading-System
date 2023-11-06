@@ -20,18 +20,10 @@ export class User {
         await this.setSubjects(await fetchUserSubjects(this.id))
     }
 
-    // async getSubjects() {
-    //     const subjects: [] = await fetchUserSubjects(this.id)
-    //     return subjects
-    // }
-
-    async setSubjects(subjects: []){
-        this.subjects = []
-        for(const subject of subjects){
-            const subjectOBJ = new Subject(subject)
-            await subjectOBJ.setup()
-            this.subjects.push(subjectOBJ)
-        }
+    async setSubjects(subjects: Subject[]){
+        for(const subject of subjects)
+            await subject.setup()
+        this.subjects = subjects
     }
 
     hasSubject(id: number){

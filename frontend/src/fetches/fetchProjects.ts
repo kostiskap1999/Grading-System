@@ -34,6 +34,12 @@ export async function fetchUserProjects(userID: number) {
         errorHandling(error)
     });
 
-    return userProjects
+    const returnedProjects: Project[] = []
+    for(const project of userProjects){
+        project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
+        returnedProjects.push(new Project(project))
+    }
+
+    return returnedProjects
 }
 

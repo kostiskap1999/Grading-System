@@ -1,10 +1,10 @@
-import { IUserExtraData } from "../interfaces/iUser";
+import { IUser, IUserExtraData } from "../interfaces/iUser";
 import { User } from "../model/user";
 import { GETHEADERS, HOSTNAME, USER, USERS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchUser(id: number) {
-    const user: User = await fetch(HOSTNAME + USER + "/" + id, GETHEADERS())
+    const user: IUser = await fetch(HOSTNAME + USER + "/" + id, GETHEADERS())
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();
@@ -13,7 +13,7 @@ export async function fetchUser(id: number) {
         errorHandling(error)
     });
 
-    return user
+    return new User(user)
 }
 
 
