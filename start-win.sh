@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd backend/
-npm start &
+npm run start-win &
 
 cd ../frontend/
-npm start
+npm run start-win
