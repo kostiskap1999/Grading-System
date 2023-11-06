@@ -26,8 +26,9 @@ async function login(request) {
     else if(result.length == 0)
       throw new NotFoundError("Id didn't match any users")
  
+    result[0].username = request.body.username
     util.promisify(config.end); 
-    return result
+    return result[0]
     
   } catch (err) {
     // console.log(err)
