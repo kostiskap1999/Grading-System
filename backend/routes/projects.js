@@ -43,21 +43,8 @@ async function getProject(request) {
 async function getSubjectProjects(request) {
   try {
     util.promisify(config.connect);
-    var sqlSelect = `SELECT project_id FROM subject_project WHERE subject_id='${request.params.subjectid}';`;
-    const projectIDs = await query(sqlSelect);
-
-    var result = []
-    if (projectIDs.length != 0){
-      sqlSelect = `SELECT * FROM projects WHERE`
-      for(let i=0; i<projectIDs.length; i++){
-        sqlSelect += ` id=${projectIDs[i].project_id}`
-        
-        if(i < projectIDs.length-1)
-          sqlSelect += ` OR`
-      }
-      sqlSelect += `;`
-      result = await query(sqlSelect);
-    }
+    var sqlSelect = `SELECT * FROM projects WHERE subject_id='${request.params.subjectid}';`;
+    const result = await query(sqlSelect);
     
     util.promisify(config.end);
     return result
@@ -70,14 +57,15 @@ async function getSubjectProjects(request) {
 async function getUserProjects(request) {
   try {
     util.promisify(config.connect);
-    var sqlSelect = `SELECT project_id FROM user_project WHERE user_id='${request.params.userid}';`;
-    const projectIDs = await query(sqlSelect);
+    
+    var sqlSelect = `SELECT subject_id FROM user_subject WHERE user_id='${request.params.userid}';`;
+    const subjectIDs = await query(sqlSelect);
     
     var result = []
-    if (projectIDs.length != 0){
+    if (subjectIDs.length != 0){
       sqlSelect = `SELECT * FROM projects WHERE`
-      for(let i=0; i<projectIDs.length; i++){
-        sqlSelect += ` id=${projectIDs[i].project_id}`
+      for(let i=0; i<subjectIDs.length; i++){
+        sqlSelect += ` id=${subjectIDs[i].project_id}`
         
         if(i < projectIDs.length-1)
           sqlSelect += ` OR`
