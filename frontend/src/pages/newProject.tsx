@@ -65,10 +65,9 @@ export default function NewProjectPage() {
   }
 
   const createProject = async (event: React.FormEvent) => {
-
+    event.preventDefault()
     const created = await postProject(newProject)
     setProjectCreated(created)
-    event.preventDefault()
   }
 
   return (

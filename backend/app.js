@@ -12,7 +12,7 @@ app.use(cors());
 app.use('/', router);
 
 router.use((request, response, next) => {
-  console.log(request.originalUrl);
+  // console.log(request.originalUrl);
   next();
 });
 
@@ -135,5 +135,16 @@ router.route('/userprojects/:userid').get(async (request, response) => {
   }
 });
 
+// POST PROJECTS ROUTER
+router.route('/projects').post(async (request, response) => {
+  try {
+    const data = await dbprojects.postProjects(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
 
 module.exports = app;

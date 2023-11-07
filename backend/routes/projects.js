@@ -45,7 +45,6 @@ async function getSubjectProjects(request) {
     util.promisify(config.connect);
     var sqlSelect = `SELECT project_id FROM subject_project WHERE subject_id='${request.params.subjectid}';`;
     const projectIDs = await query(sqlSelect);
-    console.log(sqlSelect)
 
     var result = []
     if (projectIDs.length != 0){
@@ -95,9 +94,30 @@ async function getUserProjects(request) {
   }
 }
 
+async function postProjects(request) {
+  try {
+    util.promisify(config.connect);
+    var sqlSelect = `INSERT INTO projects (name, description, deadline, subject_id) VALUES ('${request.body.name}','${request.body.description}','${request.body.deadline}',${request.body.subjectID});`;
+    
+    const result = await query(sqlSelect);
+    
+    if(result.affectedRows != 1)
+      throw new InternalServerError("There has been an error")
+    
+    util.promisify(config.end);
+    return true
+    
+  } catch (err) {
+    throw err;
+  }
+}
+
+
+
 module.exports = {
   getProjects: getProjects,
   getProject: getProject,
   getUserProjects: getUserProjects,
-  getSubjectProjects: getSubjectProjects
+  getSubjectProjects: getSubjectProjects,
+  postProjects: postProjects
 }
