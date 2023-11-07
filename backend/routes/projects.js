@@ -40,6 +40,34 @@ async function getProject(request) {
   }
 }
 
+async function getSubjectProjects(request) {
+  try {
+    util.promisify(config.connect);
+    var sqlSelect = `SELECT project_id FROM subject_project WHERE subject_id='${request.params.subjectid}';`;
+    const projectIDs = await query(sqlSelect);
+    console.log(sqlSelect)
+
+    var result = []
+    if (projectIDs.length != 0){
+      sqlSelect = `SELECT * FROM projects WHERE`
+      for(let i=0; i<projectIDs.length; i++){
+        sqlSelect += ` id=${projectIDs[i].project_id}`
+        
+        if(i < projectIDs.length-1)
+          sqlSelect += ` OR`
+      }
+      sqlSelect += `;`
+      result = await query(sqlSelect);
+    }
+    
+    util.promisify(config.end);
+    return result
+    
+  } catch (err) {
+    throw err;
+  }
+}
+
 async function getUserProjects(request) {
   try {
     util.promisify(config.connect);
@@ -70,5 +98,6 @@ async function getUserProjects(request) {
 module.exports = {
   getProjects: getProjects,
   getProject: getProject,
-  getUserProjects: getUserProjects
+  getUserProjects: getUserProjects,
+  getSubjectProjects: getSubjectProjects
 }

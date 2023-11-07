@@ -4,3 +4,4 @@ INSERT INTO `subjects` VALUES (1,'JavaScript Basics','The best programming langu
 INSERT INTO `user_project` VALUES (1,3,1),(2,4,2);
 INSERT INTO `user_subject` VALUES (1,1,1),(2,1,2),(3,2,1),(4,2,2),(5,3,1),(6,3,2);
 INSERT INTO `users` VALUES (1,'Admin','Admin','admin',1),(2,'The','Professor','professor',2),(3,'Student','No1','student',3),(4,'Student','No2','student',4);
+INSERT INTO `subject_project` VALUES ('1', '1', '1'),('2', '2', '2');
