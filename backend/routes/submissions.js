@@ -3,10 +3,10 @@ const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
 
-async function getSubmissions(request) {
+async function getProjectSubmissions(request) {
   try {
     util.promisify(config.connect);
-    const sqlSelect = "SELECT * FROM submissions;";
+    const sqlSelect = `SELECT * FROM submissions WHERE project_id='${request.params.projectid}';`;
     
     const result = await query(sqlSelect);
     util.promisify(config.end);
@@ -18,5 +18,5 @@ async function getSubmissions(request) {
 }
 
 module.exports = {
-  getSubmissions: getSubmissions
+  getProjectSubmissions: getProjectSubmissions
 }

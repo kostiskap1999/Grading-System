@@ -86,10 +86,10 @@ router.route('/projects').get(async (request, response) => {
 });
 
 
-// SUBMISSIONS ROUTER
-router.route('/submissions').get(async (request, response) => {
+// PROJECT SUBMISSIONS ROUTER
+router.route('/submissions/:projectid').get(async (request, response) => {
   try {
-    const data = await dbsubmissions.getSubmissions(request);
+    const data = await dbsubmissions.getProjectSubmissions(request);
     response.json(data);
   } catch (err) {
     console.error(err);
