@@ -1,185 +1,114 @@
-import { useEffect, ChangeEvent, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Project } from "../model/project"
-import { fetchAllProjectData, fetchAllUserData } from "../fetches/helpers/massFetching"
-import FileUpload from "../components/fileUpload";
-import ReactDropdown, { Option } from "react-dropdown";
-import { Filter, FilterAlt, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { fetchAllUserData } from "../fetches/helpers/massFetching"
 import { User } from "../model/user";
 import Cookies from "universal-cookie";
+import { Project } from "../model/project";
+import { Subject } from "../model/subject";
+import { fetchSubjects, fetchSupervisingSubjects } from "../fetches/fetchSubjects";
+import { postProject } from "../fetches/fetchProjects";
 
 export default function NewProjectPage() {
 
   const navigate = useNavigate()
   const [params] = useSearchParams()
-
-  const [projects, setProjects] = useState<Project[]>([new Project()])
-  const [selectedProject, setSelectedProject] = useState<Project>(new Project())
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([new Project()])
   
   const [user, setUser] = useState<User>(new User())
 
-  const [rerender, setRerender] = useState<number>(0)
-
-  const [userRole, setUserRole] = useState<string>("")
-
-  const filterOptions = [
-    {value: "my", label: "My Projects"},
-    {value: "all", label: "Available Projects"},
-    {value: "supervising", label: "Supervising Projects"}]  // my = my projects, all = all projects, supervising = for profs and admins
-  const [filter, setFilter] = useState<string>("")
-
+  const [supervisingSubjects, setSupervisingSubjects] = useState<Subject[]>([])
   
-  useEffect(() => {
-    const fetchData = async () => {
-      const projectsOBJ: Project[] = await fetchAllProjectData()
-      setProjects(projectsOBJ)
-      // setFilter(filterOptions[0].value)
-      const parsedID: string = (params.get('id') == null) ? "" : params.get('id')!.toString()
-      for(const project of projectsOBJ){
-        if(project.id === parseInt(parsedID)){
-          setSelectedProject(project)
-          break;
-        }
-      } 
-    }
+  const [newProject, setNewProject] = useState<Project>(new Project())
 
-    fetchData()
-  }, [rerender])
+  const [projectCreated, setProjectCreated] = useState<boolean | void>(undefined)
 
   useEffect(() => {
-    const fetchRole = async () => {
-      const cookies: Cookies = new Cookies();
-      const userRole: string = cookies.get('role-temp')
-      setUserRole(userRole)
+    const fetchSupervisingSubjects = async () => {
+      
     }
-    fetchRole()
-  }, [userRole])
+    fetchSupervisingSubjects()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
       const cookies: Cookies = new Cookies();
-      const userRole: number = cookies.get('role-temp')
-      const userOBJ: User = await fetchAllUserData(userRole)
+      const userID: number = cookies.get('user_id')
+      const userOBJ: User = await fetchAllUserData(userID)
       setUser(userOBJ)
-      setFilter(filterOptions[0].value)
+    
+      // const supSubjects: Subject[] = await fetchSupervisingSubjects(userID)
+      const supSubjects: Subject[] = await fetchSubjects()
+      setSupervisingSubjects(supSubjects)
     }
 
     fetchData()
   }, [])
 
-  useEffect(() => {
-    console.log("filteredProjects")
-    if (filter === "my")
-      setFilteredProjects(user.getProjects())
-    else if (filter === "all")
-      setFilteredProjects(projects)
-    else if (filter === "supervising")
-      setFilteredProjects([])
-    else
-      console.log("ti")
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement> ) => {
+    const project: Project = newProject
+    switch(event.target.id) {
+      case "name" :
+        project.name = event.target.value
+        break
+      case "deadline" :
+        project.deadline = event.target.value
+        break
+      case "subject_id" :
+        project.subjectID = parseInt(event.target.value)
+        break
+      case "description" :
+        project.description = event.target.value
+        break
+      default:
+        console.log("error")
+        break
+    }
+  }
 
-  }, [filter])
+  const createProject = async (event: React.FormEvent) => {
 
-  const placeholderText = "Line 1\n Line 2\nLine 3\n\nLine 4";
+    const created = await postProject(newProject)
+    setProjectCreated(created)
+    event.preventDefault()
+  }
+
   return (
     <div className="page column">
       <div className="header-title text center column">
         New Project Page
       </div>
-      <form className="form text">
+      <form className="form text" onSubmit={createProject}>
         <section>
           <header className="header-text">Characteristics</header>
           <div>
             <label>
               <span>Name</span>
-              <input placeholder="Enter project here" />
-            </label>
-            <label>
-              <span>Description</span>
-              <textarea rows={5} cols={30} placeholder="Enter description here" />
-            </label>
-            <label>
-              <span>Subject (TODO)</span>
-              <input placeholder="Pick a supervising subject" />
+              <input id="name" placeholder="Enter project here" required onChange={handleChange}/>
             </label>
             <label>
               <span>Deadline</span>
-              <input type="date" />
+              <input id="deadline" type="date" required onChange={handleChange}/>
+            </label>
+            <label>
+              <span>Subject</span>
+              <select id="subject_id" required onChange={handleChange}>
+                <option id="no" value="">No Subject Selected</option>
+                {supervisingSubjects.map((subject, index) => 
+                  <option key={index} id={subject.name} value={subject.id}>{subject.name}</option>
+                )}
+              </select>
+            </label>
+            <label>
+              <span>Description</span>
+              <textarea id="description" rows={5} cols={30} required placeholder="Enter description here" onChange={handleChange}/>
             </label>
           </div>
         </section>
-        <section>
-          <header className="header-text">Technical Details</header>
-          <section>
-            <header className="large-text">Desired Outcomes</header>
-            <div>
-              <label>
-                <span>Mandatory Terms (separate with comma)</span>
-                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
-              </label>
-              <label>
-                <span>Wanted Terms (separate with comma)</span>
-                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
-              </label>
-            </div>
-            <div>
-              <label>
-                <span>Mandatory code (separate with empty line)</span>
-                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
-              </label>
-              <label>
-                <span>Wanted code (separate with empty line)</span>
-                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
-              </label>
-            </div>
-            <div>
-              <label>
-                <span>Mandatory return value</span>
-                <input placeholder="0" />
-              </label>
-              <label>
-                <span>Wanted return value</span>
-                <input placeholder="1" />
-              </label>
-            </div>
-          </section>
-
-          <section>
-            <header className="large-text">Undesired Outcomes</header>
-            <div>
-              <label>
-                <span>Forbidden Terms (separate with comma)</span>
-                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
-              </label>
-              <label>
-                <span>Unwanted Terms (separate with comma)</span>
-                <textarea rows={5} cols={30} placeholder="console.log,<html>,setState" />
-              </label>
-            </div>
-            <div>
-              <label>
-                <span>Forbidden code (separate with empty line)</span>
-                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
-              </label>
-              <label>
-                <span>Unwanted code (separate with empty line)</span>
-                <textarea rows={10} cols={50} placeholder={"for (let i=0; i<students.length; i++){\n students.grade = grade\n}\n\nconsole.log(teachers)"} />
-              </label>
-            </div>
-            <div>
-              <label>
-                <span>Forbidden return value</span>
-                <input placeholder="0" />
-              </label>
-              <label>
-                <span>Unwanted return value</span>
-                <input placeholder="1" />
-              </label>
-            </div>
-          </section>
-
-        </section>
+        {projectCreated == undefined ?
+          <div></div> :
+          projectCreated == true ?
+            <div>Project created successfully</div> :
+            <div>Failed to create project</div>
+        }
         <input type="submit" value={"Create Project"}/>
       </form>
     </div>

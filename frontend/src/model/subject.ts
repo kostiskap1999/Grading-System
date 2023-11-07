@@ -9,13 +9,15 @@ export class Subject {
     description: string;
     semester: number;
     projects: Project[];
+    supervisorID: number;
 
-    constructor({id, name, description, semester, projects}: ISubject = ISubjectDefaults) {
+    constructor({id, name, description, semester, projects, supervisorID}: ISubject = ISubjectDefaults) {
         this.id = id
         this.name = name
         this.description = description
         this.semester = semester
         this.projects = projects
+        this.supervisorID = supervisorID
     }
 
     async setup(){
