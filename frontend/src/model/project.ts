@@ -22,13 +22,7 @@ export class Project {
     }
 
     async setup(){
-        this.setSubmissions(await fetchSubmissions())
+        this.submissions = await fetchSubmissions(this.id)
     }
 
-    setSubmissions(submissions: Submission[]){
-        this.submissions = []
-        submissions.forEach(submission => {
-            this.submissions.push(new Submission(submission))
-        });
-    }
 }

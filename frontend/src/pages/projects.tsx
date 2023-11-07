@@ -1,12 +1,13 @@
-import { useEffect, ChangeEvent, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Project } from "../model/project"
-import { fetchAllProjectData, fetchAllUserData } from "../fetches/helpers/massFetching"
+import { fetchAndSetupProjects, fetchAndSetupUser } from "../fetches/helpers/massFetching"
 import FileUpload from "../components/fileUpload";
-import ReactDropdown, { Option } from "react-dropdown";
-import { Filter, FilterAlt, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import ReactDropdown from "react-dropdown";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { User } from "../model/user";
 import Cookies from "universal-cookie";
+import { fetchProjects } from "../fetches/fetchProjects";
 
 export default function ProjectsPage() {
 
@@ -33,10 +34,9 @@ export default function ProjectsPage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const projectsOBJ: Project[] = await fetchAllProjectData()
+      const projectsOBJ: Project[] = (userRole == "professor" || userRole == "admin") ? await fetchAndSetupProjects() : await fetchProjects()
       setProjects(projectsOBJ)
-      // setFilter(filterOptions[0].value)
-      const parsedID: string = (params.get('id') == null) ? "" : params.get('id')!.toString()
+      const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
       for(const project of projectsOBJ){
         if(project.id === parseInt(parsedID)){
           setSelectedProject(project)
@@ -46,7 +46,7 @@ export default function ProjectsPage() {
     }
 
     fetchData()
-  }, [rerender])
+  }, [rerender, userRole])
 
   useEffect(() => {
     const fetchRole = async () => {
@@ -61,7 +61,7 @@ export default function ProjectsPage() {
     const fetchData = async () => {
       const cookies: Cookies = new Cookies();
       const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAllUserData(userID)
+      const userOBJ: User = await fetchAndSetupUser(userID)
       setUser(userOBJ)
       setFilter(filterOptions[0].value)
     }
@@ -87,7 +87,7 @@ export default function ProjectsPage() {
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
       <div className="header-title row">
-        {userRole == "professor" || userRole == "admin" ? <>
+        {userRole === "professor" || userRole === "admin" ? <>
           <button style={{flex: 1}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}
         <div className="text center column" style={{flex: 4}}>
@@ -123,7 +123,7 @@ export default function ProjectsPage() {
           </div>
         </div>
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
-            {selectedProject.id == -1 ? <></> : <>
+            {selectedProject.id === -1 ? <></> : <>
             <div>
               <div className="center" style={{padding:"30px"}}>
                 <div className="header-text">{selectedProject.name}</div>
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
             }
             
             
-            {userRole == "professor" || userRole == "admin" ? <>
+            {userRole === "professor" || userRole === "admin" ? <>
               <div className="large-text center" style={{margin: "20px"}}>List of Submissions</div>
               <div className="column" style={{overflow:'scroll'}}>
                 {selectedProject.submissions.map((submission, index) => (

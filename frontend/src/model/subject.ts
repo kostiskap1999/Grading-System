@@ -20,29 +20,11 @@ export class Subject {
         this.supervisorID = supervisorID
     }
 
-    async setup(){
-        this.projects = await fetchUserProjects(this.id)
-        // this.setProjects(await fetchUserProjects(this.id))
-    }
-
-    // async getProjects(id: number) {
-    //     const projects: Project[] = await fetchUserProjects(id)
-    //     var subjectProjectObjects: Project[] = []
-    
-    //     const subjectProjectIDs: number[] = (await fetchSubjectExtraData(this.id)).projects
-    
-    //     projects.forEach(async (project: Project) => {
-    //         if(subjectProjectIDs.includes(project.id)){
-    //             subjectProjectObjects.push(project)
-    //         }
-    //     });
-    
-    //     return subjectProjectObjects
-    // }
-
-    setProjects(projects: Project[]){
-        this.projects = []
-        for(const project of projects)
-            this.projects.push(new Project(project))
+    async setup(userRole?: string){
+        const projects: Project[] = await fetchUserProjects(this.id)
+        if(userRole == "professor" || userRole == "admin")
+            for(const project of projects)
+                await project.setup()
+        this.projects = projects
     }
 }

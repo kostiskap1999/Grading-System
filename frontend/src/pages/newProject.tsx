@@ -1,24 +1,14 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchAllUserData } from "../fetches/helpers/massFetching"
-import { User } from "../model/user";
 import Cookies from "universal-cookie";
 import { Project } from "../model/project";
 import { Subject } from "../model/subject";
-import { fetchSubjects, fetchSupervisingSubjects } from "../fetches/fetchSubjects";
+import { fetchSubjects } from "../fetches/fetchSubjects";
 import { postProject } from "../fetches/fetchProjects";
 
 export default function NewProjectPage() {
-
-  const navigate = useNavigate()
-  const [params] = useSearchParams()
   
-  const [user, setUser] = useState<User>(new User())
-
   const [supervisingSubjects, setSupervisingSubjects] = useState<Subject[]>([])
-  
   const [newProject, setNewProject] = useState<Project>(new Project())
-
   const [projectCreated, setProjectCreated] = useState<boolean | void>(undefined)
 
   useEffect(() => {
@@ -32,8 +22,6 @@ export default function NewProjectPage() {
     const fetchData = async () => {
       const cookies: Cookies = new Cookies();
       const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAllUserData(userID)
-      setUser(userOBJ)
     
       // const supSubjects: Subject[] = await fetchSupervisingSubjects(userID)
       const supSubjects: Subject[] = await fetchSubjects()
@@ -102,9 +90,9 @@ export default function NewProjectPage() {
             </label>
           </div>
         </section>
-        {projectCreated == undefined ?
+        {projectCreated === undefined ?
           <div></div> :
-          projectCreated == true ?
+          projectCreated === true ?
             <div>Project created successfully</div> :
             <div>Failed to create project</div>
         }

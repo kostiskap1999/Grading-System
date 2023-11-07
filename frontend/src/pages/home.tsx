@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { User } from "../model/user";
-import { fetchAllUserData } from "../fetches/helpers/massFetching";
+import { fetchAndSetupUser } from "../fetches/helpers/massFetching";
 import { Project } from "../model/project";
 
 import '../styles/general.scss';
@@ -20,7 +20,7 @@ export default function HomePage() {
     const fetchData = async () => {
       const cookies: Cookies = new Cookies();
       const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAllUserData(userID)
+      const userOBJ: User = await fetchAndSetupUser(userID)
       setUser(userOBJ)
     }
 
@@ -32,7 +32,7 @@ export default function HomePage() {
       <div className="header-title text center column" style={{flex: 1}}>
         <div>{user.username}</div>
         <div className="row">
-          <div>There are {user.getProjects().length} pending projects from {user.getSubjectsWithProjects().length} subjects.</div>
+          <div>There are {user.getProjects().length} pending projects from {user.subjects.length} subjects.</div>
         </div>
       </div>
       <div className="row" style={{flex: 6}}>

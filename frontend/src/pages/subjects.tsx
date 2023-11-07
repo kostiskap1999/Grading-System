@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Subject } from "../model/subject"
-import { fetchAllSubjectData, fetchAllUserData } from "../fetches/helpers/massFetching"
+import { fetchAndSetupSubjects, fetchAndSetupUser } from "../fetches/helpers/massFetching"
 
 import '../styles/general.scss';
 import '../styles/home.scss';
@@ -33,10 +33,10 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const subjectsOBJ: Subject[] = await fetchAllSubjectData()
+      const subjectsOBJ: Subject[] = await fetchAndSetupSubjects()
       setSubjects(subjectsOBJ)
 
-      const parsedID: string = (params.get('id') == null) ? "" : params.get('id')!.toString()
+      const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
       for(const subject of subjectsOBJ)
         if(subject.id === parseInt(parsedID)){
           setSelectedSubject(subject)
@@ -51,7 +51,7 @@ export default function SubjectsPage() {
     const fetchData = async () => {
       const cookies: Cookies = new Cookies();
       const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAllUserData(userID)
+      const userOBJ: User = await fetchAndSetupUser(userID)
       setUser(userOBJ)
       setFilter(filterOptions[0].value)
     }
@@ -105,7 +105,7 @@ export default function SubjectsPage() {
             </div>
         </div>
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
-            {selectedSubject.id == -1 ? <></> : <>
+            {selectedSubject.id === -1 ? <></> : <>
             <div>
               <div className="center">
                 <div className="header-text">{selectedSubject.name}</div>

@@ -17,12 +17,9 @@ export class User {
     }
 
     async setup(){
-        await this.setSubjects(await fetchUserSubjects(this.id))
-    }
-
-    async setSubjects(subjects: Subject[]){
+        const subjects: Subject[] = await fetchUserSubjects(this.id)
         for(const subject of subjects)
-            await subject.setup()
+            await subject.setup(this.role)
         this.subjects = subjects
     }
 
@@ -45,10 +42,10 @@ export class User {
 
     getProjects(){
         var projects: Project[] = []
-        for(const subject of this.subjects){
+        for(const subject of this.subjects)
             for(const project of subject.projects)
-            projects.push(project)
-        }
+                projects.push(project)
+        
         return projects
     }
 }
