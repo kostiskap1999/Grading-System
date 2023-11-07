@@ -48,7 +48,7 @@ async function getUserSubjects(request) {
     const subjectIDs = await query(sqlSelect);
     
     var result = []
-    if (sqlSelect.length != 0){
+    if (subjectIDs.length != 0){
       sqlSelect = `SELECT * FROM subjects WHERE`
       for(let i=0; i<subjectIDs.length; i++){
         sqlSelect += ` id=${subjectIDs[i].subject_id}`
