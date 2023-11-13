@@ -36,10 +36,8 @@ export async function fetchAndSetupProjects() {
 export async function fetchAndSetupSubmissions(projectID: number) {
     const submissions: Submission[] = await fetchSubmissions(projectID)
 
-    for(const submission of submissions){
+    for(const submission of submissions)
         await submission.setup()
-        console.log(submission)
-    }
         
 
     

@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 import CodeSandbox from "../components/codeSandbox";
 import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../fetches/helpers/massFetching";
 import { Submission } from "../model/submission";
 import { User } from "../model/user";
+import { Project } from "../model/project";
+import { fetchProject, fetchProjects } from "../fetches/fetchProjects";
 
 export default function SubmissionsPage() {
 
+  const location = useLocation()
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
   const [submissions, setSubmissions] = useState<Submission[]>([new Submission()])
+  const [selectedProject, setSelectedProject] = useState<Project>(location.state?.project)
   const [selectedSubmission, setSelectedSubmission] = useState<Submission>(new Submission())
 
   
@@ -22,6 +26,9 @@ export default function SubmissionsPage() {
   const [userRole, setUserRole] = useState<string>("")  
   useEffect(() => {
     const fetchData = async () => {
+      if(selectedProject == undefined)
+        setSelectedProject(await fetchProject(parseInt(params.get('project')?.toString()!)))
+      
       const submissionsOBJ: Submission[] = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
       setSubmissions(submissionsOBJ)
       const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
@@ -59,20 +66,26 @@ export default function SubmissionsPage() {
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
       <div className="header-title row">
-        {userRole === "professor" || userRole === "admin" ? <>
-          <button style={{flex: 1}} onClick={() => navigate('/new-submission')}>New Submission</button>
-        </> : <div style={{flex: 1}}></div>}
-        <div className="text center column" style={{flex: 4}}>
-          <div>This is a list of all the submissions. You can participate in all the submissions whose subjects you follow.</div>
-          <div className="row">
-            <div>There are pending submissions from subjects.</div>
-          </div>
+        <div style={{flex: 1}}></div>
+        <div className="text center" style={{flex: 4}}>
+          <div>This is a list of all the submissions for project {selectedProject != undefined ? selectedProject.name: "undefined"}.</div>
         </div>
         <div style={{flex: 1}}></div>
       </div>
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
-          <div>Submission for </div>
+          {selectedProject != undefined ?
+            <div>
+              <div className="center" style={{padding:"30px"}}>
+                <div className="header-text">{selectedProject.name}</div>
+                <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
+              </div>
+              <div style={{margin: "20px"}}>
+                <div className="large-text center">Project Description</div>
+                <div className="small-text">{selectedProject.description}</div>
+              </div>
+            </div>
+          : <></>}
           <div className="column" style={{overflow:'scroll'}}>
             {submissions.map((submission, index) => (
               <button key={index} className="button"

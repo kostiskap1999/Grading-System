@@ -70,7 +70,6 @@ export default function ProjectsPage() {
   }, [])
 
   useEffect(() => {
-    console.log("filteredProjects")
     if (filter === "my")
       setFilteredProjects(user.getProjects())
     else if (filter === "available")
@@ -79,8 +78,6 @@ export default function ProjectsPage() {
       setFilteredProjects(projects)
     else if (filter === "supervising")
       setFilteredProjects([])
-    else
-      console.log("ti")
 
   }, [filter])
 
@@ -105,7 +102,7 @@ export default function ProjectsPage() {
               controlClassName="row center"
               menuClassName="dropdown-menu"        
               options={filterOptions}
-              onChange={(option) => {console.log(option); setFilter(option.value);}}
+              onChange={(option) => {setFilter(option.value);}}
               value={"My Projects"}
               placeholder={filter}
               arrowClosed={<KeyboardArrowDown/>}
@@ -122,6 +119,7 @@ export default function ProjectsPage() {
             ))}
           </div>
         </div>
+        
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
             {selectedProject.id === -1 ? <></> : <>
             <div>
@@ -142,15 +140,7 @@ export default function ProjectsPage() {
             
             
             {userRole === "professor" || userRole === "admin" ? <>
-              <div className="large-text center" style={{margin: "20px"}}>List of Submissions</div>
-              <div className="column" style={{overflow:'scroll'}}>
-                {selectedProject.submissions.map((submission, index) => (
-                  <button key={index} className="button" style={{padding: "20px"}}
-                  >
-                    {submission?.student?.username}
-                  </button>
-                ))}
-              </div>
+              <button className="button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
             </> : <></>}
             </>}
         </div>

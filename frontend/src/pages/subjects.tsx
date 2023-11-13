@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchAndSetupSubjects, fetchAndSetupUser } from "../fetches/helpers/massFetching";
-import { Subject } from "../model/subject";
+import { Subject } from "../model/subject"
+import { fetchAndSetupSubjects, fetchAndSetupUser } from "../fetches/helpers/massFetching"
 
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import ReactDropdown from "react-dropdown";
-import Cookies from "universal-cookie";
-import { User } from "../model/user";
-import '../styles/button.scss';
 import '../styles/general.scss';
 import '../styles/home.scss';
+import '../styles/button.scss';
+import { User } from "../model/user";
+import ReactDropdown from "react-dropdown";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import Cookies from "universal-cookie";
 
 export default function SubjectsPage() {
 
@@ -28,7 +28,7 @@ export default function SubjectsPage() {
     {value: "available", label: "Available Subjects"},
     {value: "all", label: "All Subjects"},
     {value: "supervising", label: "Supervising Subjects"}]  // my = my subjects, all = all subjects, supervising = for profs and admins
-  const [filter, setFilter] = useState<string>("")
+  const [filter, setFilter] = useState<string>("my")
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([new Subject()])
 
   useEffect(() => {
@@ -68,8 +68,7 @@ export default function SubjectsPage() {
       setFilteredSubjects(subjects)
     else if (filter === "supervising")
       setFilteredSubjects([])
-    else
-      console.log("ti")
+    
   }, [filter])
 
   return (
@@ -87,7 +86,7 @@ export default function SubjectsPage() {
                 controlClassName="row center"
                 menuClassName="dropdown-menu"        
                 options={filterOptions}
-                onChange={(option) => {console.log(option); setFilter(option.value);}}
+                onChange={(option) => {setFilter(option.value);}}
                 value={"My Subjects"}
                 placeholder={filter}
                 arrowClosed={<KeyboardArrowDown/>}

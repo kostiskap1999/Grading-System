@@ -1,5 +1,5 @@
 import { Project } from "../model/project";
-import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS, USERPROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 import '../util/yymmdd';
@@ -24,8 +24,21 @@ export async function fetchProjects() {
     return returnedProjects
 }
 
+export async function fetchProject(id: number) {
+    const project: Project = await fetch(HOSTNAME + PROJECTS + "/" + id, GETHEADERS())
+    .then(response => {
+        if(!response.ok) throw new Error(JSON.stringify(response.status));
+        else return response.json();
+    })
+    .catch((error) => {
+        errorHandling(error)
+    });
+        
+    return project
+}
+
 export async function fetchUserProjects(userID: number) {
-    const userProjects: Project[] = await fetch(HOSTNAME + PROJECTS + "/" + userID, GETHEADERS())
+    const userProjects: Project[] = await fetch(HOSTNAME + USERPROJECTS + "/" + userID, GETHEADERS())
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.json();

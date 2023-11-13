@@ -3,4 +3,4 @@ INSERT INTO `users` VALUES (1,'admin', 'Admin','Admin','admin',1),(2, 'professor
 INSERT INTO `subjects` VALUES (1,'JavaScript Basics','The best programming language',5,2),(2,'JavaScript for Experts','The best programming language, but now with a little more pain and caffeine overdose.',7,2);
 INSERT INTO `projects` VALUES (1,'Babysteps in JavasScript','How to print something to the console?','2023-10-31',1),(2,'JavaScript Project 2','How to alert \"Hello World\" on screen?','2023-10-31',1);
 INSERT INTO `user_subject` VALUES (1,1,1),(2,1,2),(3,2,1),(4,2,2),(5,3,1),(6,3,2);
-INSERT INTO `submissions` VALUES (1, 'console.log(\"Hello World\")', '2023-10-22', null, null, 1, 1),(2, 'consolee.log(\"Hello World\")', '2023-10-29', null, null, 2, 1), (3, 'alert("Hello world")', '2023-10-12', null, null, 1, 2), (4, 'alertt("Hello world")', '2023-10-10', null, null, 2, 2);
+INSERT INTO `submissions` VALUES (1, 'console.log(\"Hello World\")', '2023-10-22', null, null, 3, 1),(2, 'consolee.log(\"Hello World\")', '2023-10-29', null, null, 4, 1), (3, 'alert("Hello world")', '2023-10-12', null, null, 3, 2), (4, 'alertt("Hello world")', '2023-10-10', null, null, 4, 2);

@@ -21,7 +21,7 @@ export default function CodeSandbox({ paramCode }: { paramCode: string }) {
   return (
     <div>
       <CodeMirror value={code} onChange={setCode} height="200px" extensions={[javascript({ jsx: true })]} />
-      <button onClick={() => runCode()}>Run Code</button>
+      <button className="button" onClick={() => runCode()}>Run Code</button>
     </div>
   );
 }
