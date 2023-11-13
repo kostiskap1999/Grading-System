@@ -8,6 +8,7 @@ import ProjectsPage from "../pages/projects";
 import SubjectsPage from "../pages/subjects";
 import { Class, Code } from "@mui/icons-material";
 import NewProjectPage from "../pages/newProject";
+import SubmissionsPage from "../pages/submissions";
 
 const appRoutes: RouteType[] = [
   {
@@ -47,6 +48,11 @@ const appRoutes: RouteType[] = [
     protected: 2,
     element: <NewProjectPage/>,
     path: "/new-project"
+  },
+  {
+    protected: 2,
+    element: <SubmissionsPage/>,
+    path: "/submissions"
   }
 ]
 
