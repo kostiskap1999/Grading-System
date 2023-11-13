@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Project } from "../model/project"
-import { fetchAndSetupProjects, fetchAndSetupUser } from "../fetches/helpers/massFetching"
-import FileUpload from "../components/fileUpload";
-import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { User } from "../model/user";
+import { useEffect, useState } from "react";
+import ReactDropdown from "react-dropdown";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "universal-cookie";
+import FileUpload from "../components/fileUpload";
 import { fetchProjects } from "../fetches/fetchProjects";
+import { fetchAndSetupProjects, fetchAndSetupUser } from "../fetches/helpers/massFetching";
+import { Project } from "../model/project";
+import { User } from "../model/user";
 
 export default function ProjectsPage() {
 

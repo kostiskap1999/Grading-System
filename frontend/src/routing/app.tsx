@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
-import store, { persistor } from "../store/store";
-import ProtectedRoute from "./protectedRoute";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import PublicRoute from "./publicRoute";
-import appRoutes from "./appRoutes";
 import DashboardItem from "../components/dashboardItem";
+import store, { persistor } from "../store/store";
+import appRoutes from "./appRoutes";
+import ProtectedRoute from "./protectedRoute";
+import PublicRoute from "./publicRoute";
 
 export default function App() {
     return (

@@ -2,7 +2,7 @@ import { Project } from "../model/project";
 import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
-import '../util/yymmdd'
+import '../util/yymmdd';
 
 export async function fetchProjects() {
     const projects: Project[] = await fetch(HOSTNAME + PROJECTS, GETHEADERS())

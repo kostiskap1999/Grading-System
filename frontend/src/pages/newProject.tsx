@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
+import { postProject } from "../fetches/fetchProjects";
+import { fetchSubjects } from "../fetches/fetchSubjects";
 import { Project } from "../model/project";
 import { Subject } from "../model/subject";
-import { fetchSubjects } from "../fetches/fetchSubjects";
-import { postProject } from "../fetches/fetchProjects";
 
 export default function NewProjectPage() {
   

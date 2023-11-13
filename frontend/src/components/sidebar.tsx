@@ -1,12 +1,12 @@
-import React from 'react';
-import '../styles/login.scss';
-import { Drawer, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import appRoutes from '../routing/appRoutes';
-import { Link, useNavigate } from 'react-router-dom';
 import { Logout } from '@mui/icons-material';
-import { LOGOUT_USER } from '../store/types';
+import { Drawer, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import appRoutes from '../routing/appRoutes';
+import { LOGOUT_USER } from '../store/types';
+import '../styles/login.scss';
 
 export default function Sidebar() {
 

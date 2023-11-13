@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Subject } from "../model/subject"
-import { fetchAndSetupSubjects, fetchAndSetupUser } from "../fetches/helpers/massFetching"
+import { fetchAndSetupSubjects, fetchAndSetupUser } from "../fetches/helpers/massFetching";
+import { Subject } from "../model/subject";
 
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import ReactDropdown from "react-dropdown";
+import Cookies from "universal-cookie";
+import { User } from "../model/user";
+import '../styles/button.scss';
 import '../styles/general.scss';
 import '../styles/home.scss';
-import '../styles/button.scss';
-import { User } from "../model/user";
-import ReactDropdown from "react-dropdown";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import Cookies from "universal-cookie";
 
 export default function SubjectsPage() {
 

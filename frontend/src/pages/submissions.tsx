@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Submission } from "../model/submission"
-import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../fetches/helpers/massFetching"
-import FileUpload from "../components/fileUpload";
-import { User } from "../model/user";
 import Cookies from "universal-cookie";
-import { fetchSubmissions } from "../fetches/fetchSubmissions";
 import CodeSandbox from "../components/codeSandbox";
+import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../fetches/helpers/massFetching";
+import { Submission } from "../model/submission";
+import { User } from "../model/user";
 
 export default function SubmissionsPage() {
 

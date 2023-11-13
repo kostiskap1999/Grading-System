@@ -9,11 +9,6 @@ export interface ISubject {
     supervisorID: number;
 }
 
-export interface ISubjectExtraData {
-    id: number,
-    projects: number[]
-}
-
 export const ISubjectDefaults = {
     id: -1,
     name: "",
@@ -21,9 +16,4 @@ export const ISubjectDefaults = {
     semester: -1,
     projects: [],
     supervisorID: -1
-}
-
-export const ISubjectExtraDataDefaults = {
-    id: -1,
-    projects: []
 }

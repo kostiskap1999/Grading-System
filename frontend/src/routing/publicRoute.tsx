@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { ReactNode } from "react";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 interface IPublicRouteProps{
   children: ReactNode

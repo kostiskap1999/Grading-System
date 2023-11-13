@@ -1,4 +1,3 @@
-import { Project } from "../model/project";
 import { Subject } from "../model/subject";
 
 export interface IUser {
@@ -9,7 +8,6 @@ export interface IUser {
     role: string,
     subjects: Subject[]
 }
-
 
 export const IUserDefaults = {
     id: -1,

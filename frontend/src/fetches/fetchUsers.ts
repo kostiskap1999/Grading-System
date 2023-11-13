@@ -1,4 +1,4 @@
-import { IUser, IUserExtraData } from "../interfaces/iUser";
+import { IUser } from "../interfaces/iUser";
 import { User } from "../model/user";
 import { GETHEADERS, HOSTNAME, USER, USERS } from "../parameters/database";
 import { errorHandling } from "../util/error";

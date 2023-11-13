@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { User } from "../model/user";
 import { fetchAndSetupUser } from "../fetches/helpers/massFetching";
 import { Project } from "../model/project";
+import { User } from "../model/user";
 
-import '../styles/general.scss';
-import '../styles/home.scss';
-import '../styles/button.scss';
-import '../styles/newProject.scss';
-import { Subject } from "../model/subject";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { Subject } from "../model/subject";
+import '../styles/button.scss';
+import '../styles/general.scss';
+import '../styles/home.scss';
+import '../styles/newProject.scss';
 
 export default function HomePage() {
 

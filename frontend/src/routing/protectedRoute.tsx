@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
+import { ReactNode } from "react";
 import { useSelector } from "react-redux";
-import { ReactNode, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 interface IProtectedRouteProps{
   children: ReactNode,

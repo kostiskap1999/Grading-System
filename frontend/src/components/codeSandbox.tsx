@@ -1,7 +1,6 @@
-import {useState, useEffect} from 'react'
-import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import { ConnectedTvOutlined } from '@mui/icons-material';
+import CodeMirror from '@uiw/react-codemirror';
+import { useEffect, useState } from 'react';
 
 export default function CodeSandbox({ paramCode }: { paramCode: string }) {
   const [code, setCode] = useState<string>('')

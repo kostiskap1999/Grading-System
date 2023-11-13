@@ -1,5 +1,4 @@
-
-import { fetchProjects, fetchUserProjects } from "../fetches/fetchProjects";
+import { fetchUserProjects } from "../fetches/fetchProjects";
 import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { Project } from "./project";
 

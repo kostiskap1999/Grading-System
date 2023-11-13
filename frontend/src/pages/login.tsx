@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import '../styles/login.scss';
-import { login } from '../fetches/login';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { login } from '../fetches/login';
+import '../styles/login.scss';
 
-import { LOGIN_USER } from "../store/types";
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
-import { IUser } from '../interfaces/iUser';
+import { User } from '../model/user';
+import { LOGIN_USER } from "../store/types";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const user: IUser = await login({username, password})
+    const user: User = await login({username, password})
     // const token = ""
 
     

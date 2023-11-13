@@ -1,8 +1,8 @@
 import { Action, createStore } from "redux";
 import { LOGIN_USER, LOGOUT_USER } from "./types";
 
-import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 
 const intitialState = {
   authenticated: false
