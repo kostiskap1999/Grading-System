@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Submission } from "../model/submission"
-import { fetchAndSetupUser } from "../fetches/helpers/massFetching"
+import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../fetches/helpers/massFetching"
 import FileUpload from "../components/fileUpload";
 import { User } from "../model/user";
 import Cookies from "universal-cookie";
@@ -24,8 +24,7 @@ export default function SubmissionsPage() {
   const [userRole, setUserRole] = useState<string>("")  
   useEffect(() => {
     const fetchData = async () => {
-      const submissionsOBJ: Submission[] = await fetchSubmissions(parseInt(params.get('project')?.toString()!))
-      console.log(submissionsOBJ)
+      const submissionsOBJ: Submission[] = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
       setSubmissions(submissionsOBJ)
       const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
       for(const submission of submissionsOBJ){
@@ -94,7 +93,7 @@ export default function SubmissionsPage() {
               </div>
               <div style={{margin: "20px"}}>
                 <div className="large-text center">Submission Code</div>
-                <CodeSandbox code={selectedSubmission.code} />
+                <CodeSandbox paramCode={selectedSubmission.code} />
               </div>
             </div>
             </>}

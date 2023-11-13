@@ -4,23 +4,18 @@ import { Subject } from "../model/subject";
 export interface IUser {
     id: number,
     username: string,
+    first_name: string,
+    last_name: string,
     role: string,
     subjects: Subject[]
 }
 
-export interface IUserExtraData {
-    id: number,
-    subjects: number[]
-}
 
 export const IUserDefaults = {
     id: -1,
     username: "",
+    first_name: "",
+    last_name: "",
     role: "",
-    subjects: new Array()
-}
-
-export const IUserExtraDataDefaults = {
-    id: -1,
     subjects: new Array()
 }

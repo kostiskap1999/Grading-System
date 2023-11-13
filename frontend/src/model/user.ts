@@ -6,12 +6,16 @@ import { Subject } from "./subject";
 export class User {
     id: number; // unique id
     username: string; // unique username
+    firstName: string;
+    lastName: string;
     role: string; // admin, professor, student
     subjects: Subject[];
 
-    constructor({id, username, role, subjects = []}: IUser = IUserDefaults) {
+    constructor({id, username, first_name, last_name, role, subjects = []}: IUser = IUserDefaults) {
         this.id = id
         this.username = username
+        this.firstName = first_name
+        this.lastName = last_name
         this.role = role
         this.subjects = subjects
     }
