@@ -6,7 +6,7 @@ const query = util.promisify(config.query).bind(config);
 const NotFoundError = require('../errors/NotFoundError');
 const InternalServerError = require('../errors/NotFoundError');
 
-async function getProjects(request) {
+async function getProjects() {
   try {
     util.promisify(config.connect);
     const sqlSelect = "SELECT * FROM projects;";

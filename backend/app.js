@@ -76,7 +76,7 @@ router.route('/subjects').get(async (request, response) => {
 // PROJECTS ROUTER
 router.route('/projects').get(async (request, response) => {
   try {
-    const data = await dbprojects.getProjects(request);
+    const data = await dbprojects.getProjects();
     response.json(data);
   } catch (err) {
     console.error(err);
@@ -111,8 +111,20 @@ router.route('/subjects/:userid').get(async (request, response) => {
   }
 });
 
+// PROJECT ROUTER
+router.route('/projects/:id').get(async (request, response) => {
+  try {
+    const data = await dbprojects.getProject(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
 // SUBJECTS-PROJECTS ROUTER
-router.route('/projects/:subjectid').get(async (request, response) => {
+router.route('/subject-projects/:subjectid').get(async (request, response) => {
   try {
     const data = await dbprojects.getSubjectProjects(request);
     response.json(data);

@@ -1,5 +1,5 @@
 import { Project } from "../model/project";
-import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS, USERPROJECTS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 import '../util/yymmdd';
@@ -58,7 +58,7 @@ export async function fetchUserProjects(userID: number) {
 
 export async function postProject(project: Project) {
 
-    const response: boolean | void = await fetch(HOSTNAME + PROJECTS, POSTHEADERS(project))
+    const response: boolean | void = await fetch(HOSTNAME + SUBJECTPROJECTS, POSTHEADERS(project))
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.ok;

@@ -9,6 +9,7 @@ export const SUBJECTS: string = '/subjects'
 export const SUPERVISINGSUBJECTS: string = '/supervising-subjects'
 export const PROJECTS: string = '/projects'
 export const USERPROJECTS: string = '/user-projects'
+export const SUBJECTPROJECTS: string = '/subject-projects'
 export const SUBMISSIONS: string = '/submissions'
 
 
