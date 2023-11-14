@@ -23,7 +23,7 @@ async function getProjects() {
 async function getProject(request) {
   try {
     util.promisify(config.connect);
-    const sqlSelect = `SELECT * FROM projects WHERE id='${request.params.userid}';`;
+    const sqlSelect = `SELECT * FROM projects WHERE id=${request.params.id};`;
     
     const result = await query(sqlSelect);
     

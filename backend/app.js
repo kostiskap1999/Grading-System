@@ -122,7 +122,7 @@ router.route('/projects').get(async (request, response) => {
 });
 
 // PROJECT ROUTER
-router.route('/projects:id').get(async (request, response) => {
+router.route('/projects/:id').get(async (request, response) => {
   try {
     const data = await dbprojects.getProject(request);
     response.json(data);
