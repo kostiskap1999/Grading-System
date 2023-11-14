@@ -121,6 +121,18 @@ router.route('/projects').get(async (request, response) => {
   }
 });
 
+// PROJECT ROUTER
+router.route('/projects:id').get(async (request, response) => {
+  try {
+    const data = await dbprojects.getProject(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
 // SUBJECT-PROJECTS ROUTER
 router.route('/subject-projects/:subjectid').get(async (request, response) => {
   try {
