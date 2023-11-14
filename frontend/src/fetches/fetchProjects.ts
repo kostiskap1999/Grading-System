@@ -33,6 +33,8 @@ export async function fetchProject(id: number) {
     .catch((error) => {
         errorHandling(error)
     });
+
+    project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
         
     return project
 }
@@ -56,9 +58,28 @@ export async function fetchUserProjects(userID: number) {
     return returnedProjects
 }
 
+export async function fetchSubjectProjects(subjectID: number) {
+    const userProjects: Project[] = await fetch(HOSTNAME + SUBJECTPROJECTS + "/" + subjectID, GETHEADERS())
+    .then(response => {
+        if(!response.ok) throw new Error(JSON.stringify(response.status));
+        else return response.json();
+    })
+    .catch((error) => {
+        errorHandling(error)
+    });
+
+    const returnedProjects: Project[] = []
+    for(const project of userProjects){
+        project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
+        returnedProjects.push(new Project(project))
+    }
+
+    return returnedProjects
+}
+
 export async function postProject(project: Project) {
 
-    const response: boolean | void = await fetch(HOSTNAME + SUBJECTPROJECTS, POSTHEADERS(project))
+    const response: boolean | void = await fetch(HOSTNAME + PROJECTS, POSTHEADERS(project))
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.ok;

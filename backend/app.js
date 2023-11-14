@@ -4,7 +4,7 @@ var  bodyParser = require('body-parser');
 var  cors = require('cors');
 
 var app = express();
-var  router = express.Router();
+var router = express.Router();
 
 app.use(bodyParser.urlencoded({ extended:  true }));
 app.use(bodyParser.json());
@@ -35,6 +35,9 @@ router.route('/login').post(async (request, response) => {
   }
 });
 
+// *******************
+// ****** USERS ******
+// *******************
 
 // USERS ROUTER
 router.route('/users').get(async (request, response) => {
@@ -49,7 +52,7 @@ router.route('/users').get(async (request, response) => {
 });
 
 // USER ROUTER
-router.route('/user/:userid').get(async (request, response) => {
+router.route('/users/:userid').get(async (request, response) => {
   try {
     const data = await dbusers.getUser(request);
     response.json(data);
@@ -59,6 +62,11 @@ router.route('/user/:userid').get(async (request, response) => {
     response.status(err.statusCode).json({error: err.message});
   }
 });
+
+
+// *******************
+// ****** SUBJECTS ******
+// *******************
 
 // SUBJECTS ROUTER
 router.route('/subjects').get(async (request, response) => {
@@ -72,6 +80,34 @@ router.route('/subjects').get(async (request, response) => {
   }
 });
 
+// SUBJECT ROUTER
+router.route('/subjects/:id').get(async (request, response) => {
+  try {
+    const data = await dbsubjects.getSubject(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+// USER-SUBJECT ROUTER
+router.route('/user-subjects/:userid').get(async (request, response) => {
+  try {
+    const data = await dbsubjects.getUserSubjects(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+
+// *******************
+// ****** PROJECTS ******
+// *******************
 
 // PROJECTS ROUTER
 router.route('/projects').get(async (request, response) => {
@@ -85,11 +121,10 @@ router.route('/projects').get(async (request, response) => {
   }
 });
 
-
-// PROJECT SUBMISSIONS ROUTER
-router.route('/submissions/:projectid').get(async (request, response) => {
+// SUBJECT-PROJECTS ROUTER
+router.route('/subject-projects/:subjectid').get(async (request, response) => {
   try {
-    const data = await dbsubmissions.getProjectSubmissions(request);
+    const data = await dbprojects.getSubjectProjects(request);
     response.json(data);
   } catch (err) {
     console.error(err);
@@ -98,11 +133,10 @@ router.route('/submissions/:projectid').get(async (request, response) => {
   }
 });
 
-
-// USER-SUBJECTS ROUTER
-router.route('/subjects/:userid').get(async (request, response) => {
+// USER-PROJECTS ROUTER
+router.route('/user-projects/:userid').get(async (request, response) => {
   try {
-    const data = await dbsubjects.getUserSubjects(request);
+    const data = await dbprojects.getUserProjects(request);
     response.json(data);
   } catch (err) {
     console.error(err);
@@ -123,34 +157,26 @@ router.route('/projects/:id').get(async (request, response) => {
   }
 });
 
-// SUBJECTS-PROJECTS ROUTER
-router.route('/subject-projects/:subjectid').get(async (request, response) => {
-  try {
-    const data = await dbprojects.getSubjectProjects(request);
-    response.json(data);
-  } catch (err) {
-    console.error(err);
-    response.statusMessage=err.message
-    response.status(err.statusCode).json({error: err.message});
-  }
-});
-
-// USER-PROJECTS ROUTER
-router.route('/userprojects/:userid').get(async (request, response) => {
-  try {
-    const data = await dbprojects.getUserProjects(request);
-    response.json(data);
-  } catch (err) {
-    console.error(err);
-    response.statusMessage=err.message
-    response.status(err.statusCode).json({error: err.message});
-  }
-});
-
 // POST PROJECTS ROUTER
 router.route('/projects').post(async (request, response) => {
   try {
     const data = await dbprojects.postProjects(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+// *******************
+// ****** SUBMISSIONS ******
+// *******************
+
+// SUBMISSIONS ROUTER
+router.route('/submissions/:projectid').get(async (request, response) => {
+  try {
+    const data = await dbsubmissions.getProjectSubmissions(request);
     response.json(data);
   } catch (err) {
     console.error(err);

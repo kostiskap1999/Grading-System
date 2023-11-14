@@ -46,7 +46,7 @@ async function getUserSubjects(request) {
     util.promisify(config.connect);
     var sqlSelect = `SELECT subject_id FROM user_subject WHERE user_id='${request.params.userid}';`;
     const subjectIDs = await query(sqlSelect);
-    
+
     var result = []
     if (subjectIDs.length != 0){
       sqlSelect = `SELECT * FROM subjects WHERE`
@@ -60,7 +60,6 @@ async function getUserSubjects(request) {
       result = await query(sqlSelect);
     }
     
-
     util.promisify(config.end);
     return result
     

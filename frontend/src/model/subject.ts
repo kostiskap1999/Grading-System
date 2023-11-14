@@ -1,4 +1,4 @@
-import { fetchUserProjects } from "../fetches/fetchProjects";
+import { fetchSubjectProjects } from "../fetches/fetchProjects";
 import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { Project } from "./project";
 
@@ -20,7 +20,7 @@ export class Subject {
     }
 
     async setup(userRole?: string){
-        const projects: Project[] = await fetchUserProjects(this.id)
+        const projects: Project[] = await fetchSubjectProjects(this.id)
         if(userRole == "professor" || userRole == "admin")
             for(const project of projects)
                 await project.setup()
