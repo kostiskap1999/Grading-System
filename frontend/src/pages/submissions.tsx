@@ -91,7 +91,7 @@ export default function SubmissionsPage() {
               <button key={index} className="button"
                 onClick={() => {navigate('/submissions?project='+ params.get('project') +'&id=' + submission.id); setRerender(rerender+1)}}
               >
-                {submission.student?.username}
+                {submission.student?.firstName + " " + submission.student?.lastName}
               </button>
             ))}
           </div>
@@ -100,7 +100,7 @@ export default function SubmissionsPage() {
             {selectedSubmission.id === -1 ? <></> : <>
             <div>
               <div className="center" style={{padding:"30px"}}>
-                <div className="header-text">{selectedSubmission.student?.username}</div>
+                <div className="header-text">{selectedSubmission.student?.firstName + " " + selectedSubmission.student?.lastName}</div>
               </div>
               <div style={{margin: "20px"}}>
                 <div className="large-text center">Submission Code</div>

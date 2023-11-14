@@ -12,6 +12,7 @@ export default function CodeSandbox({ paramCode }: { paramCode: string }) {
   const runCode = () => {
     try{
       Function(code)()
+      alert("Successful code execution.")
     }
     catch{
       alert("There was something wrong with the code. Execution aborted.")
