@@ -197,4 +197,16 @@ router.route('/submissions/:projectid').get(async (request, response) => {
   }
 });
 
+// GET SUBMISSIONS ROUTER
+router.route('/submissions').post(async (request, response) => {
+  try {
+    const data = await dbsubmissions.postSubmission(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
 module.exports = app;
