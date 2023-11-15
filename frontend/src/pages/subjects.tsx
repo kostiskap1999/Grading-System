@@ -28,7 +28,7 @@ export default function SubjectsPage() {
     {value: "available", label: "Available Subjects"},
     {value: "all", label: "All Subjects"},
     {value: "supervising", label: "Supervising Subjects"}]  // my = my subjects, all = all subjects, supervising = for profs and admins
-  const [filter, setFilter] = useState<string>("my")
+  const [filter, setFilter] = useState<string>("")
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([new Subject()])
 
   useEffect(() => {
