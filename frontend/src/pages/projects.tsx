@@ -133,7 +133,7 @@ export default function ProjectsPage() {
               </div>
             </div>
             {user.hasProject(selectedProject.id) ?
-              <FileUpload />
+              <FileUpload user={user} pID={selectedProject.id} />
             :
               <div className="button">You can not upload a submission for a subject you are not joined. Please join subject and try again.</div>
             }

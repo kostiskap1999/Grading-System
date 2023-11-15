@@ -2,10 +2,16 @@ import { CloudUpload } from '@mui/icons-material';
 import { ChangeEvent, useState } from 'react';
 import '../styles/button.scss';
 import '../styles/login.scss';
+import { User } from '../model/user';
+import { postProject } from '../fetches/fetchProjects';
+import { prepareSubmission } from '../fetches/helpers/preparePosting';
 
+interface FileUploadProps {
+  user: User;
+  pID: number;
+}
 
-
-export default function FileUpload() {
+export default function FileUpload({ user, pID }: FileUploadProps) {
 
     const [file, setFile] = useState<File>();
 
@@ -16,12 +22,19 @@ export default function FileUpload() {
       };
     
     
-      const handleUploadClick = () => {
+      const handleUploadClick = async () => {
         if (!file) {
           return;
         }
-    
-        // Uploading the file using the fetch API to the server
+
+        const reader = new FileReader();
+
+        var fileContents: string
+        reader.onload = async (event) => {
+            fileContents = event.target?.result!.toString()!;
+            await prepareSubmission({user: user, pID: pID, code: fileContents})
+        };
+
       };
 
   return (
@@ -36,7 +49,7 @@ export default function FileUpload() {
         <div style={{backgroundColor: "white", width: "400px"}}>
             {file != null ? file && `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}  -  ${file.type}` : "No file selected"}
         </div>
-        <button className="button" style={{padding: "15px"}} onClick={handleUploadClick}>Upload</button>
+        <button className="button" style={{padding: "15px"}} onClick={async () => {await handleUploadClick()}}>Upload Project</button>
     </div>    
   );
 }

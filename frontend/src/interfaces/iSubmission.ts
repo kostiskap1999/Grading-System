@@ -19,3 +19,19 @@ export const ISubmissionDefaults = {
     comment: "",
     submitee_id: -1
 }
+
+export interface IPostSubmission {
+    code: string;
+    date: string;
+    comment: string;
+    submitee_id: number;
+    project_id: number;
+}
+
+export const IPostSubmissionDefaults = {
+    code: "",
+    date: "1900-1-1",
+    comment: "",
+    submitee_id: -1,
+    project_id: -1
+}
