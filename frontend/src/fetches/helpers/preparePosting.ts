@@ -10,7 +10,6 @@ interface prepareSubmissionInterface {
   }
 
 export async function prepareSubmission({user, pID, code}: prepareSubmissionInterface) {
-    
     var date: Date | string = new Date()
 
     var year: number = date.getFullYear()

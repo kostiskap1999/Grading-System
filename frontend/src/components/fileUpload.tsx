@@ -26,16 +26,30 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
         if (!file) {
           return;
         }
+        const fileContents = await readFileContents(file);
+        await prepareSubmission({ user: user, pID: pID, code: fileContents });
+    };
 
+    const readFileContents = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
-
-        var fileContents: string
-        reader.onload = async (event) => {
-            fileContents = event.target?.result!.toString()!;
-            await prepareSubmission({user: user, pID: pID, code: fileContents})
+  
+        reader.onload = (event) => {
+          const fileContents = event.target?.result?.toString();
+          if (fileContents) {
+            resolve(fileContents);
+          } else {
+            reject(new Error('Failed to read file contents.'));
+          }
         };
-
-      };
+  
+        reader.onerror = (event) => {
+          reject(new Error('Error reading file.'));
+        };
+  
+        reader.readAsText(file);
+      });
+    };
 
   return (
     <div className='row' style={{maxHeight: "50px", margin: "20px"}}>
@@ -49,7 +63,7 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
         <div style={{backgroundColor: "white", width: "400px"}}>
             {file != null ? file && `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}  -  ${file.type}` : "No file selected"}
         </div>
-        <button className="button" style={{padding: "15px"}} onClick={async () => {await handleUploadClick()}}>Upload Project</button>
+        <button className="button" style={{padding: "15px"}} onClick={handleUploadClick}>Upload Project</button>
     </div>    
   );
 }
