@@ -28,8 +28,27 @@ async function checkToken(token) {
   }
 }
 
+async function getUserIDFromToken(request) {
+  try {
+    const decoded = checkToken(request.headers.token)
+    return decoded.user_id
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function getRoleFromToken(request) {
+  try {
+    const decoded = checkToken(request.headers.token)
+    return decoded.role
+  } catch (err) {
+    throw err;
+  }
+}
 
 module.exports = {
   createToken: createToken,
-  checkToken: checkToken
+  checkToken: checkToken,
+  getUserIDFromToken: getUserIDFromToken,
+  getRoleFromToken: getRoleFromToken
 }

@@ -17,6 +17,7 @@ router.use((request, response, next) => {
 });
 
 var dblogin = require('./routes/login');
+var dbtoken = require('./routes/token');
 var dbusers = require('./routes/users');
 var dbsubjects = require('./routes/subjects');
 var dbprojects = require('./routes/projects');
@@ -62,6 +63,35 @@ router.route('/users/:userid').get(async (request, response) => {
     response.status(err.statusCode).json({error: err.message});
   }
 });
+
+// *******************
+// ****** TOKEN ******
+// *******************
+
+// TOKEN USER ID ROUTER
+router.route('/token/id').get(async (request, response) => {
+  try {
+    const data = await dbtoken.getUserIDFromToken(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+// TOKEN ROLE ROUTER
+router.route('/token/role').get(async (request, response) => {
+  try {
+    const data = await dbtoken.getRoleFromToken(request);
+    response.json(data);
+  } catch (err) {
+    console.error(err);
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
 
 
 // *******************
