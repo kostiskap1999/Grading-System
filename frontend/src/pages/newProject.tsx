@@ -4,6 +4,7 @@ import { postProject } from "../fetches/fetchProjects";
 import { fetchSubjects } from "../fetches/fetchSubjects";
 import { Project } from "../model/project";
 import { Subject } from "../model/subject";
+import { fetchTokenID } from "../fetches/fetchToken";
 
 export default function NewProjectPage() {
   
@@ -20,10 +21,7 @@ export default function NewProjectPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cookies: Cookies = new Cookies();
-      const userID: number = cookies.get('user_id')
-    
-      // const supSubjects: Subject[] = await fetchSupervisingSubjects(userID)
+      // const supSubjects: Subject[] = await fetchSupervisingSubjects(await fetchTokenID())
       const supSubjects: Subject[] = await fetchSubjects()
       setSupervisingSubjects(supSubjects)
     }

@@ -19,12 +19,9 @@ export default function LoginPage() {
     e.preventDefault()
 
     const user: User = await login({username, password})
-    // const token = ""
-
     
     if (user.id !== -1){
       const cookies = new Cookies();
-      cookies.set('user_id', JSON.stringify(user.id), { path: '/' }); //temporary solution, will implement proper token later
       cookies.set('role-temp', JSON.stringify(user.role), { path: '/' }); //temporary solution, will implement proper token later
 
       // cookies.set('token', JSON.stringify(token), { path: '/' });

@@ -8,6 +8,7 @@ import { fetchProjects } from "../fetches/fetchProjects";
 import { fetchAndSetupProjects, fetchAndSetupUser } from "../fetches/helpers/massFetching";
 import { Project } from "../model/project";
 import { User } from "../model/user";
+import { fetchTokenID, fetchTokenRole } from "../fetches/fetchToken";
 
 export default function ProjectsPage() {
 
@@ -50,18 +51,14 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     const fetchRole = async () => {
-      const cookies: Cookies = new Cookies();
-      const userRole: number = cookies.get('role-temp')
-      setUserRole(userRole)
+      setUserRole(await fetchTokenRole())
     }
     fetchRole()
   }, [userRole])
 
   useEffect(() => {
     const fetchData = async () => {
-      const cookies: Cookies = new Cookies();
-      const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAndSetupUser(userID)
+      const userOBJ: User = await fetchAndSetupUser(await fetchTokenID())
       setUser(userOBJ)
       setFilter(filterOptions[0].value)
     }

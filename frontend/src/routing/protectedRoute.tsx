@@ -1,27 +1,33 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { fetchTokenRole } from "../fetches/fetchToken";
 
 interface IProtectedRouteProps{
   children: ReactNode,
   protectionLevel: number
 }
 
-const ProtectedRoute = ({children, protectionLevel}: IProtectedRouteProps) => {
-  
-  var auth = useSelector((store: any) => store.authenticated);
-  
-  const cookies: Cookies = new Cookies();
-  const userRole: number = cookies.get('role-temp') // temporary solution
+const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, protectionLevel }) => {
+  var auth = useSelector((store: any) => store.authenticated)
+  const [userRole, setUserRole] = useState<number | null>(null)
 
-  if(((userRole >= 2 && protectionLevel > 1)) || (userRole === 1 && protectionLevel > 2))
-    auth = false
+  useEffect(() => {
+    const fetchData = async () => {
+      const role = await fetchTokenRole()
+      setUserRole(role);
+      
+      if (((role >= 2 && protectionLevel > 1) || (role === 1 && protectionLevel > 2)))
+        auth = false
+    }
+    fetchData()
+  }, [])
 
-  if (!auth) {
-    return <Navigate to="/" replace />;
-  }
-  return children;
-};
+  if (!auth)
+    return <Navigate to="/" replace />
 
-export default ProtectedRoute;
+  return children
+}
+
+export default ProtectedRoute

@@ -10,6 +10,7 @@ import { User } from "../model/user";
 import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import Cookies from "universal-cookie";
+import { fetchTokenID } from "../fetches/fetchToken";
 
 export default function SubjectsPage() {
 
@@ -49,9 +50,7 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cookies: Cookies = new Cookies();
-      const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAndSetupUser(userID)
+      const userOBJ: User = await fetchAndSetupUser(await fetchTokenID())
       setUser(userOBJ)
       setFilter(filterOptions[0].value)
     }

@@ -10,6 +10,7 @@ import '../styles/button.scss';
 import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/newProject.scss';
+import { fetchTokenID } from "../fetches/fetchToken";
 
 export default function HomePage() {
 
@@ -18,9 +19,8 @@ export default function HomePage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const cookies: Cookies = new Cookies();
-      const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAndSetupUser(userID)
+      console.log(await fetchTokenID())
+      const userOBJ: User = await fetchAndSetupUser(await fetchTokenID())
       setUser(userOBJ)
     }
 

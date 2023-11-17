@@ -1,8 +1,11 @@
+import Cookies from "universal-cookie"
 import { ICredentials } from "../interfaces/iCredentials"
 
 export const HOSTNAME: string = 'http://localhost:8000'
 
 export const LOGIN: string = '/login'
+
+export const TOKEN: string = '/token'
 
 export const USERS: string = '/users'
 
@@ -16,6 +19,7 @@ export const SUBJECTPROJECTS: string = '/subject-projects'
 
 export const SUBMISSIONS: string = '/submissions'
 
+const cookies = new Cookies()
 
 export const LOGINHEADERS = (credentials: ICredentials) => (
     {
@@ -27,21 +31,21 @@ export const LOGINHEADERS = (credentials: ICredentials) => (
     }
 )
 
-export const GETHEADERS = (token: string = "") => (
+export const GETHEADERS = () => (
     {
         method: "GET",
         headers: {
-          'token': token
+          'token': cookies.get('token')
         }
       }
 )
 
-export const POSTHEADERS = (data: object, token: string = "") => (
+export const POSTHEADERS = (data: object) => (
     {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            'token': token
+            'token': cookies.get('token')
         },
         body: JSON.stringify(data)
       }
