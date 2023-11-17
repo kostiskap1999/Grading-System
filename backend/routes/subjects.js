@@ -1,4 +1,5 @@
 var  config = require('../database/config');
+const dbtoken = require('./token.js')
 const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
@@ -8,6 +9,7 @@ const InternalServerError = require('../errors/NotFoundError');
 
 async function getSubjects(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = "SELECT * FROM subjects;";
     
@@ -22,6 +24,7 @@ async function getSubjects(request) {
 
 async function getSubject(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = `SELECT * FROM subjects WHERE id='${request.params.userid}';`;
     
@@ -43,6 +46,7 @@ async function getSubject(request) {
 
 async function getUserSubjects(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     var sqlSelect = `SELECT subject_id FROM user_subject WHERE user_id='${request.params.userid}';`;
     const subjectIDs = await query(sqlSelect);

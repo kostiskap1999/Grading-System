@@ -1,4 +1,5 @@
 var  config = require('../database/config');
+const dbtoken = require('./token.js')
 const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
@@ -9,6 +10,7 @@ const InternalServerError = require('../errors/NotFoundError');
 
 async function getUsers(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = "SELECT * FROM users;";
     
@@ -23,6 +25,7 @@ async function getUsers(request) {
 
 async function getUser(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = `SELECT * FROM users WHERE id='${request.params.userid}';`;
     

@@ -1,4 +1,5 @@
 var  config = require('../database/config');
+const dbtoken = require('./token.js')
 const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
@@ -6,8 +7,9 @@ const query = util.promisify(config.query).bind(config);
 const NotFoundError = require('../errors/NotFoundError');
 const InternalServerError = require('../errors/NotFoundError');
 
-async function getProjects() {
+async function getProjects(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = "SELECT * FROM projects;";
     
@@ -22,6 +24,7 @@ async function getProjects() {
 
 async function getProject(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = `SELECT * FROM projects WHERE id=${request.params.id};`;
     
@@ -42,6 +45,7 @@ async function getProject(request) {
 
 async function getUserProjects(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     
     var sqlSelect = `SELECT subject_id FROM user_subject WHERE user_id=${request.params.userid};`;
@@ -70,6 +74,7 @@ async function getUserProjects(request) {
 
 async function getSubjectProjects(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect);
     const sqlSelect = `SELECT * FROM projects WHERE subject_id=${request.params.subjectid};`;
     const result = await query(sqlSelect);

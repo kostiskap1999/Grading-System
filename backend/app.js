@@ -112,7 +112,7 @@ router.route('/user-subjects/:userid').get(async (request, response) => {
 // PROJECTS ROUTER
 router.route('/projects').get(async (request, response) => {
   try {
-    const data = await dbprojects.getProjects();
+    const data = await dbprojects.getProjects(request);
     response.json(data);
   } catch (err) {
     console.error(err);

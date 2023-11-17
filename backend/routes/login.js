@@ -1,4 +1,5 @@
 var  config = require('../database/config');
+const dbtoken = require('./token.js')
 const util = require('util');
 
 const NotFoundError = require('../errors/NotFoundError');
@@ -26,9 +27,11 @@ async function login(request) {
     else if(result.length == 0)
       throw new NotFoundError("Id didn't match any users")
  
+    const token = await dbtoken.createToken({user_id: result[0].id, role: result[0].role})
+    
     result[0].username = request.body.username
     util.promisify(config.end); 
-    return result[0]
+    return {user: result[0], token: token}
     
   } catch (err) {
     // console.log(err)
