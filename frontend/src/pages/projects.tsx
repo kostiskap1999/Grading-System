@@ -22,7 +22,7 @@ export default function ProjectsPage() {
 
   const [rerender, setRerender] = useState<number>(0)
 
-  const [userRole, setUserRole] = useState<string>("")
+  const [userRole, setUserRole] = useState<number>(3)
 
   const filterOptions = [
     {value: "my", label: "My Projects"},
@@ -34,7 +34,7 @@ export default function ProjectsPage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const projectsOBJ: Project[] = (userRole == "professor" || userRole == "admin") ? await fetchAndSetupProjects() : await fetchProjects()
+      const projectsOBJ: Project[] = (userRole <= 1) ? await fetchAndSetupProjects() : await fetchProjects()
       setProjects(projectsOBJ)
       const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
       for(const project of projectsOBJ){
@@ -51,7 +51,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchRole = async () => {
       const cookies: Cookies = new Cookies();
-      const userRole: string = cookies.get('role-temp')
+      const userRole: number = cookies.get('role-temp')
       setUserRole(userRole)
     }
     fetchRole()
@@ -84,7 +84,7 @@ export default function ProjectsPage() {
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
       <div className="header-title row">
-        {userRole === "professor" || userRole === "admin" ? <>
+        {userRole <= 1 ? <>
           <button style={{flex: 1}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}
         <div className="text center column" style={{flex: 4}}>
@@ -139,7 +139,7 @@ export default function ProjectsPage() {
             }
             
             
-            {userRole === "professor" || userRole === "admin" ? <>
+            {userRole <= 1 ? <>
               <button className="button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
             </> : <></>}
             </>}

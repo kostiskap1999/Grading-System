@@ -16,7 +16,7 @@ export async function fetchProjects() {
 
     const returnedProjects: Project[] = []
     for(const project of projects){
-        project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
+        project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
         returnedProjects.push(new Project(project))
     }
         
@@ -34,7 +34,7 @@ export async function fetchProject(id: number) {
         errorHandling(error)
     });
 
-    project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
+    project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
         
     return project
 }
@@ -51,7 +51,7 @@ export async function fetchUserProjects(userID: number) {
 
     const returnedProjects: Project[] = []
     for(const project of userProjects){
-        project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
+        project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
         returnedProjects.push(new Project(project))
     }
 
@@ -70,7 +70,7 @@ export async function fetchSubjectProjects(subjectID: number) {
 
     const returnedProjects: Project[] = []
     for(const project of userProjects){
-        project.deadline = project.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })
+        project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
         returnedProjects.push(new Project(project))
     }
 

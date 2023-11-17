@@ -5,7 +5,7 @@ export interface IUser {
     username: string,
     first_name: string,
     last_name: string,
-    role: string,
+    role: number; // 0=admin, 1=professor, 2=student
     subjects: Subject[]
 }
 
@@ -14,6 +14,6 @@ export const IUserDefaults = {
     username: "",
     first_name: "",
     last_name: "",
-    role: "",
+    role: 3,
     subjects: new Array()
 }

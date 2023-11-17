@@ -19,9 +19,9 @@ export class Subject {
         this.supervisorID = supervisorID
     }
 
-    async setup(userRole?: string){
+    async setup(userRole?: number){
         const projects: Project[] = await fetchSubjectProjects(this.id)
-        if(userRole == "professor" || userRole == "admin")
+        if(userRole != undefined && userRole <= 1)
             for(const project of projects)
                 await project.setup()
         this.projects = projects

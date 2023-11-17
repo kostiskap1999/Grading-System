@@ -18,12 +18,8 @@ export default function SubmissionsPage() {
   const [selectedProject, setSelectedProject] = useState<Project>(location.state?.project)
   const [selectedSubmission, setSelectedSubmission] = useState<Submission>(new Submission())
 
-  
-  const [user, setUser] = useState<User>(new User())
-
   const [rerender, setRerender] = useState<number>(0)
 
-  const [userRole, setUserRole] = useState<string>("")  
   useEffect(() => {
     const fetchData = async () => {
       if(selectedProject == undefined)
@@ -41,27 +37,7 @@ export default function SubmissionsPage() {
     }
 
     fetchData()
-  }, [rerender, userRole])
-
-  useEffect(() => {
-    const fetchRole = async () => {
-      const cookies: Cookies = new Cookies();
-      const userRole: string = cookies.get('role-temp')
-      setUserRole(userRole)
-    }
-    fetchRole()
-  }, [userRole])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const cookies: Cookies = new Cookies();
-      const userID: number = cookies.get('user_id')
-      const userOBJ: User = await fetchAndSetupUser(userID)
-      setUser(userOBJ)
-    }
-
-    fetchData()
-  }, [])
+  }, [rerender])
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>

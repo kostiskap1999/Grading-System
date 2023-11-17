@@ -8,7 +8,7 @@ export class User {
     username: string; // unique username
     firstName: string;
     lastName: string;
-    role: string; // admin, professor, student
+    role: number; // 0=admin, 1=professor, 2=student, 3=guest
     subjects: Subject[];
 
     constructor({id, username, first_name, last_name, role, subjects = []}: IUser = IUserDefaults) {

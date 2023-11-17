@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `grading_system`.`users` (
   `username` VARCHAR(45) NOT NULL,
   `first_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NULL,
-  `role` VARCHAR(10) NOT NULL,
+  `role` SMALLINT NOT NULL,
   `credentials_id` SMALLINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,

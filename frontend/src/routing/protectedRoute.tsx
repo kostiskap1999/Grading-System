@@ -20,7 +20,7 @@ const ProtectedRoute = ({children, protectionLevel}: IProtectedRouteProps) => {
   //   getUserRole();
   // });
   
-  // if(((userRole === "user" && protectionLevel <= 1) ) || (userRole === "student" && protectionLevel <= 1) || (userRole === "professor" && protectionLevel <= 2) || (userRole === "admin" && protectionLevel <= 3))
+  // if(((userRole === 3 && protectionLevel <= 1) ) || (userRole === 2 && protectionLevel <= 1) || (userRole === 1 && protectionLevel <= 2) || (userRole === 0 && protectionLevel <= 3))
   //   isUnauthorised = false
 
   if (!auth) {
