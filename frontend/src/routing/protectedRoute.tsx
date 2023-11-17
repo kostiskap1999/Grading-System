@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 interface IProtectedRouteProps{
   children: ReactNode,
@@ -9,19 +10,13 @@ interface IProtectedRouteProps{
 
 const ProtectedRoute = ({children, protectionLevel}: IProtectedRouteProps) => {
   
-  const auth = useSelector((store: any) => store.authenticated);
-  // var isUnauthorised = true
-  // var userRole = ""
-  //   useEffect(() => {
-  //   async function getUserRole() {
-  //     userRole = await fetchUserRole()
-  //   }
-
-  //   getUserRole();
-  // });
+  var auth = useSelector((store: any) => store.authenticated);
   
-  // if(((userRole === 3 && protectionLevel <= 1) ) || (userRole === 2 && protectionLevel <= 1) || (userRole === 1 && protectionLevel <= 2) || (userRole === 0 && protectionLevel <= 3))
-  //   isUnauthorised = false
+  const cookies: Cookies = new Cookies();
+  const userRole: number = cookies.get('role-temp') // temporary solution
+
+  if(((userRole >= 2 && protectionLevel > 1)) || (userRole === 1 && protectionLevel > 2))
+    auth = false
 
   if (!auth) {
     return <Navigate to="/" replace />;
