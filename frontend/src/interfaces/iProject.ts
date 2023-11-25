@@ -1,4 +1,5 @@
 import { Submission } from "../model/submission";
+import { Test } from "../model/test";
 
 export interface IProject {
     id: number;
@@ -6,6 +7,7 @@ export interface IProject {
     description: string;
     deadline: Date | string;
     submissions: Submission[];
+    tests: Test[]
 }
 
 export const IProjectDefaults = {
@@ -13,5 +15,6 @@ export const IProjectDefaults = {
     name: "",
     description: "",
     deadline: new Date(),
-    submissions: []
+    submissions: [],
+    tests: []
 }
