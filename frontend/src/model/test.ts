@@ -12,7 +12,11 @@ export class Test {
         this.id = id
         this.inputs = inputs
         this.outputs = outputs
-    }   
+    }
+    
+    addNewTestInput() {
+        this.inputs.push(new TestInput())
+    }
 }
 
 export class TestInput {

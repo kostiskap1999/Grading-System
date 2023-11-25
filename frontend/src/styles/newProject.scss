@@ -3,72 +3,55 @@
 @import './general.scss';
 @import './button.scss';
 
+@mixin labelStyle {
+	@extend .column;
+	align-items: center;
+	flex: 1 0 30%;
+	margin: 15px;
+}
+
 .form {
 	@extend .column;
 	padding: 30px;
 	justify-content:"space-between";
 	flex-wrap: wrap;
-}
 
-.form > section {
-	padding: 40px 0;
-	border-top: solid #000;
-	border-width: 3px
-}
+	& section {
+		padding: 40px 0;
+		border-top: solid #000;
+		border-width: 3px;
 
-.form > section > header {
-	@extend .center;
-	padding-bottom: 30px;
-}
+		& header { //content header
+			@extend .center;
+			padding-bottom: 30px;
+		}
 
-.form > section > div {
-	@extend .row;
-	justify-content:"space-between";
-	flex-wrap: wrap;
-	border-top: solid #000;
-	border-width: 1px
-}
+		& div { // content
+			@extend .row;
+			justify-content:"space-between";
+			flex-wrap: wrap;
+			border-top: solid #000;
+			border-width: 1px;
 
-.form > section > div > * {
-	@extend .column;
-	align-items: center;
-	flex: 1 0 30%;
-	margin: 15px;
-}
+			& label { // content's single label
+				@include labelStyle;
 
-.form > section > div > * > span {
-	padding-bottom: 10px;
-}
+				& span { // content's single label header
+					padding-bottom: 10px;
+				}
 
-.form > section > section {
-	padding: 20px 0;
-	// border-bottom: solid #000;
-	border-top: solid #000;
-	border-width: 1px
-}
+				& div > label { // content's single label content
+					@include labelStyle;
+				}
 
-.form > section > section > header {
-	@extend .center;
-	padding-bottom: 30px;
-}
+				& button {
+					@extend .button;
+				}
+			}
+		}
+	}
 
-.form > section > section > div {
-	@extend .row;
-	justify-content:"space-between";
-	flex-wrap: wrap;
-}
-
-.form > section > section > div > * {
-	@extend .column;
-	align-items: center;
-	flex: 1 0 30%;
-	margin: 15px;
-}
-
-.form > section > section > div > * > span {
-	padding-bottom: 10px;
-}
-
-.form > input[type=submit] {
-	@extend .button;
+	& input[type=submit]  {
+		@extend .button;	
+	}
 }
