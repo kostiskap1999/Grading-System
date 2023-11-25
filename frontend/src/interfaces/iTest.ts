@@ -1,9 +1,6 @@
-import { TestInput, TestOutput } from "../model/test";
-
-export interface ITest {
+export interface ITestOutput {
     id: number;
-    inputs: TestInput[];
-    outputs: TestOutput[];
+    code: string;
 }
 
 export interface ITestInput {
@@ -13,26 +10,26 @@ export interface ITestInput {
     code: string;
 }
 
-export interface ITestOutput {
+export interface ITest {
     id: number;
-    code: string;
+    inputs: ITestInput[];
+    output: ITestOutput;
 }
 
-export const ITestDefaults = {
+export const ITestOutputDefaults = {
     id: -1,
-    inputs: [],
-    outputs: []
-}
+    code: "",
+};
 
 export const ITestInputDefaults = {
     id: -1,
     orderNum: -1,
     name: "",
-    code: ""
+    code: "",
+};
 
-}
-
-export const ITestOutputsDefaults = {
+export const ITestDefaults = {
     id: -1,
-    code: ""
-}
+    inputs: [],
+    output: ITestOutputDefaults as ITestOutput,
+};

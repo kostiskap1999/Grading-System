@@ -32,7 +32,8 @@ export default function NewProjectPage() {
 
   const createTest = () => {
     const project: Project = newProject
-    project.tests.push(new Test({id: project.tests.length, inputs: [], outputs: []}))
+    project.tests.push(new Test())
+    project.tests[project.tests.length-1].id = project.tests.length
     createInput(project.tests.length-1)
     setRerender(rerender+1)
     
@@ -58,6 +59,24 @@ export default function NewProjectPage() {
         break
       case "description" :
         project.description = event.target.value
+        break
+      default:
+        console.log("error")
+        break
+    }
+  }
+
+  const handleTestChange = (event: React.ChangeEvent<HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
+    const project: Project = newProject
+    switch(event.target.id) {
+      case "input-name" :
+        project.tests[testIndex].inputs[inputIndex!].name = event.target.value
+        break
+      case "input-code" :
+        project.tests[testIndex].inputs[inputIndex!].code = event.target.value
+        break
+      case "output-code" :
+        project.tests[testIndex].output.code = event.target.value
         break
       default:
         console.log("error")
@@ -114,11 +133,11 @@ export default function NewProjectPage() {
                   <div key={idx}>
                     <label>
                       <span>Parameter name</span>
-                      <textarea id="input-code" rows={2} cols={20} defaultValue={input.name} onChange={handleChange}/>
+                      <textarea id="input-name" rows={2} cols={20} defaultValue={input.name} onChange={(event) => handleTestChange(event, index, idx)}/>
                     </label>
                     <label>
                       <span>Parameter value</span>
-                      <textarea id="input-code" rows={2} cols={20} defaultValue={input.code} onChange={handleChange}/>
+                      <textarea id="input-code" rows={2} cols={20} defaultValue={input.code} onChange={(event) => handleTestChange(event, index, idx)}/>
                     </label>                    
                   </div>
                 ))}
@@ -126,7 +145,7 @@ export default function NewProjectPage() {
               </label>
               <label>
                 <span>Output Code</span>
-                <textarea id="output-code" rows={5} cols={30} onChange={handleChange}/>
+                <textarea id="output-code" rows={5} cols={30} onChange={(event) => handleTestChange(event, index)}/>
               </label>
             </div>
           ))}

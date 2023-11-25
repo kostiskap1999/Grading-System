@@ -1,17 +1,14 @@
-import { fetchUser } from "../fetches/fetchUsers";
-import { ISubmission, ISubmissionDefaults } from "../interfaces/iSubmission";
-import { ITest, ITestDefaults, ITestInput, ITestInputDefaults, ITestOutput, ITestOutputsDefaults } from "../interfaces/iTest";
-import { User } from "./user";
+import { ITest, ITestDefaults, ITestInput, ITestInputDefaults, ITestOutput, ITestOutputDefaults } from "../interfaces/iTest";
 
 export class Test {
     id: number;
     inputs: TestInput[];
-    outputs: TestOutput[];
+    output: TestOutput;
 
-    constructor({id, inputs, outputs}: ITest = ITestDefaults) {
+    constructor({id, inputs, output}: ITest = ITestDefaults) {
         this.id = id
         this.inputs = inputs
-        this.outputs = outputs
+        this.output = output
     }
     
     addNewTestInput() {
@@ -37,7 +34,7 @@ export class TestOutput {
     id: number;
     code: string;
 
-    constructor({id, code}: ITestOutput = ITestOutputsDefaults) {
+    constructor({id, code}: ITestOutput = ITestOutputDefaults) {
         this.id = id
         this.code = code
     }

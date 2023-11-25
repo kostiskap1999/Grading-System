@@ -79,6 +79,7 @@ export async function fetchSubjectProjects(subjectID: number) {
 
 export async function postProject(project: Project) {
 
+    console.log(project)
     const response: boolean | void = await fetch(HOSTNAME + PROJECTS, POSTHEADERS(project))
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
