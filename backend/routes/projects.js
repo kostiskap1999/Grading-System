@@ -4,8 +4,8 @@ const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
 
-const NotFoundError = require('../errors/NotFoundError');
-const InternalServerError = require('../errors/NotFoundError');
+const error = require('../errors/errorTypes');
+const { errorHandling } = require('../errors/errorHandling');
 
 async function getProjects(request) {
   try {
@@ -18,7 +18,7 @@ async function getProjects(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getProjects")
   }
 }
 
@@ -31,15 +31,15 @@ async function getProject(request) {
     const result = await query(sqlSelect);
     
     if(result.length > 1)
-      throw new InternalServerError("Found more than one project with this id")
+      throw new error.InternalServerError("Found more than one project with this id")
     else if(result.length == 0)
-      throw new NotFoundError("Id didn't match any projects")
+      throw new error.NotFoundError("Id didn't match any projects")
     
     util.promisify(config.end);
     return result[0]
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getProject")
   }
 }
 
@@ -68,7 +68,7 @@ async function getUserProjects(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getUserProjects")
   }
 }
 
@@ -83,7 +83,7 @@ async function getSubjectProjects(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getSubjectProjects")
   }
 }
 
@@ -95,13 +95,13 @@ async function postProjects(request) {
     const result = await query(sqlSelect);
     
     if(result.affectedRows != 1)
-      throw new InternalServerError("There has been an error")
+      throw new error.InternalServerError("There has been an error")
     
     util.promisify(config.end);
     return true
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "postProjects")
   }
 }
 

@@ -4,8 +4,8 @@ const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
 
-const NotFoundError = require('../errors/NotFoundError');
-const InternalServerError = require('../errors/NotFoundError');
+const error = require('../errors/errorTypes');
+const { errorHandling } = require('../errors/errorHandling');
 
 
 async function getUsers(request) {
@@ -19,7 +19,7 @@ async function getUsers(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getUsers")
   }
 }
 
@@ -32,15 +32,15 @@ async function getUser(request) {
     const result = await query(sqlSelect);
     
     if(result.length > 1)
-      throw new InternalServerError("Found more than one user with this id")
+      throw new error.InternalServerError("Found more than one user with this id")
     else if(result.length == 0)
-      throw new NotFoundError("Id didn't match any users")
+      throw new error.NotFoundError("Id didn't match any users")
     
     util.promisify(config.end);
     return result[0]
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getUser")
   }
 }
 

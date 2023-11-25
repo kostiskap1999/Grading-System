@@ -30,7 +30,6 @@ router.route('/login').post(async (request, response) => {
     const data = await dblogin.login(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -46,7 +45,6 @@ router.route('/users').get(async (request, response) => {
     const data = await dbusers.getUsers(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -58,7 +56,6 @@ router.route('/users/:userid').get(async (request, response) => {
     const data = await dbusers.getUser(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -74,7 +71,6 @@ router.route('/token/id').get(async (request, response) => {
     const data = await dbtoken.getUserIDFromToken(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -86,7 +82,6 @@ router.route('/token/role').get(async (request, response) => {
     const data = await dbtoken.getRoleFromToken(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -104,7 +99,6 @@ router.route('/subjects').get(async (request, response) => {
     const data = await dbsubjects.getSubjects(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -116,7 +110,6 @@ router.route('/subjects/:id').get(async (request, response) => {
     const data = await dbsubjects.getSubject(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -128,7 +121,6 @@ router.route('/user-subjects/:userid').get(async (request, response) => {
     const data = await dbsubjects.getUserSubjects(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -145,7 +137,6 @@ router.route('/projects').get(async (request, response) => {
     const data = await dbprojects.getProjects(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -157,7 +148,6 @@ router.route('/projects/:id').get(async (request, response) => {
     const data = await dbprojects.getProject(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -169,7 +159,6 @@ router.route('/subject-projects/:subjectid').get(async (request, response) => {
     const data = await dbprojects.getSubjectProjects(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -181,7 +170,6 @@ router.route('/user-projects/:userid').get(async (request, response) => {
     const data = await dbprojects.getUserProjects(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -193,7 +181,6 @@ router.route('/projects/:id').get(async (request, response) => {
     const data = await dbprojects.getProject(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -205,7 +192,6 @@ router.route('/projects').post(async (request, response) => {
     const data = await dbprojects.postProjects(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -221,7 +207,6 @@ router.route('/submissions/:projectid').get(async (request, response) => {
     const data = await dbsubmissions.getProjectSubmissions(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }
@@ -233,7 +218,6 @@ router.route('/submissions').post(async (request, response) => {
     const data = await dbsubmissions.postSubmission(request);
     response.json(data);
   } catch (err) {
-    console.error(err);
     response.statusMessage=err.message
     response.status(err.statusCode).json({error: err.message});
   }

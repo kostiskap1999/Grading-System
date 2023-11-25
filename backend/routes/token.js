@@ -2,13 +2,15 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const { errorHandling } = require('../errors/errorHandling');
+
 async function createToken(payload) {
   try {
     TOKEN_KEY = process.env.TOKEN_KEY;
     const token = jwt.sign(payload, TOKEN_KEY, {expiresIn: "168h"})
     return token
   } catch (err) {
-    throw err;
+    errorHandling(err, "createToken")
   }
 }
 
@@ -24,7 +26,7 @@ async function checkToken(token) {
     }
     return decoded
   } catch (err) {
-    throw err;
+    errorHandling(err, "checkToken")
   }
 }
 
@@ -33,7 +35,7 @@ async function getUserIDFromToken(request) {
     const decoded = await checkToken(request.headers.token)
     return decoded.user_id
   } catch (err) {
-    throw err;
+    errorHandling(err, "getUserIDFromToken")
   }
 }
 
@@ -42,7 +44,7 @@ async function getRoleFromToken(request) {
     const decoded = await checkToken(request.headers.token)
     return decoded.role
   } catch (err) {
-    throw err;
+    errorHandling(err, "getRoleFromToken")
   }
 }
 

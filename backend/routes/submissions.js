@@ -4,6 +4,9 @@ const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
 
+const error = require('../errors/errorTypes');
+const { errorHandling } = require('../errors/errorHandling');
+
 async function getProjectSubmissions(request) {
   try {
     await dbtoken.checkToken(request.headers.token)
@@ -15,7 +18,7 @@ async function getProjectSubmissions(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getProjectSubmissions")
   }
 }
 
@@ -28,13 +31,13 @@ async function postSubmission(request) {
     const result = await query(sqlSelect);
     
     if(result.affectedRows != 1)
-      throw new InternalServerError("There has been an error")
+      throw new error.InternalServerError("There has been an error")
     
     util.promisify(config.end);
     return true
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "postSubmission")
   }
 }
 

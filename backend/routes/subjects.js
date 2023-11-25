@@ -4,8 +4,8 @@ const util = require('util');
 
 const query = util.promisify(config.query).bind(config);
 
-const NotFoundError = require('../errors/NotFoundError');
-const InternalServerError = require('../errors/NotFoundError');
+const error = require('../errors/errorTypes');
+const { errorHandling } = require('../errors/errorHandling');
 
 async function getSubjects(request) {
   try {
@@ -18,7 +18,7 @@ async function getSubjects(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getSubjects")
   }
 }
 
@@ -31,15 +31,15 @@ async function getSubject(request) {
     const result = await query(sqlSelect);
     
     if(result.length > 1)
-      throw new InternalServerError("Found more than one subject with this id")
+      throw new error.InternalServerError("Found more than one subject with this id")
     else if(result.length == 0)
-      throw new NotFoundError("Id didn't match any subjects")
+      throw new error.NotFoundError("Id didn't match any subjects")
     
     util.promisify(config.end);
     return result[0]
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getSubject")
   }
 }
 
@@ -68,7 +68,7 @@ async function getUserSubjects(request) {
     return result
     
   } catch (err) {
-    throw err;
+    errorHandling(err, "getUserSubjects")
   }
 }
 
