@@ -91,12 +91,38 @@ async function postProjects(request) {
   try {
     util.promisify(config.connect);
     var sqlSelect = `INSERT INTO projects (name, description, deadline, subject_id) VALUES ('${request.body.name}','${request.body.description}','${request.body.deadline}',${request.body.subjectID});`;
-    
-    const result = await query(sqlSelect);
+
+    var result = await query(sqlSelect);
     
     if(result.affectedRows != 1)
       throw new error.InternalServerError("There has been an error")
     
+    sqlSelect = `SELECT id FROM projects WHERE id >= LAST_INSERT_ID();`;
+    result = await query(sqlSelect);
+    const project_id = result[0].id
+
+    for(let i=0; i<request.body.tests.length; i++){
+      sqlSelect = `INSERT INTO inputs_outputs_group (project_id) VALUES (${project_id});`
+      result = await query(sqlSelect);
+      
+      sqlSelect = `SELECT id FROM inputs_outputs_group WHERE id >= LAST_INSERT_ID();`;
+      result = await query(sqlSelect);
+      const group_id = result[0].id
+
+      sqlSelect = `INSERT INTO inputs (name, code, group_id) VALUES `
+      for(let j=0; j<request.body.tests[i].inputs.length; j++){
+        sqlSelect += `('${request.body.tests[i].inputs[j].name}', '${request.body.tests[i].inputs[j].code}', ${group_id})`
+        if(j != request.body.tests[i].inputs.length-1)
+          sqlSelect += ', '
+        else
+          sqlSelect += `;`
+      }
+      result = await query(sqlSelect);
+
+      sqlSelect = `INSERT INTO outputs (code, group_id) VALUES ('${request.body.tests[i].output.code}', ${group_id})`
+      result = await query(sqlSelect);
+    }
+
     util.promisify(config.end);
     return true
     
