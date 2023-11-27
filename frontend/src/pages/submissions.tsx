@@ -80,7 +80,7 @@ export default function SubmissionsPage() {
               </div>
               <div style={{margin: "20px"}}>
                 <div className="large-text center">Submission Code</div>
-                <CodeSandbox paramCode={selectedSubmission.code} />
+                <CodeSandbox project={selectedProject} paramCode={selectedSubmission.code} />
               </div>
             </div>
             </>}
