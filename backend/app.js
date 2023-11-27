@@ -22,6 +22,7 @@ var dbusers = require('./routes/users');
 var dbsubjects = require('./routes/subjects');
 var dbprojects = require('./routes/projects');
 var dbsubmissions = require('./routes/submissions');
+var dbinputsoutputs = require('./routes/inputsOutputs');
 
 
 // LOGIN ROUTER
@@ -216,6 +217,17 @@ router.route('/submissions/:projectid').get(async (request, response) => {
 router.route('/submissions').post(async (request, response) => {
   try {
     const data = await dbsubmissions.postSubmission(request);
+    response.json(data);
+  } catch (err) {
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+// GET INPUTS_OUTPUTS ROUTER
+router.route('/getProjectInputsOutputs/:projectID').get(async (request, response) => {
+  try {
+    const data = await dbinputsoutputs.getProjectInputsOutputs(request);
     response.json(data);
   } catch (err) {
     response.statusMessage=err.message
