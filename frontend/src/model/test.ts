@@ -7,24 +7,21 @@ export class Test {
 
     constructor({id, inputs, output}: ITest = ITestDefaults) {
         this.id = id
-        this.inputs = inputs
-        this.output = output
-    }
-    
-    addNewTestInput() {
-        this.inputs.push(new TestInput())
+        this.inputs = []
+        inputs.forEach(input => {
+            this.inputs.push(new TestInput(input))
+        });
+        this.output = new TestOutput(output)
     }
 }
 
 export class TestInput {
     id: number;
-    orderNum: number;
     name: string;
     code: string;
 
-    constructor({id, orderNum, name, code}: ITestInput = ITestInputDefaults) {
+    constructor({id, name, code}: ITestInput = ITestInputDefaults) {
         this.id = id
-        this.orderNum = orderNum
         this.name = name
         this.code = code
     }

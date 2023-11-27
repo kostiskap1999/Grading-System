@@ -19,6 +19,8 @@ export const SUBJECTPROJECTS: string = '/subject-projects'
 
 export const SUBMISSIONS: string = '/submissions'
 
+export const TESTS: string = '/getProjectInputsOutputs'
+
 const cookies = new Cookies()
 
 export const LOGINHEADERS = (credentials: ICredentials) => (

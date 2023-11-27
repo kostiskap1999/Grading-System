@@ -1,4 +1,5 @@
 import { fetchSubmissions } from "../fetches/fetchSubmissions";
+import { fetchTests } from "../fetches/fetchTests";
 import { IProject, IProjectDefaults } from "../interfaces/iProject";
 import { Submission } from "./submission";
 import { Test } from "./test";
@@ -25,6 +26,7 @@ export class Project {
     }
 
     async setup(){
+        this.tests = await fetchTests(this.id)
         this.submissions = await fetchSubmissions(this.id)
     }
 

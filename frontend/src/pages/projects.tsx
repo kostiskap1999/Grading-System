@@ -2,7 +2,6 @@ import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import ReactDropdown from "react-dropdown";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Cookies from "universal-cookie";
 import FileUpload from "../components/fileUpload";
 import { fetchProjects } from "../fetches/fetchProjects";
 import { fetchAndSetupProjects, fetchAndSetupUser } from "../fetches/helpers/massFetching";

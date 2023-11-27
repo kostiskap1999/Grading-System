@@ -5,7 +5,6 @@ export interface ITestOutput {
 
 export interface ITestInput {
     id: number;
-    orderNum: number;
     name: string;
     code: string;
 }
@@ -23,7 +22,6 @@ export const ITestOutputDefaults = {
 
 export const ITestInputDefaults = {
     id: -1,
-    orderNum: -1,
     name: "",
     code: "",
 };

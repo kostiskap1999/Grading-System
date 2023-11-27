@@ -13,29 +13,36 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
 
   const runCode = () => {
     try{
-      var codeBefore = ""
-      var codeAfter = ""
-      var finalCode = ""
-      setLog("")
+      var logVar = ""
+      setLog(logVar)
       project.tests.forEach((test, index) => {
-        setLog(log + "Running test " + index + "\n")
-        test.inputs.forEach(input => {
+        logVar += `Running test ${index+1}<br>`
+        setLog(logVar)
+
+        var codeBefore = ""
+        var codeAfter = ""
+        var finalCode = ""
+        test.inputs.forEach((input, idx) => {
           codeBefore += "var " + input.name + " = " + input.code + ";\n"
           codeAfter += input.name
-          if (index != test.inputs.length-1)
+          console.log(test.inputs.length)
+          if (idx != test.inputs.length-1)
             codeAfter += ", "
         });
         finalCode += codeBefore + code + "\nreturn main(" + codeAfter +");"
-        console.log(finalCode)
         var result = Function(finalCode)()
-        if (result == test.output)
-          setLog(log + "Test " + index + " completed successfully\n")
-        else
-          setLog(log + "Test " + index + " failed\n")
+        if (result == test.output.code){
+          logVar += `Test ${index+1} completed successfully<br>`
+          setLog(logVar)
+        }
+        else{
+          logVar += `Test ${index+1} failed<br>`
+          setLog(logVar)
+        }
       });
     }
     catch{
-      setLog("There was something wrong with the code parsing. Execution aborted.\n")
+      setLog("There was something wrong with the code parsing. Execution aborted.<br>")
     }
   }
 
@@ -43,7 +50,7 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
     <div>
       <CodeMirror value={code} onChange={setCode} height="200px" extensions={[javascript({ jsx: true })]} />
       <button className="button" onClick={() => runCode()}>Run Code</button>
-      <div>{log}</div>
+      <div dangerouslySetInnerHTML={{ __html: log }} />
     </div>
   );
 }

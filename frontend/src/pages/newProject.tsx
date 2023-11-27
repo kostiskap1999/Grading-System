@@ -41,7 +41,7 @@ export default function NewProjectPage() {
 
   const createInput = (testIndex: number) => {
     const project: Project = newProject
-    project.tests[testIndex].inputs.push(new TestInput({id: project.tests[testIndex].inputs.length, orderNum: project.tests[testIndex].inputs.length+1, name: "", code: "" }))
+    project.tests[testIndex].inputs.push(new TestInput({id: project.tests[testIndex].inputs.length, name: "", code: "" }))
     setRerender(rerender+1)
   }
 

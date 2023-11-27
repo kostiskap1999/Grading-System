@@ -22,8 +22,12 @@ export default function SubmissionsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if(selectedProject == undefined)
-        setSelectedProject(await fetchProject(parseInt(params.get('project')?.toString()!)))
+      if(selectedProject == undefined){
+        const selProject: Project = await fetchProject(parseInt(params.get('project')?.toString()!))
+        selProject.setup()
+        setSelectedProject(selProject)
+      }
+        
       
       const submissionsOBJ: Submission[] = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
       setSubmissions(submissionsOBJ)
