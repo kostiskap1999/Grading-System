@@ -31,6 +31,7 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
         });
         finalCode += codeBefore + code + "\nreturn main(" + codeAfter +");"
         var result = Function(finalCode)()
+        result = result.toString()
         if (result == test.output.code){
           logVar += `Test ${index+1} completed successfully<br>`
           setLog(logVar)

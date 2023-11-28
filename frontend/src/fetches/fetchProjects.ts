@@ -36,7 +36,7 @@ export async function fetchProject(id: number) {
 
     project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
         
-    return project
+    return new Project(project)
 }
 
 export async function fetchUserProjects(userID: number) {
