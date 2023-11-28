@@ -22,7 +22,7 @@ var dbusers = require('./routes/users');
 var dbsubjects = require('./routes/subjects');
 var dbprojects = require('./routes/projects');
 var dbsubmissions = require('./routes/submissions');
-var dbinputsoutputs = require('./routes/inputsOutputs');
+var dbtests = require('./routes/tests');
 
 
 // LOGIN ROUTER
@@ -225,9 +225,9 @@ router.route('/submissions').post(async (request, response) => {
 });
 
 // GET INPUTS_OUTPUTS ROUTER
-router.route('/getProjectInputsOutputs/:projectID').get(async (request, response) => {
+router.route('/getTests/:projectID').get(async (request, response) => {
   try {
-    const data = await dbinputsoutputs.getProjectInputsOutputs(request);
+    const data = await dbtests.getTests(request);
     response.json(data);
   } catch (err) {
     response.statusMessage=err.message
