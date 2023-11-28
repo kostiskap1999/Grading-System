@@ -2,11 +2,13 @@ import { ITest, ITestDefaults, ITestInput, ITestInputDefaults, ITestOutput, ITes
 
 export class Test {
     id: number;
+    main: string;
     inputs: TestInput[];
     output: TestOutput;
 
-    constructor({id, inputs, output}: ITest = ITestDefaults) {
+    constructor({id, main, inputs, output}: ITest = ITestDefaults) {
         this.id = id
+        this.main = main
         this.inputs = []
         inputs.forEach(input => {
             this.inputs.push(new TestInput(input))
@@ -19,11 +21,13 @@ export class TestInput {
     id: number;
     name: string;
     code: string;
+    isMainParam: boolean;
 
-    constructor({id, name, code}: ITestInput = ITestInputDefaults) {
+    constructor({id, name, code, isMainParam}: ITestInput = ITestInputDefaults) {
         this.id = id
         this.name = name
         this.code = code
+        this.isMainParam = isMainParam
     }
 }
 

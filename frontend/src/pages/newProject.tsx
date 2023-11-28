@@ -41,7 +41,8 @@ export default function NewProjectPage() {
 
   const createInput = (testIndex: number) => {
     const project: Project = newProject
-    project.tests[testIndex].inputs.push(new TestInput({id: project.tests[testIndex].inputs.length, name: "", code: "" }))
+    project.tests[testIndex].inputs.push(new TestInput())
+    project.tests[testIndex].inputs[project.tests[testIndex].inputs.length-1].id = project.tests[testIndex].inputs.length //I promise this line is necessary and completely not hansaplast
     setRerender(rerender+1)
   }
 
@@ -66,14 +67,20 @@ export default function NewProjectPage() {
     }
   }
 
-  const handleTestChange = (event: React.ChangeEvent<HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
+  const handleTestChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
     const project: Project = newProject
     switch(event.target.id) {
+      case "main-function" :
+        project.tests[testIndex].main = event.target.value
+        break
       case "input-name" :
         project.tests[testIndex].inputs[inputIndex!].name = event.target.value
         break
       case "input-code" :
         project.tests[testIndex].inputs[inputIndex!].code = event.target.value
+        break
+      case "input-is-main-param" :
+        project.tests[testIndex].inputs[inputIndex!].isMainParam = (event.target as HTMLInputElement).checked
         break
       case "output-code" :
         project.tests[testIndex].output.code = event.target.value
@@ -127,25 +134,33 @@ export default function NewProjectPage() {
           <header className="header-text">Tests</header>
           {newProject.tests.map((test, index) => (
             <div key={index}>
-              <label>
+              <label style={{flex: 0.5}}>
+                <span>Main Function</span>
+                <textarea id="main-function" rows={1} onChange={(event) => handleTestChange(event, index)}/>
+              </label>
+              <label style={{flex: 3}}>
                 <span>Inputs</span>
                 {test.inputs.map((input, idx) => (
                   <div key={idx}>
-                    <label>
-                      <span>Parameter name</span>
-                      <textarea id="input-name" rows={2} cols={20} defaultValue={input.name} onChange={(event) => handleTestChange(event, index, idx)}/>
+                    <label style={{flex: 0.01}}>
+                      <span style={{fontSize: 12}}>Is Param?</span>
+                      <input id="input-is-main-param" type="checkbox" onChange={(event) => handleTestChange(event, index, idx)}/>
                     </label>
-                    <label>
+                    <label style={{flex: 0.4}}>
+                      <span>Parameter name</span>
+                      <textarea id="input-name" rows={1} defaultValue={input.name} onChange={(event) => handleTestChange(event, index, idx)}/>
+                    </label>
+                    <label style={{flex: 0.5}}>
                       <span>Parameter value</span>
-                      <textarea id="input-code" rows={2} cols={20} defaultValue={input.code} onChange={(event) => handleTestChange(event, index, idx)}/>
-                    </label>                    
+                      <textarea id="input-code" rows={1} defaultValue={input.code} onChange={(event) => handleTestChange(event, index, idx)}/>
+                    </label>
                   </div>
                 ))}
                 <button type="button" onClick={() => createInput(index)}>Add Input</button>
               </label>
-              <label>
+              <label style={{flex: 0.5}}>
                 <span>Output Code</span>
-                <textarea id="output-code" rows={5} cols={30} onChange={(event) => handleTestChange(event, index)}/>
+                <textarea id="output-code" rows={1} onChange={(event) => handleTestChange(event, index)}/>
               </label>
             </div>
           ))}
