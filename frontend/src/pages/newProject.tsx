@@ -23,8 +23,9 @@ export default function NewProjectPage() {
   useEffect(() => {
     const fetchData = async () => {
       // const supSubjects: Subject[] = await fetchSupervisingSubjects(await fetchTokenID())
-      const supSubjects: Subject[] = await fetchSubjects()
-      setSupervisingSubjects(supSubjects)
+      const supSubjects: Subject[] | null = await fetchSubjects()
+      
+      supSubjects && setSupervisingSubjects(supSubjects)
     }
 
     fetchData()

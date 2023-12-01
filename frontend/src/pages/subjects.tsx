@@ -34,15 +34,18 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const subjectsOBJ: Subject[] = await fetchAndSetupSubjects()
-      setSubjects(subjectsOBJ)
+      const subjectsOBJ: Subject[] | null = await fetchAndSetupSubjects()
+      
+      if(subjectsOBJ){
+        setSubjects(subjectsOBJ)
 
-      const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-      for(const subject of subjectsOBJ)
-        if(subject.id === parseInt(parsedID)){
-          setSelectedSubject(subject)
-          break;
-        }
+        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        for(const subject of subjectsOBJ)
+          if(subject.id === parseInt(parsedID)){
+            setSelectedSubject(subject)
+            break;
+          }
+      }
     }
 
     fetchData()
@@ -50,8 +53,13 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userOBJ: User = await fetchAndSetupUser(await fetchTokenID())
-      setUser(userOBJ)
+      const tokenID: number | null = await fetchTokenID()
+
+      if(tokenID){
+        const userOBJ: User | null = await fetchAndSetupUser(tokenID)
+        userOBJ && setUser(userOBJ)
+      }
+
       setFilter(filterOptions[0].value)
     }
 

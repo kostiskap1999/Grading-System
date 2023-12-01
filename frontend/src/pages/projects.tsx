@@ -34,15 +34,18 @@ export default function ProjectsPage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const projectsOBJ: Project[] = (userRole <= 1) ? await fetchAndSetupProjects() : await fetchProjects()
-      setProjects(projectsOBJ)
-      const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-      for(const project of projectsOBJ){
-        if(project.id === parseInt(parsedID)){
-          setSelectedProject(project)
-          break;
-        }
-      } 
+      const projectsOBJ: Project[] | null = (userRole <= 1) ? await fetchAndSetupProjects() : await fetchProjects()
+      
+      if(projectsOBJ){
+        setProjects(projectsOBJ)
+        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        for(const project of projectsOBJ){
+          if(project.id === parseInt(parsedID)){
+            setSelectedProject(project)
+            break;
+          }
+        } 
+      }
     }
 
     fetchData()
@@ -50,15 +53,22 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     const fetchRole = async () => {
-      setUserRole(await fetchTokenRole())
+      const role: number | null = await fetchTokenRole()
+      if(role != null)
+        setUserRole(role)
     }
     fetchRole()
   }, [userRole])
 
   useEffect(() => {
     const fetchData = async () => {
-      const userOBJ: User = await fetchAndSetupUser(await fetchTokenID())
-      setUser(userOBJ)
+      const tokenID: number | null = await fetchTokenID()
+
+      if(tokenID){
+        const userOBJ: User | null = await fetchAndSetupUser(tokenID)
+        userOBJ && setUser(userOBJ)
+      }
+
       setFilter(filterOptions[0].value)
     }
 

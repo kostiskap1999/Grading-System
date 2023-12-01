@@ -26,8 +26,8 @@ export class Project {
     }
 
     async setup(){
-        this.tests = await fetchTests(this.id)
-        this.submissions = await fetchSubmissions(this.id)
+        this.tests = await fetchTests(this.id) ?? this.tests
+        this.submissions = await fetchSubmissions(this.id) ?? this.submissions
     }
 
 }

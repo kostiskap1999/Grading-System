@@ -9,35 +9,40 @@ import { fetchSubmissions } from "../fetchSubmissions";
 import { fetchUser } from "../fetchUsers";
 
 export async function fetchAndSetupUser(id: number) {
-    const user: User = await fetchUser(id)
-    await user.setup()
+    const user: User | null = await fetchUser(id)
+    
+    if(user)
+        await user.setup()
     
     return user
 }
 
 export async function fetchAndSetupSubjects() {
-    const subjects: Subject[] = await fetchSubjects()
+    const subjects: Subject[] | null = await fetchSubjects()
 
-    for(const subject of subjects)
-        await subject.setup()
+    if(subjects)
+        for(const subject of subjects)
+            await subject.setup()
 
     return subjects
 }
 
 export async function fetchAndSetupProjects() {
-    const projects: Project[] = await fetchProjects()
+    const projects: Project[] | null = await fetchProjects()
 
-    for(const project of projects)
-        await project.setup()
+    if(projects)
+        for(const project of projects)
+            await project.setup()
 
     return projects
 }
 
 export async function fetchAndSetupSubmissions(projectID: number) {
-    const submissions: Submission[] = await fetchSubmissions(projectID)
+    const submissions: Submission[] | null = await fetchSubmissions(projectID)
 
-    for(const submission of submissions)
-        await submission.setup()
+    if(submissions)
+        for(const submission of submissions)
+            await submission.setup()
         
 
     

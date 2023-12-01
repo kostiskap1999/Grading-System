@@ -19,9 +19,16 @@ export default function HomePage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      console.log(await fetchTokenID())
-      const userOBJ: User = await fetchAndSetupUser(await fetchTokenID())
-      setUser(userOBJ)
+      const tokenID: number | null = await fetchTokenID()
+
+      if(tokenID){
+        const userOBJ: User | null = await fetchAndSetupUser(tokenID)
+        userOBJ && setUser(userOBJ)
+      }
+        
+      
+      
+      
     }
 
     fetchData()

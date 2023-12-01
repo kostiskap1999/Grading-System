@@ -20,10 +20,12 @@ export class Subject {
     }
 
     async setup(userRole?: number){
-        const projects: Project[] = await fetchSubjectProjects(this.id)
-        if(userRole != undefined && userRole <= 1)
-            for(const project of projects)
-                await project.setup()
-        this.projects = projects
+        const projects: Project[] | null = await fetchSubjectProjects(this.id)
+        if(projects){
+            if(userRole != undefined && userRole <= 1)
+                for(const project of projects)
+                    await project.setup()
+            this.projects = projects
+        }
     }
 }

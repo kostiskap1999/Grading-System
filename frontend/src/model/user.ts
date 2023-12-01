@@ -21,10 +21,12 @@ export class User {
     }
 
     async setup(){
-        const subjects: Subject[] = await fetchUserSubjects(this.id)
-        for(const subject of subjects)
-            await subject.setup(this.role)
-        this.subjects = subjects
+        const subjects: Subject[] | null = await fetchUserSubjects(this.id)
+        if(subjects){
+            for(const subject of subjects)
+                await subject.setup(this.role)
+            this.subjects = subjects
+        }
     }
 
     hasSubject(id: number){

@@ -23,21 +23,27 @@ export default function SubmissionsPage() {
   useEffect(() => {
     const fetchData = async () => {
       if(selectedProject == undefined){
-        const selProject: Project = await fetchProject(parseInt(params.get('project')?.toString()!))
-        selProject.setup()
-        setSelectedProject(selProject)
-      }
+        const selProject: Project | null = await fetchProject(parseInt(params.get('project')?.toString()!))
         
-      
-      const submissionsOBJ: Submission[] = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
-      setSubmissions(submissionsOBJ)
-      const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-      for(const submission of submissionsOBJ){
-        if(submission.id === parseInt(parsedID)){
-          setSelectedSubmission(submission)
-          break;
+        if(selProject){
+          selProject.setup()
+          setSelectedProject(selProject)
         }
-      } 
+
+      }
+      
+      const submissionsOBJ: Submission[] | null = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
+      
+      if(submissionsOBJ){
+        setSubmissions(submissionsOBJ)
+        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        for(const submission of submissionsOBJ){
+          if(submission.id === parseInt(parsedID)){
+            setSelectedSubmission(submission)
+            break;
+          }
+        } 
+      }
     }
 
     fetchData()

@@ -6,18 +6,21 @@ import { errorHandling } from "../util/error";
 
 
 export async function login(credentials: ICredentials) {
-    
-    const user: ILoggedIn = await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))
+    return await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))
     .then(response => {
-        if(!response.ok) throw new Error(JSON.stringify(response.status));
-        else return response.json();
+        if(!response.ok)
+            throw new Error(JSON.stringify(response.status));
+        else
+            return response.json();
+    })
+    .then((user: ILoggedIn) => {
+        const cookies = new Cookies()
+        cookies.set('token', JSON.stringify(user.token), { path: '/' })
+    
+        return new User(user.user)
     })
     .catch((error) => {
         errorHandling(error)
+        return null
     });
-    
-    const cookies = new Cookies()
-    cookies.set('token', JSON.stringify(user.token), { path: '/' })
-
-    return new User(user.user)
 }

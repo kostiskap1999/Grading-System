@@ -18,16 +18,8 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const user: User = await login({username, password})
-    
-    if (user.id !== -1){
-      const cookies = new Cookies();
-      cookies.set('role-temp', JSON.stringify(user.role), { path: '/' }); //temporary solution, will implement proper token later
-
-      // cookies.set('token', JSON.stringify(token), { path: '/' });
-      dispatch({ type: LOGIN_USER });
-      // navigate("/home")
-    }
+    const user: User | null = await login({username, password})
+    user && dispatch({ type: LOGIN_USER });
   }
 
   const handleKeyUp = () => {

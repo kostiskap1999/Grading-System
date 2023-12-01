@@ -23,7 +23,7 @@ export class Submission {
     }
 
     async setup(){
-        this.student = await fetchUser(this.submiteeID)
+        this.student = await fetchUser(this.submiteeID) ?? this.student
     }
 
 }
