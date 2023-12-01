@@ -5,9 +5,9 @@ import { errorHandling } from "../util/error";
 
 export async function checkToken() {
     await fetch(HOSTNAME + TOKEN, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })
@@ -22,9 +22,9 @@ export async function checkToken() {
 
 export async function fetchTokenID() {
     return await fetch(HOSTNAME + TOKEN + "/id", GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })
@@ -39,9 +39,9 @@ export async function fetchTokenID() {
 
 export async function fetchTokenRole() {
     return await fetch(HOSTNAME + TOKEN + "/role", GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })

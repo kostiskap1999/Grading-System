@@ -5,9 +5,9 @@ import { errorHandling } from "../util/error";
 
 export async function fetchSubmissions(projectID: number) {
     return await fetch(HOSTNAME + SUBMISSIONS + "/" + projectID, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })
@@ -34,7 +34,6 @@ export async function postSubmission(submission: IPostSubmission) {
     })
     .catch((error) => {
         errorHandling(error)
-
     });
 
     return response

@@ -7,9 +7,9 @@ import { errorHandling } from "../util/error";
 
 export async function login(credentials: ICredentials) {
     return await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })

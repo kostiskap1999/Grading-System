@@ -7,9 +7,9 @@ import '../util/yymmdd';
 
 export async function fetchTests(projectID: number) {
     return await fetch(HOSTNAME + TESTS + "/" + projectID, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })

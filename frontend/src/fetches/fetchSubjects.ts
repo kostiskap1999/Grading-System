@@ -26,9 +26,9 @@ export async function fetchSubjects() {
 
 export async function fetchSubject(id: number) {
     return await fetch(HOSTNAME + SUBJECTS + "/" + id, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })
@@ -47,9 +47,9 @@ export async function fetchSubject(id: number) {
 
 export async function fetchUserSubjects(userID: number) {
     return await fetch(HOSTNAME + USERSUBJECTS + "/" + userID, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })
@@ -68,9 +68,9 @@ export async function fetchUserSubjects(userID: number) {
 
 export async function fetchSupervisingSubjects(userID: number) {
     await fetch(HOSTNAME + SUPERVISINGSUBJECTS + "/" + userID, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })

@@ -5,9 +5,9 @@ import { errorHandling } from "../util/error";
 
 export async function fetchUsers() {
     return await fetch(HOSTNAME + USERS, GETHEADERS())
-    .then(response => {
+    .then(async response => {
         if(!response.ok)
-            throw new Error(JSON.stringify(response.status));
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
         else
             return response.json();
     })
