@@ -6,17 +6,15 @@ const errorHandling = (error, functionName) => {
     console.log(error)
     console.log("\n=====================");
 
-    if (error.message === "401")
-        throw new errors.UnauthorizedError();
-    else if (error.message === "403")
-        throw new errors.ForbiddenError();
-    else if (error.message === "404")
-        throw new errors.NotFoundError();
-    else if (error.message === "500") {
-        throw new errors.InternalServerError();
-    } else {
+    if (error.statusCode === 401)
+        throw new errors.UnauthorizedError(error.message);
+    else if (error.statusCode === 403)
+        throw new errors.ForbiddenError(error.message);
+    else if (error.statusCode === 404)
+        throw new errors.NotFoundError(error.message);
+    else
         throw new errors.InternalServerError(error.message);
-    }
+
 }
 
 module.exports = { errorHandling }
