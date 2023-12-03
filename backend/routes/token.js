@@ -8,6 +8,7 @@ async function createToken(payload) {
   try {
     TOKEN_KEY = process.env.TOKEN_KEY;
     const token = jwt.sign(payload, TOKEN_KEY, {expiresIn: "168h"})
+
     return token
   } catch (err) {
     errorHandling(err, "createToken")
@@ -33,6 +34,7 @@ async function checkToken(token) {
 async function getUserIDFromToken(request) {
   try {
     const decoded = await checkToken(request.headers.token)
+
     return decoded.user_id
   } catch (err) {
     errorHandling(err, "getUserIDFromToken")
@@ -42,6 +44,7 @@ async function getUserIDFromToken(request) {
 async function getRoleFromToken(request) {
   try {
     const decoded = await checkToken(request.headers.token)
+    
     return decoded.role
   } catch (err) {
     errorHandling(err, "getRoleFromToken")

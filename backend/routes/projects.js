@@ -1,22 +1,22 @@
-var  config = require('../database/config');
+var  config = require('../database/config')
 const dbtoken = require('./token.js')
-const util = require('util');
+const util = require('util')
 
-const query = util.promisify(config.query).bind(config);
+const query = util.promisify(config.query).bind(config)
 
-const error = require('../errors/errorTypes');
-const { errorHandling } = require('../errors/errorHandling');
+const error = require('../errors/errorTypes')
+const { errorHandling } = require('../errors/errorHandling')
 
 async function getProjects(request) {
   try {
     await dbtoken.checkToken(request.headers.token)
-    util.promisify(config.connect);
-    const sqlSelect = "SELECT * FROM projects;";
+    util.promisify(config.connect)
     
-    const result = await query(sqlSelect);
-    util.promisify(config.end);
-    return result
-    
+    const sql = `SELECT * FROM projects`
+    const projects = await query(sql)
+
+    util.promisify(config.end)
+    return projects
   } catch (err) {
     errorHandling(err, "getProjects")
   }
@@ -25,19 +25,19 @@ async function getProjects(request) {
 async function getProject(request) {
   try {
     await dbtoken.checkToken(request.headers.token)
-    util.promisify(config.connect);
-    const sqlSelect = `SELECT * FROM projects WHERE id=${request.params.id};`;
+    util.promisify(config.connect)
+
+    const sql = `SELECT * FROM projects WHERE id = ?`
+    const projectID = [request.params.id]
+    const project = await query(sql, projectID)
     
-    const result = await query(sqlSelect);
-    
-    if(result.length > 1)
+    if(project.length > 1)
       throw new error.InternalServerError("Found more than one project with this id")
-    else if(result.length == 0)
+    else if(project.length == 0)
       throw new error.NotFoundError("Id didn't match any projects")
     
-    util.promisify(config.end);
-    return result[0]
-    
+    util.promisify(config.end)
+    return project[0]
   } catch (err) {
     errorHandling(err, "getProject")
   }
@@ -46,27 +46,21 @@ async function getProject(request) {
 async function getUserProjects(request) {
   try {
     await dbtoken.checkToken(request.headers.token)
-    util.promisify(config.connect);
+    util.promisify(config.connect)
     
-    var sqlSelect = `SELECT subject_id FROM user_subject WHERE user_id=${request.params.userid};`;
-    const projectIDs = await query(sqlSelect);
+    var sql = `SELECT subject_id FROM user_subject WHERE user_id = ?`
+    const userID = [request.params.userid]
+    const subjectIDs = await query(sql, userID)
 
-    var result = []
-    if (projectIDs.length != 0){
-      sqlSelect = `SELECT * FROM projects WHERE`
-      for(let i=0; i<projectIDs.length; i++){
-        sqlSelect += ` id=${projectIDs[i].subject_id}`
-        
-        if(i < projectIDs.length-1)
-          sqlSelect += ` OR`
-      }
-      sqlSelect += `;`
-      result = await query(sqlSelect);
+    var userProjects = [] // initialise in case it is empty    
+    if (subjectIDs.length != 0){
+      sql = `SELECT * FROM projects WHERE`
+      sql += subjectIDs.map(() => ' id=?').join(' OR')
+      userProjects = await query(sql, subjectIDs.map(subject => subject.subject_id))
     }
     
-    util.promisify(config.end);
-    return result
-    
+    util.promisify(config.end)
+    return userProjects
   } catch (err) {
     errorHandling(err, "getUserProjects")
   }
@@ -75,13 +69,14 @@ async function getUserProjects(request) {
 async function getSubjectProjects(request) {
   try {
     await dbtoken.checkToken(request.headers.token)
-    util.promisify(config.connect);
-    const sqlSelect = `SELECT * FROM projects WHERE subject_id=${request.params.subjectid};`;
-    const result = await query(sqlSelect);
+    util.promisify(config.connect)
+
+    const sql = `SELECT * FROM projects WHERE subject_id = ?`
+    const subjectID = request.params.subjectid
+    const subjectProjects = await query(sql, subjectID)
     
-    util.promisify(config.end);
-    return result
-    
+    util.promisify(config.end)
+    return subjectProjects
   } catch (err) {
     errorHandling(err, "getSubjectProjects")
   }
@@ -89,43 +84,33 @@ async function getSubjectProjects(request) {
 
 async function postProjects(request) {
   try {
-    util.promisify(config.connect);
-    var sqlSelect = `INSERT INTO projects (name, description, deadline, subject_id) VALUES ('${request.body.name}','${request.body.description}','${request.body.deadline}',${request.body.subjectID});`;
-
-    var result = await query(sqlSelect);
+    util.promisify(config.connect)
+    var sql = 'INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)'
+    const projectValues = [request.body.name, request.body.description, request.body.deadline, request.body.subjectID]
+    await query(sql, projectValues)
     
-    if(result.affectedRows != 1)
-      throw new error.InternalServerError("There has been an error")
-    
-    sqlSelect = `SELECT id FROM projects WHERE id >= LAST_INSERT_ID();`;
-    result = await query(sqlSelect);
-    const project_id = result[0].id
+    sql = `SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`
+    const insertedID = await query(sql)
 
     for(let i=0; i<request.body.tests.length; i++){
-      sqlSelect = `INSERT INTO inputs_outputs_group (project_id) VALUES (${project_id});`
-      result = await query(sqlSelect);
+      sql = `INSERT INTO inputs_outputs_group (project_id) VALUES (?)`
+      await query(sql, insertedID[0].id)
       
-      sqlSelect = `SELECT id FROM inputs_outputs_group WHERE id >= LAST_INSERT_ID();`;
-      result = await query(sqlSelect);
-      const group_id = result[0].id
+      sql = `SELECT id FROM inputs_outputs_group WHERE id >= LAST_INSERT_ID()`
+      const lastTestID = await query(sql)
+      const groupID = lastTestID[0].id
 
-      sqlSelect = `INSERT INTO inputs (name, code, group_id) VALUES `
-      for(let j=0; j<request.body.tests[i].inputs.length; j++){
-        sqlSelect += `('${request.body.tests[i].inputs[j].name}', '${request.body.tests[i].inputs[j].code}', ${group_id})`
-        if(j != request.body.tests[i].inputs.length-1)
-          sqlSelect += ', '
-        else
-          sqlSelect += `;`
-      }
-      result = await query(sqlSelect);
+      sql = `INSERT INTO inputs (name, code, group_id) VALUES ${request.body.tests[i].inputs.map(() => '(?, ?, ?)').join(', ')}`
+      const inputValues = request.body.tests[i].inputs.flatMap(input => [input.name, input.code, groupID])
+      await query(sql, inputValues)
 
-      sqlSelect = `INSERT INTO outputs (code, group_id) VALUES ('${request.body.tests[i].output.code}', ${group_id})`
-      result = await query(sqlSelect);
+      sql = `INSERT INTO outputs (code, group_id) VALUES (?, ?)`
+      const outputValues = [request.body.tests[i].output.code, groupID]
+      await query(sql, outputValues)
     }
 
-    util.promisify(config.end);
+    util.promisify(config.end)
     return true
-    
   } catch (err) {
     errorHandling(err, "postProjects")
   }
