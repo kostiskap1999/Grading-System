@@ -67,6 +67,37 @@ async function getTests(request) {
   }
 }
 
+async function postTestsFromPostProjects(request, insertedID) {
+  try{
+    await dbtoken.checkToken(request.headers.token)
+    util.promisify(config.connect)
+  
+    for(let i=0; i<request.body.tests.length; i++){
+      sql = `INSERT INTO inputs_outputs_group (project_id, main_function) VALUES (?, ?)`
+      const testValues = [insertedID[0].id, request.body.tests[i].main]
+      await query(sql, testValues)
+      
+      sql = `SELECT id FROM inputs_outputs_group WHERE id >= LAST_INSERT_ID()`
+      const lastTestID = await query(sql)
+      const groupID = lastTestID[0].id
+  
+      sql = `INSERT INTO inputs (name, code, group_id) VALUES ${request.body.tests[i].inputs.map(() => '(?, ?, ?)').join(', ')}`
+      const inputValues = request.body.tests[i].inputs.flatMap(input => [input.name, input.code, groupID])
+      await query(sql, inputValues)
+  
+      sql = `INSERT INTO outputs (code, group_id) VALUES (?, ?)`
+      const outputValues = [request.body.tests[i].output.code, groupID]
+      await query(sql, outputValues)
+    }
+  
+    util.promisify(config.end)
+    return true
+  }catch{
+    errorHandling(err, "postTests")
+  }
+}
+
 module.exports = {
   getTests: getTests,
+  postTestsFromPostProjects: postTestsFromPostProjects
 }

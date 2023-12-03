@@ -1,5 +1,6 @@
 var  config = require('../database/config')
 const dbtoken = require('./token.js')
+const dbtests = require('./tests.js')
 const util = require('util')
 
 const query = util.promisify(config.query).bind(config)
@@ -84,7 +85,9 @@ async function getSubjectProjects(request) {
 
 async function postProjects(request) {
   try {
+    await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect)
+
     var sql = 'INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)'
     const projectValues = [request.body.name, request.body.description, request.body.deadline, request.body.subjectID]
     await query(sql, projectValues)
@@ -92,23 +95,8 @@ async function postProjects(request) {
     sql = `SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`
     const insertedID = await query(sql)
 
-    for(let i=0; i<request.body.tests.length; i++){
-      sql = `INSERT INTO inputs_outputs_group (project_id) VALUES (?)`
-      await query(sql, insertedID[0].id)
-      
-      sql = `SELECT id FROM inputs_outputs_group WHERE id >= LAST_INSERT_ID()`
-      const lastTestID = await query(sql)
-      const groupID = lastTestID[0].id
-
-      sql = `INSERT INTO inputs (name, code, group_id) VALUES ${request.body.tests[i].inputs.map(() => '(?, ?, ?)').join(', ')}`
-      const inputValues = request.body.tests[i].inputs.flatMap(input => [input.name, input.code, groupID])
-      await query(sql, inputValues)
-
-      sql = `INSERT INTO outputs (code, group_id) VALUES (?, ?)`
-      const outputValues = [request.body.tests[i].output.code, groupID]
-      await query(sql, outputValues)
-    }
-
+    await dbtests.postTestsFromPostProjects(request, insertedID)
+    
     util.promisify(config.end)
     return true
   } catch (err) {
