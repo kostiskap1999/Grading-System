@@ -148,9 +148,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `grading_system`.`inputs_outputs_group`
+-- Table `grading_system`.`tests`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `grading_system`.`inputs_outputs_group` (
+CREATE TABLE IF NOT EXISTS `grading_system`.`tests` (
   `id` SMALLINT NOT NULL AUTO_INCREMENT,
   `main_function` VARCHAR(45) NOT NULL,
   `project_id` SMALLINT NOT NULL,
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `grading_system`.`inputs` (
   INDEX `group_id_idx` (`group_id` ASC) VISIBLE,
   CONSTRAINT `group_id`
     FOREIGN KEY (`group_id`)
-    REFERENCES `grading_system`.`inputs_outputs_group` (`id`)
+    REFERENCES `grading_system`.`tests` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `grading_system`.`outputs` (
   INDEX `group_id_idx` (`group_id` ASC) VISIBLE,
   CONSTRAINT `group_id0`
     FOREIGN KEY (`group_id`)
-    REFERENCES `grading_system`.`inputs_outputs_group` (`id`)
+    REFERENCES `grading_system`.`tests` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;

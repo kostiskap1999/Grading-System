@@ -19,7 +19,7 @@ export const SUBJECTPROJECTS: string = '/subject-projects'
 
 export const SUBMISSIONS: string = '/submissions'
 
-export const TESTS: string = '/getTests'
+export const TESTS: string = '/tests'
 
 const cookies = new Cookies()
 

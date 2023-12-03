@@ -12,7 +12,7 @@ async function getTests(request) {
     await dbtoken.checkToken(request.headers.token)
     util.promisify(config.connect)
 
-    var sql = `SELECT * FROM inputs_outputs_group WHERE project_id = ?`
+    var sql = `SELECT * FROM tests WHERE project_id = ?`
     const projectID = [request.params.projectID]
     const testsGroupResult = await query(sql, projectID)
     
@@ -73,11 +73,11 @@ async function postTestsFromPostProjects(request, insertedID) {
     util.promisify(config.connect)
   
     for(let i=0; i<request.body.tests.length; i++){
-      sql = `INSERT INTO inputs_outputs_group (project_id, main_function) VALUES (?, ?)`
+      sql = `INSERT INTO tests (project_id, main_function) VALUES (?, ?)`
       const testValues = [insertedID[0].id, request.body.tests[i].main]
       await query(sql, testValues)
       
-      sql = `SELECT id FROM inputs_outputs_group WHERE id >= LAST_INSERT_ID()`
+      sql = `SELECT id FROM tests WHERE id >= LAST_INSERT_ID()`
       const lastTestID = await query(sql)
       const groupID = lastTestID[0].id
   

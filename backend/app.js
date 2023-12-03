@@ -225,7 +225,7 @@ router.route('/submissions').post(async (request, response) => {
 });
 
 // GET INPUTS_OUTPUTS ROUTER
-router.route('/getTests/:projectID').get(async (request, response) => {
+router.route('/tests/:projectID').get(async (request, response) => {
   try {
     const data = await dbtests.getTests(request);
     response.json(data);
