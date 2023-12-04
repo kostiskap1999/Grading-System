@@ -91,7 +91,7 @@ export default function ProjectsPage() {
     <div className="page column" style={{overflow: 'hidden'}}>
       <div className="header-title row">
         {userRole <= 1 ? <>
-          <button style={{flex: 1}} onClick={() => navigate('/new-project')}>New Project</button>
+          <button style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}
         <div className="text center column" style={{flex: 4}}>
           <div>This is a list of all the projects. You can participate in all the projects whose subjects you follow.</div>

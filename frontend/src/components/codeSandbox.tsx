@@ -22,18 +22,22 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
         var codeBefore = ""
         var codeAfter = ""
         var finalCode = ""
+        var inputsForLog = ""
         test.inputs.forEach((input, idx) => {
           codeBefore += "var " + input.name + " = " + input.code + ";\n"
           codeAfter += input.name
-          console.log(test.inputs.length)
-          if (idx != test.inputs.length-1)
+          inputsForLog += input.name + " = " + input.code
+          if (idx != test.inputs.length-1){
             codeAfter += ", "
+            inputsForLog += ", "
+          }
+            
         });
         finalCode += codeBefore + code + "\nreturn main(" + codeAfter +");"
         var result = Function(finalCode)()
         result = result.toString()
         if (result == test.output.code){
-          logVar += `Test ${index+1} completed successfully<br>`
+          logVar += `Test ${index+1} completed with (${inputsForLog}) as input(s) and ${test.output.code} as output<br>`
           setLog(logVar)
         }
         else{

@@ -3,6 +3,9 @@
 @import './general.scss';
 @import './button.scss';
 
+$border-radius: 5px;
+
+
 @mixin labelStyle {
 	@extend .column;
 	align-items: center;
@@ -16,7 +19,9 @@
 	justify-content:"space-between";
 	flex-wrap: wrap;
 
-	& section {
+	// *** STYLE FOR THE CONTAINERS ***
+	// Style for the section
+	section {
 		padding: 40px 0;
 		border-top: solid #000;
 		border-width: 3px;
@@ -32,26 +37,128 @@
 			flex-wrap: wrap;
 			border-top: solid #000;
 			border-width: 1px;
+		}
+	}
 
-			& label { // content's single label
-				@include labelStyle;
+	// Style for the label
+	label {
+		@include labelStyle;
+		
+		& span { // content's single label header
+			padding-bottom: 10px;
+		}
+	}
 
-				& span { // content's single label header
-					padding-bottom: 10px;
-				}
+	// *** STYLE FOR THE FIELDS ***
+	// Style for the inputs
+	input, textarea {
+		font-size: 16px;
+		color: $text-color;
+		padding: 10px;
+		background-color: transparent;
+		border: 2px solid lighten($alt-color2, 20%);
+		border-radius: $border-radius;
+		transition: border-color 0.3s ease;
 
-				& div > label { // content's single label content
-					@include labelStyle;
-				}
+		&:focus {
+			outline: none;
+			border-color: $alt-color2;
+			box-shadow: 0 0 5px darken($alt-color2, 10%);
+		}
 
-				& button {
-					@extend .button;
-				}
+		&::placeholder {
+			color: lighten($alt-color2, 40%);
+		}
+	}
+
+	// Style for the checkbox
+	input[type=checkbox] {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		width: 16px;
+		height: 16px;
+		border: 2px solid $alt-color2;
+		border-radius: 3px;
+		outline: none;
+		cursor: pointer;
+		margin-right: 5px;
+
+		&:checked {
+		background-color: $alt-color2;
+		border-color: $alt-color2;
+		}
+
+		&:hover {
+		border-color: darken($alt-color2, 10%);
+		}
+	}
+
+	// Style for the buttons
+	input[type=submit], button {
+		@extend button;
+	}
+
+	// Style for the dropdown
+	select {
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		font-size: 16px;
+		padding: 10px;
+		border: 2px solid lighten($alt-color2, 20%);
+		border-radius: $border-radius;
+		background-color: white; // Override default styles
+		cursor: pointer;
+		transition: border-color 0.3s ease;
+
+		&:focus {
+			outline: none;
+			border-color: $alt-color2;
+			box-shadow: 0 0 5px darken($alt-color2, 10%);
+		}
+
+		& ::after {
+			content: '\25BC'; // Unicode for down arrow
+			font-size: 16px;
+			color: $alt-color2;
+			position: absolute;
+			top: 50%;
+			right: 10px;
+			transform: translateY(-50%);
+		}
+
+		& :hover::after {
+			color: darken($alt-color2, 10%);
+		}
+	}
+
+	// Style for the table
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 20px;
+
+
+		& th, td {
+			@extend .center;
+			border: 1px solid #ddd;
+			padding: 8px;
+		}
+
+		& th {
+			background-color: $alt-color2;
+			color: #fff;
+
+			& :nth-child(even) {
+				background-color: #f2f2f2;
 			}
 		}
 	}
 
-	& input[type=submit]  {
-		@extend .button;	
-	}
+	// *** STYLE FOR THE TEXT*
+	text{
+		@extend .text
+	}	
+
 }

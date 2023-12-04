@@ -141,22 +141,52 @@ export default function NewProjectPage() {
               </label>
               <label style={{flex: 3}}>
                 <span>Inputs</span>
-                {test.inputs.map((input, idx) => (
-                  <div key={idx}>
-                    <label style={{flex: 0.01}}>
-                      <span style={{fontSize: 12}}>Is Param?</span>
-                      <input id="input-is-main-param" type="checkbox" onChange={(event) => handleTestChange(event, index, idx)}/>
-                    </label>
-                    <label style={{flex: 0.4}}>
-                      <span>Parameter name</span>
-                      <textarea id="input-name" rows={1} defaultValue={input.name} onChange={(event) => handleTestChange(event, index, idx)}/>
-                    </label>
-                    <label style={{flex: 0.5}}>
-                      <span>Parameter value</span>
-                      <textarea id="input-code" rows={1} defaultValue={input.code} onChange={(event) => handleTestChange(event, index, idx)}/>
-                    </label>
-                  </div>
-                ))}
+                {/* Assuming you are using React */}
+                <table>
+                  <thead>
+                    <tr>
+                      <th style={{ flex: 0.01 }}>Is Param?</th>
+                      <th style={{ flex: 0.4 }}>Parameter name</th>
+                      <th style={{ flex: 0.5 }}>Parameter value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {test.inputs.map((input, idx) => (
+                      <tr key={idx}>
+                        <td style={{ flex: 0.01 }}>
+                          <label htmlFor={`input-is-main-param-${idx}`}>
+                            <input
+                              id={`input-is-main-param-${idx}`}
+                              type="checkbox"
+                              onChange={(event) => handleTestChange(event, index, idx)}
+                            />
+                          </label>
+                        </td>
+                        <td style={{ flex: 0.4 }}>
+                          <label htmlFor={`input-name-${idx}`}>
+                            <textarea
+                              id={`input-name-${idx}`}
+                              rows={1}
+                              defaultValue={input.name}
+                              onChange={(event) => handleTestChange(event, index, idx)}
+                            />
+                          </label>
+                        </td>
+                        <td style={{ flex: 0.5 }}>
+                          <label htmlFor={`input-code-${idx}`}>
+                            <textarea
+                              id={`input-code-${idx}`}
+                              rows={1}
+                              defaultValue={input.code}
+                              onChange={(event) => handleTestChange(event, index, idx)}
+                            />
+                          </label>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                
                 <button type="button" onClick={() => createInput(index)}>Add Input</button>
               </label>
               <label style={{flex: 0.5}}>
