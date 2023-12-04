@@ -26,7 +26,7 @@ export const ITestInputDefaults = {
     id: -1,
     name: "",
     code: "",
-    isMainParam: false
+    isMainParam: true
 };
 
 export const ITestDefaults = {

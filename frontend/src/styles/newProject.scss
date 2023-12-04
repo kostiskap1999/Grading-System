@@ -5,44 +5,61 @@
 
 $border-radius: 5px;
 
-
-@mixin labelStyle {
-	@extend .column;
-	align-items: center;
-	flex: 1 0 30%;
-	margin: 15px;
-}
-
 .form {
 	@extend .column;
-	padding: 30px;
 	justify-content:"space-between";
 	flex-wrap: wrap;
 
 	// *** STYLE FOR THE CONTAINERS ***
 	// Style for the section
 	section {
-		padding: 40px 0;
-		border-top: solid #000;
-		border-width: 3px;
+		padding-bottom: 15px;
+		margin-bottom: 15px;
+		border-bottom: solid #000;
+		border-width: 1px;
 
 		& header { //content header
+			@extend .row;
 			@extend .center;
-			padding-bottom: 30px;
+			padding-top: 10px;
+
+			& label {
+				@extend .row;
+				@extend .center;
+
+				& span {
+					@extend .column;
+					@extend .center;
+					margin-right: 10px;
+					padding-bottom: 0;
+				}
+			}
 		}
 
 		& div { // content
 			@extend .row;
 			justify-content:"space-between";
 			flex-wrap: wrap;
-			border-top: solid #000;
-			border-width: 1px;
+
+			& div {
+				@extend .column;
+				justify-content:"space-between";
+				flex-wrap: wrap;
+
+				& span {
+					@extend .center;
+				}
+			}
 		}
 	}
 
 	// Style for the label
 	label {
-		@include labelStyle;
+		@extend .center;
+		@extend .column;
+		align-items: center;
+		flex: 1 0 30%;
+		margin: 15px;
 		
 		& span { // content's single label header
 			padding-bottom: 10px;
@@ -71,6 +88,15 @@ $border-radius: 5px;
 		}
 	}
 
+	textarea {
+		width: 100%;
+		box-sizing: border-box;
+		height: 60px;
+		min-height: 60px;
+		min-width: 300px;
+		max-width: 99%;
+	}
+
 	// Style for the checkbox
 	input[type=checkbox] {
 		appearance: none;
@@ -97,6 +123,7 @@ $border-radius: 5px;
 	// Style for the buttons
 	input[type=submit], button {
 		@extend button;
+		width: 100%;
 	}
 
 	// Style for the dropdown
@@ -135,10 +162,12 @@ $border-radius: 5px;
 
 	// Style for the table
 	table {
-		width: 100%;
 		border-collapse: collapse;
 		margin-top: 20px;
 
+		textarea {
+			resize: vertical;
+		}
 
 		& th, td {
 			@extend .center;

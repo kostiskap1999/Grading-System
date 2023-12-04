@@ -35,9 +35,19 @@ export default function NewProjectPage() {
     const project: Project = newProject
     project.tests.push(new Test())
     project.tests[project.tests.length-1].id = project.tests.length
+    project.tests[project.tests.length-1].output.id = project.tests.length
     createInput(project.tests.length-1)
     setRerender(rerender+1)
-    
+  }
+
+  const copyTest = (index: number) => {
+    const project: Project = newProject
+    console.log(project.tests)
+    project.tests.push(project.tests[index])
+    project.tests[project.tests.length-1].id = project.tests.length
+    project.tests[project.tests.length-1].output.id = project.tests.length
+    console.log(project.tests)
+    setRerender(rerender+1)
   }
 
   const createInput = (testIndex: number) => {
@@ -47,7 +57,7 @@ export default function NewProjectPage() {
     setRerender(rerender+1)
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement> ) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> ) => {
     const project: Project = newProject
     switch(event.target.id) {
       case "name" :
@@ -68,22 +78,22 @@ export default function NewProjectPage() {
     }
   }
 
-  const handleTestChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
+  const handleTestChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
     const project: Project = newProject
     switch(event.target.id) {
-      case "main-function" :
+      case `main-function-${testIndex}` :
         project.tests[testIndex].main = event.target.value
         break
-      case "input-name" :
+      case `input-name-${inputIndex}` :
         project.tests[testIndex].inputs[inputIndex!].name = event.target.value
         break
-      case "input-code" :
+      case `input-code-${inputIndex}` :
         project.tests[testIndex].inputs[inputIndex!].code = event.target.value
         break
-      case "input-is-main-param" :
+      case `input-is-main-param-${inputIndex}` :
         project.tests[testIndex].inputs[inputIndex!].isMainParam = (event.target as HTMLInputElement).checked
         break
-      case "output-code" :
+      case `output-code-${testIndex}` :
         project.tests[testIndex].output.code = event.target.value
         break
       default:
@@ -91,7 +101,7 @@ export default function NewProjectPage() {
         break
     }
   }
-
+  
   const createProject = async (event: React.FormEvent) => {
     event.preventDefault()
     const created = await postProject(newProject)
@@ -100,20 +110,20 @@ export default function NewProjectPage() {
 
   return (
     <div className="page column">
-      <div className="header-title text center column">
-        New Project Page
-      </div>
       <form className="form text" onSubmit={createProject}>
         <section>
-          <header className="header-text">Characteristics</header>
+          <header>
+              <label>
+                <input style={{fontSize: 30, border: 0, textAlign: "center"}} id="name" placeholder="New Project Name" defaultValue="New Project Name" required onChange={handleChange}/>
+              </label>
+            </header>
+        </section>
+        
+        <section>
           <div>
             <label>
-              <span>Name</span>
-              <input id="name" placeholder="Enter project here" required onChange={handleChange}/>
-            </label>
-            <label>
               <span>Deadline</span>
-              <input id="deadline" type="date" required onChange={handleChange}/>
+              <input id="deadline" type="date" defaultValue={new Date().toISOString().split('T')[0]} required onChange={handleChange}/>
             </label>
             <label>
               <span>Subject</span>
@@ -124,80 +134,86 @@ export default function NewProjectPage() {
                 )}
               </select>
             </label>
+          </div>
+          <div>
             <label>
               <span>Description</span>
-              <textarea id="description" rows={5} cols={30} required placeholder="Enter description here" onChange={handleChange}/>
+              <textarea id="description" rows={5} cols={100} required placeholder="Enter description here" onChange={handleChange}/>
             </label>
           </div>
         </section>
 
         <section>
-          <header className="header-text">Tests</header>
           {newProject.tests.map((test, index) => (
-            <div key={index}>
-              <label style={{flex: 0.5}}>
-                <span>Main Function</span>
-                <textarea id="main-function" rows={1} onChange={(event) => handleTestChange(event, index)}/>
-              </label>
-              <label style={{flex: 3}}>
-                <span>Inputs</span>
-                {/* Assuming you are using React */}
-                <table>
-                  <thead>
-                    <tr>
-                      <th style={{ flex: 0.01 }}>Is Param?</th>
-                      <th style={{ flex: 0.4 }}>Parameter name</th>
-                      <th style={{ flex: 0.5 }}>Parameter value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {test.inputs.map((input, idx) => (
-                      <tr key={idx}>
-                        <td style={{ flex: 0.01 }}>
-                          <label htmlFor={`input-is-main-param-${idx}`}>
-                            <input
-                              id={`input-is-main-param-${idx}`}
-                              type="checkbox"
-                              onChange={(event) => handleTestChange(event, index, idx)}
-                            />
-                          </label>
-                        </td>
-                        <td style={{ flex: 0.4 }}>
-                          <label htmlFor={`input-name-${idx}`}>
+            <span key={index}>
+              <header>
+                <div style={{flex: 0.3}}></div>
+                <label style={{flex: 2}}>
+                  <div>
+                    <span>Test {index+1} to run for function</span>
+                  </div>
+                  <input id={`main-function-${index}`} defaultValue={test.main} onChange={(event) => handleTestChange(event, index)}/>
+                </label>
+                <button style={{flex: 0.3}} type="button" onClick={() => copyTest(index)}>Copy Test</button>
+              </header>
+              <div>
+                <div style={{flex: 1}}>
+                  <span>Inputs</span>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th style={{ flex: 0.01 }}>Is Param?</th>
+                        <th style={{ flex: 0.4 }}>Parameter name</th>
+                        <th style={{ flex: 0.5 }}>Parameter value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {test.inputs.map((input, idx) => (
+                        <tr key={idx}>
+                          <td style={{flex: 0.01, padding: 0}}>
+                            <label style={{padding: 0, margin: 0}}>
+                              <input
+                                id={`input-is-main-param-${idx}`}
+                                type="checkbox"
+                                defaultChecked={input.isMainParam}
+                                onChange={(event) => handleTestChange(event, index, idx)}
+                              />
+                            </label>
+                          </td>
+                          <td style={{ flex: 0.4 }}>
                             <textarea
                               id={`input-name-${idx}`}
                               rows={1}
                               defaultValue={input.name}
                               onChange={(event) => handleTestChange(event, index, idx)}
                             />
-                          </label>
-                        </td>
-                        <td style={{ flex: 0.5 }}>
-                          <label htmlFor={`input-code-${idx}`}>
+                          </td>
+                          <td style={{ flex: 0.5 }}>
                             <textarea
                               id={`input-code-${idx}`}
                               rows={1}
                               defaultValue={input.code}
                               onChange={(event) => handleTestChange(event, index, idx)}
                             />
-                          </label>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                
-                <button type="button" onClick={() => createInput(index)}>Add Input</button>
-              </label>
-              <label style={{flex: 0.5}}>
-                <span>Output Code</span>
-                <textarea id="output-code" rows={1} onChange={(event) => handleTestChange(event, index)}/>
-              </label>
-            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  
+                  <button type="button" onClick={() => createInput(index)}>Add Input</button>
+                </div>
+                <div style={{flex: 0.5}}>
+                  <label>
+                    <span>Output Code</span>
+                    <textarea id={`output-code-${index}`} defaultValue={test.output.code} rows={1} onChange={(event) => handleTestChange(event, index)}/>
+                  </label>
+                </div>
+              </div>
+            </span>
           ))}
           
-          <button type="button" className="button" onClick={createTest}>Add Test</button>
-
+          <button style={{marginTop: "50px"}} type="button" onClick={createTest}>Add Test</button>
         </section>
         {projectCreated === undefined ?
           <div></div> :
