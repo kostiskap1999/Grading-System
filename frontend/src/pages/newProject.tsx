@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react";
-import { postProject } from "../fetches/fetchProjects";
-import { fetchSubjects } from "../fetches/fetchSubjects";
-import { Project } from "../model/project";
-import { Subject } from "../model/subject";
-import { Test, TestInput } from "../model/test";
+import { useEffect, useState } from "react"
+import { postProject } from "../fetches/fetchProjects"
+import { fetchSubjects } from "../fetches/fetchSubjects"
+import { Project } from "../model/project"
+import { Subject } from "../model/subject"
+import { Test, TestInput } from "../model/test"
 
 export default function NewProjectPage() {
   
   const [supervisingSubjects, setSupervisingSubjects] = useState<Subject[]>([])
   const [newProject, setNewProject] = useState<Project>(new Project())
   const [projectCreated, setProjectCreated] = useState<boolean | void>(undefined)
-
-  const [rerender, setRerender] = useState<number>(0)
 
   useEffect(() => {
     const fetchSupervisingSubjects = async () => {
@@ -32,75 +30,106 @@ export default function NewProjectPage() {
   }, [])
 
   const createTest = () => {
-    const project: Project = newProject
-    project.tests.push(new Test())
-    project.tests[project.tests.length-1].id = project.tests.length
-    project.tests[project.tests.length-1].output.id = project.tests.length
-    createInput(project.tests.length-1)
-    setRerender(rerender+1)
+    setNewProject((prevProject: Project) => {
+        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+        const newTest = new Test()
+        newTest.id = newProjectCopy.tests.length+1
+        newTest.output.id = newTest.id
+        newProjectCopy.tests.push(newTest)
+        createInput(newProjectCopy.tests.length - 1)
+        return newProjectCopy
+    })
   }
+
 
   const copyTest = (index: number) => {
-    const project: Project = newProject
-    console.log(project.tests)
-    project.tests.push(project.tests[index])
-    project.tests[project.tests.length-1].id = project.tests.length
-    project.tests[project.tests.length-1].output.id = project.tests.length
-    console.log(project.tests)
-    setRerender(rerender+1)
+    setNewProject((prevProject: Project) => {
+        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+        const copiedTest = new Test(newProjectCopy.tests[index])
+        copiedTest.id = newProjectCopy.tests.length + 1
+        copiedTest.output.id = copiedTest.id
+        newProjectCopy.tests.push(copiedTest)
+        return newProjectCopy
+    })
   }
+
+  const deleteTest = (index: number) => {
+      setNewProject((prevProject: Project) => {
+          const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+          newProjectCopy.tests = [
+              ...newProjectCopy.tests.slice(0, index),
+              ...newProjectCopy.tests.slice(index + 1),
+          ]
+          return newProjectCopy
+      })
+  }
+
 
   const createInput = (testIndex: number) => {
-    const project: Project = newProject
-    project.tests[testIndex].inputs.push(new TestInput())
-    project.tests[testIndex].inputs[project.tests[testIndex].inputs.length-1].id = project.tests[testIndex].inputs.length //I promise this line is necessary and completely not hansaplast
-    setRerender(rerender+1)
+    setNewProject((prevProject: Project) => {
+        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+        const newInput = new TestInput()
+        newInput.id = newProjectCopy.tests[testIndex].inputs.length + 1
+        newProjectCopy.tests[testIndex].inputs.push(newInput)
+        return newProjectCopy
+    })
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> ) => {
-    const project: Project = newProject
-    switch(event.target.id) {
-      case "name" :
-        project.name = event.target.value
-        break
-      case "deadline" :
-        project.deadline = event.target.value
-        break
-      case "subject_id" :
-        project.subjectID = parseInt(event.target.value)
-        break
-      case "description" :
-        project.description = event.target.value
-        break
-      default:
-        console.log("error")
-        break
-    }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setNewProject((prevProject: Project) => {
+        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+
+        switch(event.target.id) {
+            case "name" :
+                newProjectCopy.name = event.target.value
+                break
+            case "deadline" :
+                newProjectCopy.deadline = event.target.value
+                break
+            case "subject_id" :
+                newProjectCopy.subjectID = parseInt(event.target.value)
+                break
+            case "description" :
+                newProjectCopy.description = event.target.value
+                break
+            default:
+                console.log("error")
+                break
+        }
+
+        return newProjectCopy
+    })
   }
+
 
   const handleTestChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
-    const project: Project = newProject
-    switch(event.target.id) {
-      case `main-function-${testIndex}` :
-        project.tests[testIndex].main = event.target.value
-        break
-      case `input-name-${inputIndex}` :
-        project.tests[testIndex].inputs[inputIndex!].name = event.target.value
-        break
-      case `input-code-${inputIndex}` :
-        project.tests[testIndex].inputs[inputIndex!].code = event.target.value
-        break
-      case `input-is-main-param-${inputIndex}` :
-        project.tests[testIndex].inputs[inputIndex!].isMainParam = (event.target as HTMLInputElement).checked
-        break
-      case `output-code-${testIndex}` :
-        project.tests[testIndex].output.code = event.target.value
-        break
-      default:
-        console.log("error")
-        break
-    }
+    setNewProject((prevProject: Project) => {
+        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+        switch(event.target.id) {
+            case `main-function-${testIndex}` :
+                newProjectCopy.tests[testIndex].main = event.target.value
+                break
+            case `input-name-${inputIndex}` :
+                newProjectCopy.tests[testIndex].inputs[inputIndex!].name = event.target.value
+                break
+            case `input-code-${inputIndex}` :
+                newProjectCopy.tests[testIndex].inputs[inputIndex!].code = event.target.value
+                break
+            case `input-is-main-param-${inputIndex}` :
+                newProjectCopy.tests[testIndex].inputs[inputIndex!].isMainParam = (event.target as HTMLInputElement).checked
+                break
+            case `output-code-${testIndex}` :
+                newProjectCopy.tests[testIndex].output.code = event.target.value
+                break
+            default:
+                console.log("error")
+                break
+        }
+        return newProjectCopy
+    })
   }
+
   
   const createProject = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -130,7 +159,7 @@ export default function NewProjectPage() {
               <select id="subject_id" required onChange={handleChange}>
                 <option id="no" value="">No Subject Selected</option>
                 {supervisingSubjects.map((subject, index) => 
-                  <option key={index} id={subject.name} value={subject.id}>{subject.name}</option>
+                  <option key={subject.id} id={subject.name} value={subject.id}>{subject.name}</option>
                 )}
               </select>
             </label>
@@ -145,16 +174,17 @@ export default function NewProjectPage() {
 
         <section>
           {newProject.tests.map((test, index) => (
-            <span key={index}>
+            <section key={test.id}>
               <header>
-                <div style={{flex: 0.3}}></div>
+                <button style={{flex: 0.3, padding: 20, borderRadius: "2px"}} type="button" onClick={() => copyTest(index)}>Copy Test</button>
                 <label style={{flex: 2}}>
                   <div>
                     <span>Test {index+1} to run for function</span>
                   </div>
                   <input id={`main-function-${index}`} defaultValue={test.main} onChange={(event) => handleTestChange(event, index)}/>
                 </label>
-                <button style={{flex: 0.3}} type="button" onClick={() => copyTest(index)}>Copy Test</button>
+                
+                <button style={{flex: 0.3, padding: 20, borderRadius: "2px", backgroundColor: "firebrick" }} type="button" onClick={() => deleteTest(index)}>Delete Test</button>
               </header>
               <div>
                 <div style={{flex: 1}}>
@@ -169,7 +199,7 @@ export default function NewProjectPage() {
                     </thead>
                     <tbody>
                       {test.inputs.map((input, idx) => (
-                        <tr key={idx}>
+                        <tr key={input.id}>
                           <td style={{flex: 0.01, padding: 0}}>
                             <label style={{padding: 0, margin: 0}}>
                               <input
@@ -210,7 +240,7 @@ export default function NewProjectPage() {
                   </label>
                 </div>
               </div>
-            </span>
+            </section>
           ))}
           
           <button style={{marginTop: "50px"}} type="button" onClick={createTest}>Add Test</button>
@@ -224,5 +254,5 @@ export default function NewProjectPage() {
         <input type="submit" value={"Create Project"}/>
       </form>
     </div>
-  );
+  )
 }
