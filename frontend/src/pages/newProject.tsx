@@ -110,9 +110,6 @@ export default function NewProjectPage() {
             case `main-function-${testIndex}` :
                 newProjectCopy.tests[testIndex].main = event.target.value
                 break
-            case `input-name-${inputIndex}` :
-                newProjectCopy.tests[testIndex].inputs[inputIndex!].name = event.target.value
-                break
             case `input-code-${inputIndex}` :
                 newProjectCopy.tests[testIndex].inputs[inputIndex!].code = event.target.value
                 break
@@ -192,14 +189,17 @@ export default function NewProjectPage() {
                   <table>
                     <thead>
                       <tr>
+                        <th style={{ flex: 0.01 }}>#</th>
                         <th style={{ flex: 0.01 }}>Is Param?</th>
-                        <th style={{ flex: 0.4 }}>Parameter name</th>
                         <th style={{ flex: 0.5 }}>Parameter value</th>
                       </tr>
                     </thead>
                     <tbody>
                       {test.inputs.map((input, idx) => (
                         <tr key={input.id}>
+                          <td style={{ flex: 0.01 }}>
+                            <div>{idx+1}.</div>
+                          </td>
                           <td style={{flex: 0.01, padding: 0}}>
                             <label style={{padding: 0, margin: 0}}>
                               <input
@@ -209,14 +209,6 @@ export default function NewProjectPage() {
                                 onChange={(event) => handleTestChange(event, index, idx)}
                               />
                             </label>
-                          </td>
-                          <td style={{ flex: 0.4 }}>
-                            <textarea
-                              id={`input-name-${idx}`}
-                              rows={1}
-                              defaultValue={input.name}
-                              onChange={(event) => handleTestChange(event, index, idx)}
-                            />
                           </td>
                           <td style={{ flex: 0.5 }}>
                             <textarea

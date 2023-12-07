@@ -176,7 +176,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `grading_system`.`inputs` (
   `id` SMALLINT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
   `code` TEXT(100) NULL,
   `is_main_param` TINYINT NULL,
   `group_id` SMALLINT NOT NULL,

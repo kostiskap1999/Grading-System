@@ -19,17 +19,15 @@ async function getTests(request) {
     const groupedJSON = []
     if(testsGroupResult.length > 0){
       const groupIDs = testsGroupResult.map(element => element.id)
-      const groupMain = testsGroupResult.map(element => element.main_function)
       const sql = `
-      SELECT i.group_id, i.id AS input_id, i.name, i.code AS input_code, 
+      SELECT i.group_id, i.id AS input_id, i.code AS input_code, 
       i.is_main_param AS input_is_main_param, o.id AS output_id, o.code AS output_code,
       t.main_function AS main
-FROM inputs i
-LEFT JOIN outputs o ON i.group_id = o.group_id
-LEFT JOIN tests t ON i.group_id = t.id
-WHERE i.group_id IN (${groupIDs.map(() => '?').join(', ')})
-ORDER BY i.group_id;
-
+      FROM inputs i
+      LEFT JOIN outputs o ON i.group_id = o.group_id
+      LEFT JOIN tests t ON i.group_id = t.id
+      WHERE i.group_id IN (${groupIDs.map(() => '?').join(', ')})
+      ORDER BY i.group_id;
       `
       const tests = await query(sql, groupIDs)
       
@@ -55,7 +53,6 @@ ORDER BY i.group_id;
 
           currentGroupObject.inputs.push({
               id: test.input_id,
-              name: test.name,
               code: test.input_code,
               is_main_param: test.input_is_main_param,
               group_id: test.group_id
@@ -85,8 +82,8 @@ async function postTestsFromPostProjects(request, insertedID) {
       const lastTestID = await query(sql)
       const groupID = lastTestID[0].id
   
-      sql = `INSERT INTO inputs (name, code, group_id) VALUES ${request.body.tests[i].inputs.map(() => '(?, ?, ?)').join(', ')}`
-      const inputValues = request.body.tests[i].inputs.flatMap(input => [input.name, input.code, groupID])
+      sql = `INSERT INTO inputs (code, group_id) VALUES ${request.body.tests[i].inputs.map(() => '(?, ?)').join(', ')}`
+      const inputValues = request.body.tests[i].inputs.flatMap(input => [input.code, groupID])
       await query(sql, inputValues)
   
       sql = `INSERT INTO outputs (code, group_id) VALUES (?, ?)`

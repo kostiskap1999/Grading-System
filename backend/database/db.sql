@@ -5,5 +5,5 @@ INSERT INTO `projects` VALUES (1,'Sum','From 1 to an input set by user, calculat
 INSERT INTO `user_subject` VALUES (1,1,1),(2,1,2),(3,2,1),(4,2,2),(5,3,1),(6,4,2);
 INSERT INTO `submissions` VALUES (1,'const addNum =  30\n\nfunction main(input){\n  var result = 0\n  for (let i=0; i<input; i++)\n    result += addNum*i\n\n  var finalResult = isMoreThanThousand(result)\n  return finalResult  \n}\n\nfunction isMoreThanThousand(mainResult){\n  if (mainResult > 1000)\n    return true\n  else\n    return false\n}','2023-11-28',NULL,'',1,1);
 INSERT INTO `tests` VALUES (1,'main',1,NULL),(2,'main',1,NULL);
-INSERT INTO `inputs` VALUES (1,'input','5',TRUE,1),(2,'input','10',TRUE,2);
+INSERT INTO `inputs` VALUES (1,'5',TRUE,1),(2,'10',TRUE,2);
 INSERT INTO `outputs` VALUES (1,'false',1),(2,'true',2);

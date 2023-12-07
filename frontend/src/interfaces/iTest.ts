@@ -5,7 +5,6 @@ export interface ITestOutput {
 
 export interface ITestInput {
     id: number;
-    name: string;
     code: string;
     isMainParam: boolean;
 }
@@ -24,7 +23,6 @@ export const ITestOutputDefaults = {
 
 export const ITestInputDefaults = {
     id: -1,
-    name: "",
     code: "",
     isMainParam: true
 };

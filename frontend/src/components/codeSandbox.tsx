@@ -19,21 +19,21 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
         logVar += `Running test ${index+1}<br>`
         setLog(logVar)
 
-        var inputCode = test.inputs.map(input => input.code).join(', ');
+        var inputCode = test.inputs.map(input => typeof input.code === 'string' ? `'${input.code}'` : input.code).join(', ');
         
         var finalCode = `${code}
         return ${test.main}(${inputCode});
         `
-        
+        console.log(finalCode)
         var result = Function(finalCode)()
         result = result.toString()
         console.log(result)
         if (result == test.output.code){
-          logVar += `Test ${index+1} completed with (${test.inputs.map(input => `${input.name} = ${input.code}`).join(', ')}) as input(s) and ${test.output.code} as output<br>`
+          logVar += `<span style="color: green;">Test ${index+1} completed.</span> Got <span style="color: darkblue;">(${inputCode})</span> as input(s) and <span style="color: darkblue;">${test.output.code}</span> as output<br>`
           setLog(logVar)
         }
         else{
-          logVar += `Test ${index+1} failed<br>`
+          logVar += `<span style="color: darkred;">Test ${index+1} failed.</span> Got <span style="color: darkblue;">(${inputCode})</span> as input(s) and expected <span style="color: darkblue;">${test.output.code}</span> as output. Got output <span style="color: darkblue;">${result}</span><br>`
           setLog(logVar)
         }
       });

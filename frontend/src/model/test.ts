@@ -19,13 +19,11 @@ export class Test {
 
 export class TestInput {
     id: number;
-    name: string;
     code: string;
     isMainParam: boolean;
 
-    constructor({id, name, code, isMainParam}: ITestInput = ITestInputDefaults) {
+    constructor({id, code, isMainParam}: ITestInput = ITestInputDefaults) {
         this.id = id
-        this.name = name
         this.code = code
         this.isMainParam = isMainParam
     }
