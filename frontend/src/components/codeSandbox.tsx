@@ -19,25 +19,17 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
         logVar += `Running test ${index+1}<br>`
         setLog(logVar)
 
-        var codeBefore = ""
-        var codeAfter = ""
-        var finalCode = ""
-        var inputsForLog = ""
-        test.inputs.forEach((input, idx) => {
-          codeBefore += "var " + input.name + " = " + input.code + ";\n"
-          codeAfter += input.name
-          inputsForLog += input.name + " = " + input.code
-          if (idx != test.inputs.length-1){
-            codeAfter += ", "
-            inputsForLog += ", "
-          }
-            
-        });
-        finalCode += codeBefore + code + "\nreturn main(" + codeAfter +");"
+        var inputCode = test.inputs.map(input => input.code).join(', ');
+        
+        var finalCode = `${code}
+        return ${test.main}(${inputCode});
+        `
+        
         var result = Function(finalCode)()
         result = result.toString()
+        console.log(result)
         if (result == test.output.code){
-          logVar += `Test ${index+1} completed with (${inputsForLog}) as input(s) and ${test.output.code} as output<br>`
+          logVar += `Test ${index+1} completed with (${test.inputs.map(input => `${input.name} = ${input.code}`).join(', ')}) as input(s) and ${test.output.code} as output<br>`
           setLog(logVar)
         }
         else{

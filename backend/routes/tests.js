@@ -15,17 +15,21 @@ async function getTests(request) {
     var sql = `SELECT * FROM tests WHERE project_id = ?`
     const projectID = [request.params.projectID]
     const testsGroupResult = await query(sql, projectID)
-    
+
     const groupedJSON = []
     if(testsGroupResult.length > 0){
       const groupIDs = testsGroupResult.map(element => element.id)
+      const groupMain = testsGroupResult.map(element => element.main_function)
       const sql = `
-        SELECT i.group_id, i.id AS input_id, i.name, i.code AS input_code, 
-               i.is_main_param AS input_is_main_param, o.id AS output_id, o.code AS output_code
-        FROM inputs i
-        LEFT JOIN outputs o ON i.group_id = o.group_id
-        WHERE i.group_id IN (${groupIDs.map(() => '?').join(', ')})
-        ORDER BY i.group_id
+      SELECT i.group_id, i.id AS input_id, i.name, i.code AS input_code, 
+      i.is_main_param AS input_is_main_param, o.id AS output_id, o.code AS output_code,
+      t.main_function AS main
+FROM inputs i
+LEFT JOIN outputs o ON i.group_id = o.group_id
+LEFT JOIN tests t ON i.group_id = t.id
+WHERE i.group_id IN (${groupIDs.map(() => '?').join(', ')})
+ORDER BY i.group_id;
+
       `
       const tests = await query(sql, groupIDs)
       
@@ -37,7 +41,7 @@ async function getTests(request) {
       for (const test of tests) {
           if (test.group_id !== currentGroup) {
               currentGroupObject = {
-                  main: testsGroupResult[i].main_function,
+                  main: test.main,
                   inputs: [],
                   output: {
                       id: test.output_id,
@@ -63,7 +67,7 @@ async function getTests(request) {
     util.promisify(config.end)
     return groupedJSON
   } catch (err) {
-    errorHandling(err, "getProjectInputsOutputs")
+    errorHandling(err, "getTests")
   }
 }
 
