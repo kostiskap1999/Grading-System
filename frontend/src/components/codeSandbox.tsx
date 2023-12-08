@@ -19,7 +19,8 @@ export default function CodeSandbox({ project, paramCode }: { project: Project, 
         logVar += `Running test ${index+1}<br>`
         setLog(logVar)
 
-        var inputCode = test.inputs.map(input => typeof input.code === 'string' ? `'${input.code}'` : input.code).join(', ');
+        var inputCode = test.inputs.map(input => typeof input.code === 'string' && !isNaN(Number(input.code)) ? input.code : `'${input.code}'`).join(', ');
+
         
         var finalCode = `${code}
         return ${test.main}(${inputCode});
