@@ -7,7 +7,7 @@ export class Submission {
     student?: User;
     code: string;
     date: Date;
-    grade: number;
+    grade: number | null;
     comment: string;
     
     submiteeID: number; //only used for setup

@@ -5,7 +5,7 @@ export interface ISubmission {
     student?: User;
     code: string;
     date: Date;
-    grade: number;
+    grade: number | null;
     comment: string;
     submitee_id: number
 }
@@ -15,7 +15,7 @@ export const ISubmissionDefaults = {
     student: undefined,
     code: "",
     date: new Date(),
-    grade: 0,
+    grade: null,
     comment: "",
     submitee_id: -1
 }
