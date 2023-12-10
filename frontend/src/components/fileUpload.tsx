@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from 'react';
 import '../styles/button.scss';
 import '../styles/login.scss';
 import { User } from '../model/user';
-import { postSubmission } from '../fetches/fetchSubmissions';
+import { postSubmission } from '../api/submissionsApi';
 import { Submission } from '../model/submission';
 
 interface FileUploadProps {

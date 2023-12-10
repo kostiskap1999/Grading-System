@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import ReactDropdown from "react-dropdown";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import FileUpload from "../components/fileUpload";
-import { fetchProjects } from "../fetches/fetchProjects";
-import { fetchAndSetupProjects, fetchAndSetupUser } from "../fetches/helpers/massFetching";
+import { fetchProjects } from "../api/projectsApi";
+import { fetchAndSetupProjects, fetchAndSetupUser } from "../api/helpers/massSetups";
 import { Project } from "../model/project";
 import { User } from "../model/user";
-import { fetchTokenID, fetchTokenRole } from "../fetches/fetchToken";
+import { fetchTokenID, fetchTokenRole } from "../api/tokenApi";
 
 export default function ProjectsPage() {
 

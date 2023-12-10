@@ -3,10 +3,10 @@ import { Project } from "../../model/project";
 import { Subject } from "../../model/subject";
 import { Submission } from "../../model/submission";
 import { User } from "../../model/user";
-import { fetchProjects } from "../fetchProjects";
-import { fetchSubjects } from "../fetchSubjects";
-import { fetchSubmissions } from "../fetchSubmissions";
-import { fetchUser } from "../fetchUsers";
+import { fetchProjects } from "../projectsApi";
+import { fetchSubjects } from "../subjectsApi";
+import { fetchSubmissions } from "../submissionsApi";
+import { fetchUser } from "../usersApi";
 
 export async function fetchAndSetupUser(id: number) {
     const user: User | null = await fetchUser(id)

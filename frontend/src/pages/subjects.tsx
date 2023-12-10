@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Subject } from "../model/subject"
-import { fetchAndSetupSubjects, fetchAndSetupUser } from "../fetches/helpers/massFetching"
+import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 
 import '../styles/general.scss';
 import '../styles/home.scss';
@@ -10,7 +10,7 @@ import { User } from "../model/user";
 import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import Cookies from "universal-cookie";
-import { fetchTokenID } from "../fetches/fetchToken";
+import { fetchTokenID } from "../api/tokenApi";
 
 export default function SubjectsPage() {
 

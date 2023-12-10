@@ -1,4 +1,4 @@
-import { fetchUser } from "../fetches/fetchUsers";
+import { fetchUser } from "../api/usersApi";
 import { ISubmission, ISubmissionDefaults } from "../interfaces/iSubmission";
 import { User } from "./user";
 

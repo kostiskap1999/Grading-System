@@ -1,5 +1,5 @@
-import { fetchSubmissions } from "../fetches/fetchSubmissions";
-import { fetchTests } from "../fetches/fetchTests";
+import { fetchSubmissions } from "../api/submissionsApi";
+import { fetchTests } from "../api/testsApi";
 import { IProject, IProjectDefaults } from "../interfaces/iProject";
 import { Submission } from "./submission";
 import { Test } from "./test";

@@ -1,4 +1,4 @@
-import { fetchUserSubjects } from "../fetches/fetchSubjects";
+import { fetchUserSubjects } from "../api/subjectsApi";
 import { IUser, IUserDefaults } from "../interfaces/iUser";
 import { Project } from "./project";
 import { Subject } from "./subject";

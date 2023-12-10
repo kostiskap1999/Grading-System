@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { postProject } from "../fetches/fetchProjects"
-import { fetchSubjects } from "../fetches/fetchSubjects"
+import { postProject } from "../api/projectsApi"
+import { fetchSubjects } from "../api/subjectsApi"
 import { Project } from "../model/project"
 import { Subject } from "../model/subject"
 import { Test, TestInput } from "../model/test"

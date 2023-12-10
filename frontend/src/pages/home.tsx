@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchAndSetupUser } from "../fetches/helpers/massFetching";
+import { fetchAndSetupUser } from "../api/helpers/massSetups";
 import { Project } from "../model/project";
 import { User } from "../model/user";
 
@@ -10,7 +10,7 @@ import '../styles/button.scss';
 import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/newProject.scss';
-import { fetchTokenID } from "../fetches/fetchToken";
+import { fetchTokenID } from "../api/tokenApi";
 
 export default function HomePage() {
 

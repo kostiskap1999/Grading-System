@@ -3,7 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { useEffect, useState } from 'react';
 import { Project } from '../model/project';
 import { Submission } from '../model/submission';
-import { patchSubmission } from '../fetches/fetchSubmissions';
+import { patchSubmission } from '../api/submissionsApi';
 
 export default function CodeSandbox({ project, submission }: { project: Project, submission: Submission }) {
   const [code, setCode] = useState<string>('')

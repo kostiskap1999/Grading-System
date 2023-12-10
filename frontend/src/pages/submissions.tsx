@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 import CodeSandbox from "../components/codeSandbox";
-import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../fetches/helpers/massFetching";
+import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../api/helpers/massSetups";
 import { Submission } from "../model/submission";
 import { User } from "../model/user";
 import { Project } from "../model/project";
-import { fetchProject, fetchProjects } from "../fetches/fetchProjects";
+import { fetchProject, fetchProjects } from "../api/projectsApi";
 
 export default function SubmissionsPage() {
 
