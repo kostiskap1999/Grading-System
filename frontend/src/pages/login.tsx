@@ -5,7 +5,7 @@ import '../styles/login.scss';
 
 import { useDispatch } from 'react-redux';
 import Cookies from 'universal-cookie';
-import { User } from '../model/user';
+import { UserModel } from '../model/UserModel';
 import { LOGIN_USER } from "../store/types";
 
 export default function LoginPage() {
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const user: User | null = await login({username, password})
+    const user: UserModel | null = await login({username, password})
     user && dispatch({ type: LOGIN_USER });
   }
 

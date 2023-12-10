@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import { postProject } from "../api/projectsApi"
 import { fetchSubjects } from "../api/subjectsApi"
-import { Project } from "../model/project"
-import { Subject } from "../model/subject"
-import { Test, TestInput } from "../model/test"
+import { ProjectModel } from "../model/ProjectModel"
+import { SubjectModel } from "../model/SubjectModel"
+import { TestModel, TestInputModel } from "../model/TestModel"
 
 export default function NewProjectPage() {
   
-  const [supervisingSubjects, setSupervisingSubjects] = useState<Subject[]>([])
-  const [newProject, setNewProject] = useState<Project>(new Project())
+  const [supervisingSubjects, setSupervisingSubjects] = useState<SubjectModel[]>([])
+  const [newProject, setNewProject] = useState<ProjectModel>(new ProjectModel())
   const [projectCreated, setProjectCreated] = useState<boolean | void>(undefined)
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function NewProjectPage() {
   useEffect(() => {
     const fetchData = async () => {
       // const supSubjects: Subject[] = await fetchSupervisingSubjects(await fetchTokenID())
-      const supSubjects: Subject[] | null = await fetchSubjects()
+      const supSubjects: SubjectModel[] | null = await fetchSubjects()
       
       supSubjects && setSupervisingSubjects(supSubjects)
     }
@@ -30,9 +30,9 @@ export default function NewProjectPage() {
   }, [])
 
   const createTest = () => {
-    setNewProject((prevProject: Project) => {
-        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
-        const newTest = new Test()
+    setNewProject((prevProject: ProjectModel) => {
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup }
+        const newTest = new TestModel()
         newTest.id = newProjectCopy.tests.length+1
         newTest.output.id = newTest.id
         newProjectCopy.tests.push(newTest)
@@ -43,9 +43,9 @@ export default function NewProjectPage() {
 
 
   const copyTest = (index: number) => {
-    setNewProject((prevProject: Project) => {
-        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
-        const copiedTest = new Test(newProjectCopy.tests[index])
+    setNewProject((prevProject: ProjectModel) => {
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup }
+        const copiedTest = new TestModel(newProjectCopy.tests[index])
         copiedTest.id = newProjectCopy.tests.length + 1
         copiedTest.output.id = copiedTest.id
         newProjectCopy.tests.push(copiedTest)
@@ -54,8 +54,8 @@ export default function NewProjectPage() {
   }
 
   const deleteTest = (index: number) => {
-      setNewProject((prevProject: Project) => {
-          const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+      setNewProject((prevProject: ProjectModel) => {
+          const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup }
           newProjectCopy.tests = [
               ...newProjectCopy.tests.slice(0, index),
               ...newProjectCopy.tests.slice(index + 1),
@@ -66,9 +66,9 @@ export default function NewProjectPage() {
 
 
   const createInput = (testIndex: number) => {
-    setNewProject((prevProject: Project) => {
-        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
-        const newInput = new TestInput()
+    setNewProject((prevProject: ProjectModel) => {
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup }
+        const newInput = new TestInputModel()
         newInput.id = newProjectCopy.tests[testIndex].inputs.length + 1
         newProjectCopy.tests[testIndex].inputs.push(newInput)
         return newProjectCopy
@@ -77,8 +77,8 @@ export default function NewProjectPage() {
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setNewProject((prevProject: Project) => {
-        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+    setNewProject((prevProject: ProjectModel) => {
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup }
 
         switch(event.target.id) {
             case "name" :
@@ -104,8 +104,8 @@ export default function NewProjectPage() {
 
 
   const handleTestChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
-    setNewProject((prevProject: Project) => {
-        const newProjectCopy: Project = { ...prevProject, setup: prevProject.setup }
+    setNewProject((prevProject: ProjectModel) => {
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup }
         switch(event.target.id) {
             case `main-function-${testIndex}` :
                 newProjectCopy.tests[testIndex].main = event.target.value

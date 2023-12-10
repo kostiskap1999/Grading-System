@@ -1,4 +1,4 @@
-import { Subject } from "../model/subject";
+import { SubjectModel } from "../model/SubjectModel";
 
 export interface IUser {
     id: number,
@@ -6,7 +6,7 @@ export interface IUser {
     first_name: string,
     last_name: string,
     role: number; // 0=admin, 1=professor, 2=student
-    subjects: Subject[]
+    subjects: SubjectModel[]
 }
 
 export const IUserDefaults = {

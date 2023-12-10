@@ -1,6 +1,6 @@
 import Cookies from "universal-cookie";
 import { ICredentials, ILoggedIn } from "../interfaces/iCredentials";
-import { User } from "../model/user";
+import { UserModel } from "../model/UserModel";
 import { HOSTNAME, LOGIN, LOGINHEADERS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
@@ -17,7 +17,7 @@ export async function login(credentials: ICredentials) {
         const cookies = new Cookies()
         cookies.set('token', JSON.stringify(user.token), { path: '/' })
     
-        return new User(user.user)
+        return new UserModel(user.user)
     })
     .catch((error) => {
         errorHandling(error)

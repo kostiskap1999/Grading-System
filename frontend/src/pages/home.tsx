@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { fetchAndSetupUser } from "../api/helpers/massSetups";
-import { Project } from "../model/project";
-import { User } from "../model/user";
+import { ProjectModel } from "../model/ProjectModel";
+import { UserModel } from "../model/UserModel";
 
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { Subject } from "../model/subject";
+import { SubjectModel } from "../model/SubjectModel";
 import '../styles/button.scss';
 import '../styles/general.scss';
 import '../styles/home.scss';
@@ -15,14 +15,14 @@ import { fetchTokenID } from "../api/tokenApi";
 export default function HomePage() {
 
   const navigate = useNavigate();
-  const [user, setUser] = useState<User>(new User())
+  const [user, setUser] = useState<UserModel>(new UserModel())
   
   useEffect(() => {
     const fetchData = async () => {
       const tokenID: number | null = await fetchTokenID()
 
       if(tokenID){
-        const userOBJ: User | null = await fetchAndSetupUser(tokenID)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
       }
         
@@ -46,7 +46,7 @@ export default function HomePage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.subjects.map((subject: Subject, index: number) => (
+            {user.subjects.map((subject: SubjectModel, index: number) => (
                   <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
                     {subject.name}
                   </button>
@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.getProjects().map((project: Project, index: number) => (
+            {user.getProjects().map((project: ProjectModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
                   {project.name}
                 </button>

@@ -1,8 +1,8 @@
-import { User } from "../model/user";
+import { UserModel } from "../model/UserModel";
 
 export interface ISubmission {
     id: number;
-    student?: User;
+    student?: UserModel;
     code: string;
     date: Date;
     grade: number | null;

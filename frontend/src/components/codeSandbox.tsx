@@ -1,11 +1,11 @@
 import { javascript } from '@codemirror/lang-javascript';
 import CodeMirror from '@uiw/react-codemirror';
 import { useEffect, useState } from 'react';
-import { Project } from '../model/project';
-import { Submission } from '../model/submission';
+import { ProjectModel } from '../model/ProjectModel';
+import { SubmissionModel } from '../model/SubmissionModel';
 import { patchSubmission } from '../api/submissionsApi';
 
-export default function CodeSandbox({ project, submission }: { project: Project, submission: Submission }) {
+export default function CodeSandbox({ project, submission }: { project: ProjectModel, submission: SubmissionModel }) {
   const [code, setCode] = useState<string>('')
   const [log, setLog] = useState<string>('No tests running<br>')
   const [grade, setGrade] = useState<number | null>(null)

@@ -1,15 +1,15 @@
 import { fetchUserSubjects } from "../api/subjectsApi";
 import { IUser, IUserDefaults } from "../interfaces/iUser";
-import { Project } from "./project";
-import { Subject } from "./subject";
+import { ProjectModel } from "./ProjectModel";
+import { SubjectModel } from "./SubjectModel";
 
-export class User {
+export class UserModel {
     id: number; // unique id
     username: string; // unique username
     firstName: string;
     lastName: string;
     role: number; // 0=admin, 1=professor, 2=student, 3=guest
-    subjects: Subject[];
+    subjects: SubjectModel[];
 
     constructor({id, username, first_name, last_name, role, subjects = []}: IUser = IUserDefaults) {
         this.id = id
@@ -21,7 +21,7 @@ export class User {
     }
 
     async setup(){
-        const subjects: Subject[] | null = await fetchUserSubjects(this.id)
+        const subjects: SubjectModel[] | null = await fetchUserSubjects(this.id)
         if(subjects){
             for(const subject of subjects)
                 await subject.setup(this.role)
@@ -38,7 +38,7 @@ export class User {
     }
     
     getSubjectsWithProjects(){
-        var subjects: Subject[] = []
+        var subjects: SubjectModel[] = []
         for(const subject of this.subjects){
             if(subject.projects.length > 0)
             subjects.push(subject)
@@ -47,7 +47,7 @@ export class User {
     }
 
     getProjects(){
-        var projects: Project[] = []
+        var projects: ProjectModel[] = []
         for(const subject of this.subjects)
             for(const project of subject.projects)
                 projects.push(project)

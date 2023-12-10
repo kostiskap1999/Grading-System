@@ -1,13 +1,13 @@
-import { Submission } from "../model/submission";
-import { Test } from "../model/test";
+import { SubmissionModel } from "../model/SubmissionModel";
+import { TestModel } from "../model/TestModel";
 
 export interface IProject {
     id: number;
     name: string;
     description: string;
     deadline: Date | string;
-    submissions: Submission[];
-    tests: Test[]
+    submissions: SubmissionModel[];
+    tests: TestModel[]
 }
 
 export const IProjectDefaults = {

@@ -1,5 +1,5 @@
 import { IUser } from "../interfaces/iUser";
-import { User } from "../model/user";
+import { UserModel } from "../model/UserModel";
 import { GETHEADERS, HOSTNAME, TOKEN, USERS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 

@@ -1,5 +1,5 @@
 import { IProject } from "../interfaces/iProject";
-import { Project } from "../model/project";
+import { ProjectModel } from "../model/ProjectModel";
 import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
@@ -14,10 +14,10 @@ export async function fetchProjects() {
             return response.json()
     })
     .then((projects: IProject[]) => {
-        const returnedProjects: Project[] = []
+        const returnedProjects: ProjectModel[] = []
         for(const project of projects){
             project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
-            returnedProjects.push(new Project(project))
+            returnedProjects.push(new ProjectModel(project))
         }
             
     
@@ -39,7 +39,7 @@ export async function fetchProject(id: number) {
     })
     .then((project: IProject) => {
         project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
-        return new Project(project)
+        return new ProjectModel(project)
     })
     .catch((error) => {
         errorHandling(error)
@@ -56,10 +56,10 @@ export async function fetchUserProjects(userID: number) {
             return response.json()
     })
     .then((userProjects: IProject[]) => {
-        const returnedProjects: Project[] = []
+        const returnedProjects: ProjectModel[] = []
         for(const project of userProjects){
             project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
-            returnedProjects.push(new Project(project))
+            returnedProjects.push(new ProjectModel(project))
         }
     
         return returnedProjects
@@ -79,10 +79,10 @@ export async function fetchSubjectProjects(subjectID: number) {
             return response.json()
     })
     .then((userProjects: IProject[]) => {
-        const returnedProjects: Project[] = []
+        const returnedProjects: ProjectModel[] = []
         for(const project of userProjects){
             project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
-            returnedProjects.push(new Project(project))
+            returnedProjects.push(new ProjectModel(project))
         }
 
         return returnedProjects
@@ -93,7 +93,7 @@ export async function fetchSubjectProjects(subjectID: number) {
     });
 }
 
-export async function postProject(project: Project) {
+export async function postProject(project: ProjectModel) {
     const response: boolean | void = await fetch(HOSTNAME + PROJECTS, POSTHEADERS(project))
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));

@@ -1,16 +1,16 @@
 import { fetchSubmissions } from "../api/submissionsApi";
 import { fetchTests } from "../api/testsApi";
 import { IProject, IProjectDefaults } from "../interfaces/iProject";
-import { Submission } from "./submission";
-import { Test } from "./test";
+import { SubmissionModel } from "./SubmissionModel";
+import { TestModel } from "./TestModel";
 
-export class Project {
+export class ProjectModel {
     id: number;
     name: string;
     description: string;
     deadline: Date | string;
-    submissions: Submission[];
-    tests: Test[]
+    submissions: SubmissionModel[];
+    tests: TestModel[]
     subjectID: number | null;
 
     constructor({id, name, description, deadline, submissions, tests}: IProject = IProjectDefaults) {

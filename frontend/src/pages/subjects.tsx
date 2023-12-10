@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Subject } from "../model/subject"
+import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 
 import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/button.scss';
-import { User } from "../model/user";
+import { UserModel } from "../model/UserModel";
 import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import Cookies from "universal-cookie";
@@ -17,10 +17,10 @@ export default function SubjectsPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const [user, setUser] = useState<User>(new User())
+  const [user, setUser] = useState<UserModel>(new UserModel())
 
-  const [subjects, setSubjects] = useState<Subject[]>([new Subject()])
-  const [selectedSubject, setSelectedSubject] = useState<Subject>(new Subject())
+  const [subjects, setSubjects] = useState<SubjectModel[]>([new SubjectModel()])
+  const [selectedSubject, setSelectedSubject] = useState<SubjectModel>(new SubjectModel())
   
   const [rerender, setRerender] = useState<number>(0)
 
@@ -30,11 +30,11 @@ export default function SubjectsPage() {
     {value: "all", label: "All Subjects"},
     {value: "supervising", label: "Supervising Subjects"}]  // my = my subjects, all = all subjects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
-  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([new Subject()])
+  const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([new SubjectModel()])
 
   useEffect(() => {
     const fetchData = async () => {
-      const subjectsOBJ: Subject[] | null = await fetchAndSetupSubjects()
+      const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
       
       if(subjectsOBJ){
         setSubjects(subjectsOBJ)
@@ -56,7 +56,7 @@ export default function SubjectsPage() {
       const tokenID: number | null = await fetchTokenID()
 
       if(tokenID){
-        const userOBJ: User | null = await fetchAndSetupUser(tokenID)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
       }
 

@@ -2,12 +2,12 @@ import { CloudUpload } from '@mui/icons-material';
 import { ChangeEvent, useState } from 'react';
 import '../styles/button.scss';
 import '../styles/login.scss';
-import { User } from '../model/user';
+import { UserModel } from '../model/UserModel';
 import { postSubmission } from '../api/submissionsApi';
-import { Submission } from '../model/submission';
+import { SubmissionModel } from '../model/SubmissionModel';
 
 interface FileUploadProps {
-  user: User;
+  user: UserModel;
   pID: number;
 }
 
@@ -27,7 +27,7 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
           return;
         }
         const fileContents = await readFileContents(file);
-        let submission = new Submission()
+        let submission = new SubmissionModel()
         submission.submitee_id = user.id
         submission.project_id = pID
         submission.code = fileContents

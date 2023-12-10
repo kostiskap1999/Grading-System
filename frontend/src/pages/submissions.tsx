@@ -3,9 +3,9 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 import CodeSandbox from "../components/codeSandbox";
 import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../api/helpers/massSetups";
-import { Submission } from "../model/submission";
-import { User } from "../model/user";
-import { Project } from "../model/project";
+import { SubmissionModel } from "../model/SubmissionModel";
+import { UserModel } from "../model/UserModel";
+import { ProjectModel } from "../model/ProjectModel";
 import { fetchProject, fetchProjects } from "../api/projectsApi";
 
 export default function SubmissionsPage() {
@@ -14,16 +14,16 @@ export default function SubmissionsPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const [submissions, setSubmissions] = useState<Submission[]>([new Submission()])
-  const [selectedProject, setSelectedProject] = useState<Project>(location.state?.project)
-  const [selectedSubmission, setSelectedSubmission] = useState<Submission>(new Submission())
+  const [submissions, setSubmissions] = useState<SubmissionModel[]>([new SubmissionModel()])
+  const [selectedProject, setSelectedProject] = useState<ProjectModel>(location.state?.project)
+  const [selectedSubmission, setSelectedSubmission] = useState<SubmissionModel>(new SubmissionModel())
 
   const [rerender, setRerender] = useState<number>(0)
 
   useEffect(() => {
     const fetchData = async () => {
       if(selectedProject == undefined){
-        const selProject: Project | null = await fetchProject(parseInt(params.get('project')?.toString()!))
+        const selProject: ProjectModel | null = await fetchProject(parseInt(params.get('project')?.toString()!))
         
         if(selProject){
           selProject.setup()
@@ -32,7 +32,7 @@ export default function SubmissionsPage() {
 
       }
       
-      const submissionsOBJ: Submission[] | null = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
+      const submissionsOBJ: SubmissionModel[] | null = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
       
       if(submissionsOBJ){
         setSubmissions(submissionsOBJ)

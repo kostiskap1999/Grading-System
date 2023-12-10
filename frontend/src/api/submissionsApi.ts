@@ -1,5 +1,5 @@
 import { ISubmission } from "../interfaces/iSubmission";
-import { Submission } from "../model/submission";
+import { SubmissionModel } from "../model/SubmissionModel";
 import { GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, SUBMISSIONS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
@@ -12,9 +12,9 @@ export async function fetchSubmissions(projectID: number) {
             return response.json();
     })
     .then((submissions: ISubmission[]) => {
-        const returnedSubmissions: Submission[] = []
+        const returnedSubmissions: SubmissionModel[] = []
         for(const submission of submissions)
-            returnedSubmissions.push(new Submission(submission))
+            returnedSubmissions.push(new SubmissionModel(submission))
     
         return returnedSubmissions
     })
@@ -39,7 +39,7 @@ export async function postSubmission(submission: ISubmission) {
     return response
 }
 
-export async function patchSubmission(submission: Submission) {
+export async function patchSubmission(submission: SubmissionModel) {
     const response: boolean | void = await fetch(HOSTNAME + SUBMISSIONS, PATCHHEADERS(submission))
     .then(response => {
         if(!response.ok)

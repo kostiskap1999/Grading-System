@@ -1,5 +1,5 @@
 import { ITest } from "../interfaces/iTest";
-import { Test } from "../model/test";
+import { TestModel } from "../model/TestModel";
 import { GETHEADERS, HOSTNAME, TESTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
@@ -14,9 +14,9 @@ export async function fetchTests(projectID: number) {
             return response.json();
     })
     .then((tests: ITest[]) => {
-        const returnedTests: Test[] = []
+        const returnedTests: TestModel[] = []
         for(const test of tests)
-            returnedTests.push(new Test(test))        
+            returnedTests.push(new TestModel(test))        
     
         return returnedTests
     })

@@ -5,8 +5,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import FileUpload from "../components/fileUpload";
 import { fetchProjects } from "../api/projectsApi";
 import { fetchAndSetupProjects, fetchAndSetupUser } from "../api/helpers/massSetups";
-import { Project } from "../model/project";
-import { User } from "../model/user";
+import { ProjectModel } from "../model/ProjectModel";
+import { UserModel } from "../model/UserModel";
 import { fetchTokenID, fetchTokenRole } from "../api/tokenApi";
 
 export default function ProjectsPage() {
@@ -14,11 +14,11 @@ export default function ProjectsPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const [projects, setProjects] = useState<Project[]>([new Project()])
-  const [selectedProject, setSelectedProject] = useState<Project>(new Project())
+  const [projects, setProjects] = useState<ProjectModel[]>([new ProjectModel()])
+  const [selectedProject, setSelectedProject] = useState<ProjectModel>(new ProjectModel())
 
   
-  const [user, setUser] = useState<User>(new User())
+  const [user, setUser] = useState<UserModel>(new UserModel())
 
   const [rerender, setRerender] = useState<number>(0)
 
@@ -30,11 +30,11 @@ export default function ProjectsPage() {
     {value: "all", label: "All Projects"},
     {value: "supervising", label: "Supervising Projects"}]  // my = my projects, all = all projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([new Project()])
+  const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([new ProjectModel()])
   
   useEffect(() => {
     const fetchData = async () => {
-      const projectsOBJ: Project[] | null = (userRole <= 1) ? await fetchAndSetupProjects() : await fetchProjects()
+      const projectsOBJ: ProjectModel[] | null = (userRole <= 1) ? await fetchAndSetupProjects() : await fetchProjects()
       
       if(projectsOBJ){
         setProjects(projectsOBJ)
@@ -65,7 +65,7 @@ export default function ProjectsPage() {
       const tokenID: number | null = await fetchTokenID()
 
       if(tokenID){
-        const userOBJ: User | null = await fetchAndSetupUser(tokenID)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
       }
 

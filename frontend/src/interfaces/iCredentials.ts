@@ -1,4 +1,4 @@
-import { User } from "../model/user";
+import { UserModel } from "../model/UserModel";
 import { IUser } from "./iUser";
 
 export interface ICredentials {
@@ -17,6 +17,6 @@ export interface ILoggedIn {
 }
 
 export const ILoggedInDefaults = {
-    user: new User(),
+    user: new UserModel(),
     token: ""
 }

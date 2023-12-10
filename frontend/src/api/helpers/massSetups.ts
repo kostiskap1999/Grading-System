@@ -1,15 +1,15 @@
 // This is a list of helper functions to mass fetch with one function call
-import { Project } from "../../model/project";
-import { Subject } from "../../model/subject";
-import { Submission } from "../../model/submission";
-import { User } from "../../model/user";
+import { ProjectModel } from "../../model/ProjectModel";
+import { SubjectModel } from "../../model/SubjectModel";
+import { SubmissionModel } from "../../model/SubmissionModel";
+import { UserModel } from "../../model/UserModel";
 import { fetchProjects } from "../projectsApi";
 import { fetchSubjects } from "../subjectsApi";
 import { fetchSubmissions } from "../submissionsApi";
 import { fetchUser } from "../usersApi";
 
 export async function fetchAndSetupUser(id: number) {
-    const user: User | null = await fetchUser(id)
+    const user: UserModel | null = await fetchUser(id)
     
     if(user)
         await user.setup()
@@ -18,7 +18,7 @@ export async function fetchAndSetupUser(id: number) {
 }
 
 export async function fetchAndSetupSubjects() {
-    const subjects: Subject[] | null = await fetchSubjects()
+    const subjects: SubjectModel[] | null = await fetchSubjects()
 
     if(subjects)
         for(const subject of subjects)
@@ -28,7 +28,7 @@ export async function fetchAndSetupSubjects() {
 }
 
 export async function fetchAndSetupProjects() {
-    const projects: Project[] | null = await fetchProjects()
+    const projects: ProjectModel[] | null = await fetchProjects()
 
     if(projects)
         for(const project of projects)
@@ -38,7 +38,7 @@ export async function fetchAndSetupProjects() {
 }
 
 export async function fetchAndSetupSubmissions(projectID: number) {
-    const submissions: Submission[] | null = await fetchSubmissions(projectID)
+    const submissions: SubmissionModel[] | null = await fetchSubmissions(projectID)
 
     if(submissions)
         for(const submission of submissions)

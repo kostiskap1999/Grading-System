@@ -1,23 +1,23 @@
 import { ITest, ITestDefaults, ITestInput, ITestInputDefaults, ITestOutput, ITestOutputDefaults } from "../interfaces/iTest";
 
-export class Test {
+export class TestModel {
     id: number;
     main: string;
-    inputs: TestInput[];
-    output: TestOutput;
+    inputs: TestInputModel[];
+    output: TestOutputModel;
 
     constructor({id, main, inputs, output}: ITest = ITestDefaults) {
         this.id = id
         this.main = main
         this.inputs = []
         inputs.forEach(input => {
-            this.inputs.push(new TestInput(input))
+            this.inputs.push(new TestInputModel(input))
         });
-        this.output = new TestOutput(output)
+        this.output = new TestOutputModel(output)
     }
 }
 
-export class TestInput {
+export class TestInputModel {
     id: number;
     code: string;
     isMainParam: boolean;
@@ -29,7 +29,7 @@ export class TestInput {
     }
 }
 
-export class TestOutput {
+export class TestOutputModel {
     id: number;
     code: string;
 

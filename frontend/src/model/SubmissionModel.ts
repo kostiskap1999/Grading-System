@@ -1,10 +1,10 @@
 import { fetchUser } from "../api/usersApi";
 import { ISubmission, ISubmissionDefaults } from "../interfaces/iSubmission";
-import { User } from "./user";
+import { UserModel } from "./UserModel";
 
-export class Submission {
+export class SubmissionModel {
     id: number;
-    student?: User;
+    student?: UserModel;
     code: string;
     date: Date;
     grade: number | null;

@@ -1,13 +1,13 @@
 import { fetchSubjectProjects } from "../api/projectsApi";
 import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
-import { Project } from "./project";
+import { ProjectModel } from "./ProjectModel";
 
-export class Subject {
+export class SubjectModel {
     id: number;
     name: string;
     description: string;
     semester: number;
-    projects: Project[];
+    projects: ProjectModel[];
     supervisorID: number;
 
     constructor({id, name, description, semester, projects, supervisorID}: ISubject = ISubjectDefaults) {
@@ -20,7 +20,7 @@ export class Subject {
     }
 
     async setup(userRole?: number){
-        const projects: Project[] | null = await fetchSubjectProjects(this.id)
+        const projects: ProjectModel[] | null = await fetchSubjectProjects(this.id)
         if(projects){
             if(userRole != undefined && userRole <= 1)
                 for(const project of projects)

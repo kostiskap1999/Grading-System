@@ -1,11 +1,11 @@
-import { Project } from "../model/project";
+import { ProjectModel } from "../model/ProjectModel";
 
 export interface ISubject {
     id: number;
     name: string;
     description: string;
     semester: number;
-    projects: Project[];
+    projects: ProjectModel[];
     supervisorID: number;
 }
 
