@@ -1,14 +1,14 @@
 import { RouteType } from "./config";
 
-import HomePage from "../pages/home";
-import LoginPage from "../pages/login";
+import HomePage from "../pages/HomePage";
+import LoginPage from "../pages/LoginPage";
 
 import { Class, Code } from "@mui/icons-material";
 import Home from '@mui/icons-material/Home';
-import NewProjectPage from "../pages/newProject";
-import ProjectsPage from "../pages/projects";
-import SubjectsPage from "../pages/subjects";
-import SubmissionsPage from "../pages/submissions";
+import NewProjectPage from "../pages/NewProjectPage";
+import ProjectsPage from "../pages/ProjectsPage";
+import SubjectsPage from "../pages/SubjectsPage";
+import SubmissionsPage from "../pages/SubmissionsPage";
 
 const appRoutes: RouteType[] = [
   {
