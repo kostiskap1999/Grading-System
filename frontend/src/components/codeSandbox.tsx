@@ -9,25 +9,36 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
   const [code, setCode] = useState<string>('')
   const [log, setLog] = useState<string>('No tests running<br>')
   const [grade, setGrade] = useState<number | null>(null)
-  const [lastID, setLastID] = useState<number>(-1)
+  const [isSubmittingGrade, setIsSubmittingGrade] = useState<boolean | null>(null)
   
   useEffect(() => {
     setCode(submission.code)
   }, [submission.code])
 
   useEffect(() => {
+    console.log("gay")
     if(grade !== null)
-      setLog((prevLog) => `${prevLog}Grade ${grade}<br>
-      Grade was not uploaded<br>`)
+      setLog((prevLog) => `${prevLog}Grade ${grade}<br>`)
+      
+      if(isSubmittingGrade !== null)
+        if(isSubmittingGrade)
+          setLog((prevLog) => `${prevLog}Submission graded successfully<br>`);
+        else
+          setLog((prevLog) => `${prevLog}Grade was not submitted<br>`);
+      
+      setIsSubmittingGrade(null)
       setGrade(null)
   }, [grade])
 
 
   const runCode = async (grading: boolean) => {
+    let passedTests = 0
+
     try{
+      setIsSubmittingGrade(grading)
       setLog(``);
       submission.grade = null
-      let passedTests = 0
+      
       project.tests.forEach((test, index) => {
         setLog((prevLog) => `${prevLog}Running test ${index + 1}<br>`)
         let inputCode = test.inputs.map(input => typeof input.code === 'string' && !isNaN(Number(input.code)) ? input.code : `'${input.code}'`).join(', ');
@@ -46,19 +57,17 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
           setLog((prevLog) => `${prevLog}<span style="color: darkred;">Test ${index + 1} failed.</span> Got <span style="color: darkblue;">(${inputCode})</span> as input(s) and expected <span style="color: darkblue;">${test.output.code}</span> as output. Got output <span style="color: darkblue;">${result}</span><br>`);
         }
       });
-      let gradeVar = Math.round(passedTests/project.tests.length*10 * 2) / 2
-      setGrade(gradeVar)
-      
-      if(grading){
-        submission.grade = gradeVar
-        await patchSubmission(submission)
-        setLog((prevLog) => `${prevLog}Submission graded successfully<br>`);
-
-      }
     }
     catch{
       setLog(`There was something wrong with the code parsing. Execution aborted.<br>`)
-      setGrade(null)
+    }
+
+    let gradeVar = Math.round(passedTests/project.tests.length*10 * 2) / 2
+    setGrade(gradeVar)
+    
+    if(grading){
+      submission.grade = gradeVar
+      await patchSubmission(submission)
     }
   }
 
