@@ -3,8 +3,8 @@ import { ChangeEvent, useState } from 'react';
 import '../styles/button.scss';
 import '../styles/login.scss';
 import { User } from '../model/user';
-import { postProject } from '../fetches/fetchProjects';
-import { prepareSubmission } from '../fetches/helpers/preparePosting';
+import { postSubmission } from '../fetches/fetchSubmissions';
+import { Submission } from '../model/submission';
 
 interface FileUploadProps {
   user: User;
@@ -27,7 +27,11 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
           return;
         }
         const fileContents = await readFileContents(file);
-        await prepareSubmission({ user: user, pID: pID, code: fileContents });
+        let submission = new Submission()
+        submission.submitee_id = user.id
+        submission.project_id = pID
+        submission.code = fileContents
+        await postSubmission(submission);
     };
 
     const readFileContents = (file: File): Promise<string> => {

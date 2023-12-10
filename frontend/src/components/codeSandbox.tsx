@@ -52,6 +52,7 @@ export default function CodeSandbox({ project, submission }: { project: Project,
       if(grading){
         submission.grade = gradeVar
         await patchSubmission(submission)
+        setLog((prevLog) => `${prevLog}Submission graded successfully<br>`);
 
       }
     }

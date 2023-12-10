@@ -213,10 +213,21 @@ router.route('/submissions/:projectid').get(async (request, response) => {
   }
 });
 
-// GET SUBMISSIONS ROUTER
+// POST SUBMISSIONS ROUTER
 router.route('/submissions').post(async (request, response) => {
   try {
     const data = await dbsubmissions.postSubmission(request);
+    response.json(data);
+  } catch (err) {
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+// PATCH SUBMISSIONS ROUTER
+router.route('/submissions').patch(async (request, response) => {
+  try {
+    const data = await dbsubmissions.patchSubmission(request);
     response.json(data);
   } catch (err) {
     response.statusMessage=err.message

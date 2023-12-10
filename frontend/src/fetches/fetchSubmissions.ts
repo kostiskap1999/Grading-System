@@ -1,4 +1,4 @@
-import { IPostSubmission, ISubmission } from "../interfaces/iSubmission";
+import { ISubmission } from "../interfaces/iSubmission";
 import { Submission } from "../model/submission";
 import { GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, SUBMISSIONS } from "../parameters/database";
 import { errorHandling } from "../util/error";
@@ -24,7 +24,7 @@ export async function fetchSubmissions(projectID: number) {
     });
 }
 
-export async function postSubmission(submission: IPostSubmission) {
+export async function postSubmission(submission: ISubmission) {
     const response: boolean | void = await fetch(HOSTNAME + SUBMISSIONS, POSTHEADERS(submission))
     .then(response => {
         if(!response.ok)
