@@ -2,6 +2,7 @@ import { UserModel } from "../model/UserModel";
 
 export interface ISubmission {
     id: number;
+    name: string;
     student?: UserModel;
     code: string;
     date: Date;
@@ -13,6 +14,7 @@ export interface ISubmission {
 
 export const ISubmissionDefaults = {
     id: -1,
+    name: "",
     student: undefined,
     code: "",
     date: new Date(),

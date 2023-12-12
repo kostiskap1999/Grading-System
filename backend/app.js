@@ -213,6 +213,16 @@ router.route('/submissions/:projectid').get(async (request, response) => {
   }
 });
 
+router.route('/submissions/:projectid/:userid').get(async (request, response) => {
+  try {
+    const data = await dbsubmissions.getProjectUserSubmission(request);
+    response.json(data);
+  } catch (err) {
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
 // POST SUBMISSIONS ROUTER
 router.route('/submissions').post(async (request, response) => {
   try {

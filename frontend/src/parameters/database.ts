@@ -18,6 +18,7 @@ export const USERPROJECTS: string = '/user-projects'
 export const SUBJECTPROJECTS: string = '/subject-projects'
 
 export const SUBMISSIONS: string = '/submissions'
+export const PROJECTUSERSUBMISSIONS: string = '/project-user-submissions'
 
 export const TESTS: string = '/tests'
 

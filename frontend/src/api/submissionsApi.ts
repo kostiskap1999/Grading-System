@@ -1,6 +1,6 @@
 import { ISubmission } from "../interfaces/iSubmission";
 import { SubmissionModel } from "../model/SubmissionModel";
-import { GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, SUBMISSIONS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, PROJECTUSERSUBMISSIONS, SUBMISSIONS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchSubmissions(projectID: number) {
@@ -17,6 +17,23 @@ export async function fetchSubmissions(projectID: number) {
             returnedSubmissions.push(new SubmissionModel(submission))
     
         return returnedSubmissions
+    })
+    .catch((error) => {
+        errorHandling(error)
+        return null
+    });
+}
+
+export async function fetchProjectUserSubmission(projectID: number, userID: number) {
+    return await fetch(HOSTNAME + SUBMISSIONS + "/" + projectID + "/" + userID, GETHEADERS())
+    .then(async response => {
+        if(!response.ok)
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
+        else
+            return response.json();
+    })
+    .then((submission: ISubmission[]) => {
+        return new SubmissionModel(submission[0])
     })
     .catch((error) => {
         errorHandling(error)

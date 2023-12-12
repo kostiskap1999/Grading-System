@@ -23,6 +23,22 @@ async function getProjectSubmissions(request) {
   }
 }
 
+async function getProjectUserSubmission(request) {
+  try {
+    await dbtoken.checkToken(request.headers.token)
+    util.promisify(config.connect)
+    
+    const sql = `SELECT * FROM submissions WHERE project_id = ? AND submitee_id = ?`
+    const values = [request.params.projectid, request.params.userid]
+    const projectUserSubmissions = await query(sql, values)
+    
+    util.promisify(config.end)
+    return projectUserSubmissions
+  } catch (err) {
+    errorHandling(err, "getProjectUserSubmissions")
+  }
+}
+
 async function postSubmission(request) {
   try {
     await dbtoken.checkToken(request.headers.token)
@@ -74,6 +90,7 @@ async function patchSubmission(request) {
 
 module.exports = {
   getProjectSubmissions: getProjectSubmissions,
+  getProjectUserSubmission: getProjectUserSubmission,
   postSubmission: postSubmission,
   patchSubmission: patchSubmission
 }
