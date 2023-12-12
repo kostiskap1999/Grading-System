@@ -64,11 +64,10 @@ export default function SubjectsPage() {
     }
 
     fetchData()
-  }, [rerender])
+  }, [])
 
   useEffect(() => {
-    console.log("filteredSubjects")
-    console.log(filteredSubjects)
+    console.log(filter + " ga")
     if (filter === "my")
       setFilteredSubjects(user.subjects)
     else if (filter === "available")
@@ -77,25 +76,20 @@ export default function SubjectsPage() {
       setFilteredSubjects(subjects)
     else if (filter === "supervising")
       setFilteredSubjects([])
-
-      console.log(filteredSubjects)
+      console.log(filter + " y")
   }, [filter])
 
   const joinSubject = async () => {
+    setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
     await postUserSubject(user.id, selectedSubject.id)
-    setFilteredSubjects(prevFilteredSubjects => [
-      ...prevFilteredSubjects,
-      selectedSubject,
-    ]);
-    setRerender(prevRerender => prevRerender + 1);
+    window.location.reload()
   }
 
   const leaveSubject = async () => {
+    setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
     await deleteUserSubject(user.id, selectedSubject.id)
-    setFilteredSubjects(prevFilteredSubjects =>
-      prevFilteredSubjects.filter(subject => subject.id !== selectedSubject.id)
-    );
-    setRerender(prevRerender => prevRerender + 1);
+    navigate('/subjects')
+    window.location.reload()
   }
 
   return (
@@ -114,7 +108,7 @@ export default function SubjectsPage() {
                 menuClassName="dropdown-menu"        
                 options={filterOptions}
                 onChange={(option) => {setFilter(option.value);}}
-                value={"My Subjects"}
+                value={filter}
                 placeholder={filter}
                 arrowClosed={<KeyboardArrowDown/>}
                 arrowOpen={<KeyboardArrowUp/>}
