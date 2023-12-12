@@ -67,8 +67,43 @@ async function getUserSubjects(request) {
   }
 }
 
+async function postUserSubject(request) {
+  try {
+    await dbtoken.checkToken(request.headers.token)
+    util.promisify(config.connect)
+
+    const sql = 'INSERT INTO user_subject (user_id, subject_id) VALUES (?, ?)';
+    const userSubjectValues = [request.body.userID, request.body.subjectID];
+    await query(sql, userSubjectValues)
+    
+    util.promisify(config.end)
+    return true
+  } catch (err) {
+    errorHandling(err, "postSubmission")
+  }
+}
+
+async function deleteUserSubject(request) {
+  try {
+    await dbtoken.checkToken(request.headers.token);
+    util.promisify(config.connect);
+
+    const sql = 'DELETE FROM user_subject WHERE user_id = ? AND subject_id = ?';
+    const userSubjectValues = [request.body.userID, request.body.subjectID];
+    await query(sql, userSubjectValues);
+
+    util.promisify(config.end);
+    return true;
+  } catch (err) {
+    errorHandling(err, "deleteUserSubject");
+  }
+}
+
+
 module.exports = {
   getSubjects: getSubjects,
   getSubject: getSubject,
-  getUserSubjects: getUserSubjects
+  getUserSubjects: getUserSubjects,
+  postUserSubject: postUserSubject,
+  deleteUserSubject: deleteUserSubject
 }

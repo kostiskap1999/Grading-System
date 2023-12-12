@@ -127,6 +127,25 @@ router.route('/user-subjects/:userid').get(async (request, response) => {
   }
 });
 
+router.route('/user-subjects').post(async (request, response) => {
+  try {
+    const data = await dbsubjects.postUserSubject(request);
+    response.json(data);
+  } catch (err) {
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
+
+router.route('/user-subjects').delete(async (request, response) => {
+  try {
+    const data = await dbsubjects.deleteUserSubject(request);
+    response.json(data);
+  } catch (err) {
+    response.statusMessage=err.message
+    response.status(err.statusCode).json({error: err.message});
+  }
+});
 
 // *******************
 // ****** PROJECTS ******

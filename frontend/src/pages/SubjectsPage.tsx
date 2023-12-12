@@ -11,6 +11,7 @@ import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import Cookies from "universal-cookie";
 import { fetchTokenID } from "../api/tokenApi";
+import { deleteUserSubject, postUserSubject } from "../api/subjectsApi";
 
 export default function SubjectsPage() {
 
@@ -35,7 +36,6 @@ export default function SubjectsPage() {
   useEffect(() => {
     const fetchData = async () => {
       const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
-      
       if(subjectsOBJ){
         setSubjects(subjectsOBJ)
 
@@ -64,9 +64,11 @@ export default function SubjectsPage() {
     }
 
     fetchData()
-  }, [])
+  }, [rerender])
 
   useEffect(() => {
+    console.log("filteredSubjects")
+    console.log(filteredSubjects)
     if (filter === "my")
       setFilteredSubjects(user.subjects)
     else if (filter === "available")
@@ -75,8 +77,26 @@ export default function SubjectsPage() {
       setFilteredSubjects(subjects)
     else if (filter === "supervising")
       setFilteredSubjects([])
-    
+
+      console.log(filteredSubjects)
   }, [filter])
+
+  const joinSubject = async () => {
+    await postUserSubject(user.id, selectedSubject.id)
+    setFilteredSubjects(prevFilteredSubjects => [
+      ...prevFilteredSubjects,
+      selectedSubject,
+    ]);
+    setRerender(prevRerender => prevRerender + 1);
+  }
+
+  const leaveSubject = async () => {
+    await deleteUserSubject(user.id, selectedSubject.id)
+    setFilteredSubjects(prevFilteredSubjects =>
+      prevFilteredSubjects.filter(subject => subject.id !== selectedSubject.id)
+    );
+    setRerender(prevRerender => prevRerender + 1);
+  }
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
@@ -120,9 +140,9 @@ export default function SubjectsPage() {
               <div className="small-text">{selectedSubject.description}</div>
             </div>
             {user.hasSubject(selectedSubject.id) ?
-              <button className="button">Leave Subject</button>
+              <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
             :
-              <button className="button">Join Subject</button>
+              <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
             }
             <div className="column" style={{overflow:'scroll'}}>
               {selectedSubject.projects.map((project, index) => (

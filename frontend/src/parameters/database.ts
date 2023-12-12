@@ -64,3 +64,14 @@ export const PATCHHEADERS = (data: object) => (
         body: JSON.stringify(data)
       }
 )
+
+export const DELETEHEADERS = (data: object) => (
+    {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+            'token': cookies.get('token')
+        },
+        body: JSON.stringify(data)
+      }
+)
