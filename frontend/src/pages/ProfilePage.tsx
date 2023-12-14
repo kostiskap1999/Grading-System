@@ -35,7 +35,7 @@ export default function ProfilePage() {
       <div className="header-title text center column" style={{flex: 1}}>
         <div>{user.firstName} {user.lastName}</div>
         <div className="row">
-          <div>Your average grade is {}.</div>
+          <div>Your average grade is {user.averageGrade}.</div>
         </div>
       </div>
       <div className="row" style={{flex: 6}}>
@@ -44,7 +44,13 @@ export default function ProfilePage() {
           <div className="column" style={{overflow:'scroll'}}>
             {user.subjects.map((subject: SubjectModel, index: number) => (
                   <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
-                    {subject.name}
+                    <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
+                      <span>{}</span>
+                      <span>{subject.name}</span>
+                      <span className={`grade-box ${subject.userGrade !== null ? (subject.userGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                        {subject.userGrade !== null ? subject.userGrade : " - "}
+                      </span>
+                    </div>
                   </button>
             ))}
           </div>
@@ -64,7 +70,13 @@ export default function ProfilePage() {
           <div className="column" style={{overflow:'scroll'}}>
             {user.getSubmissions().map((submission: SubmissionModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
-                  {submission.name}
+                    <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
+                      <span>{}</span>
+                      <span>{submission.name}</span>
+                      <span className={`grade-box ${submission.grade !== null ? (submission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                        {submission.grade !== null ? submission.grade : " - "}
+                      </span>
+                    </div>
                 </button>
             ))}
           </div>

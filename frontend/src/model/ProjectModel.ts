@@ -1,4 +1,4 @@
-import { fetchSubmissions } from "../api/submissionsApi";
+import { fetchProjectUserSubmission, fetchSubmissions } from "../api/submissionsApi";
 import { fetchTests } from "../api/testsApi";
 import { IProject, IProjectDefaults } from "../interfaces/iProject";
 import { SubmissionModel } from "./SubmissionModel";
@@ -25,9 +25,24 @@ export class ProjectModel {
         this.subjectID = null
     }
 
-    async setup(){
-        this.tests = await fetchTests(this.id) ?? this.tests
-        this.submissions = await fetchSubmissions(this.id) ?? this.submissions
+    async setup(userID?: number){
+        if(!userID){ //userID is given only when setting up student
+            this.tests = await fetchTests(this.id) ?? this.tests
+            this.submissions = await fetchSubmissions(this.id) ?? this.submissions
+        }else{
+            const submission = await fetchProjectUserSubmission(this.id, userID) 
+            if(submission){
+                this.submissions = []
+                this.submissions.push(submission)
+            }
+                
+        }
     }
+
+    getUserSubmission(userID: number) {
+        for (const submission of this.submissions)
+            if(submission.submitee_id == userID)
+                return submission
+    }   
 
 }

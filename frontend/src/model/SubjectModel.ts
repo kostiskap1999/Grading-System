@@ -1,4 +1,5 @@
 import { fetchSubjectProjects } from "../api/projectsApi";
+import { fetchProjectUserSubmission } from "../api/submissionsApi";
 import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { ProjectModel } from "./ProjectModel";
 
@@ -21,13 +22,29 @@ export class SubjectModel {
         this.userGrade = userGrade
     }
 
-    async setup(userRole?: number){
+    async setup(userID?: number, userRole?: number){
         const projects: ProjectModel[] | null = await fetchSubjectProjects(this.id)
+        let gradeSum = 0
+        let subjectsGraded = 0
         if(projects){
-            if(userRole != undefined && userRole <= 1)
-                for(const project of projects)
+            for(const project of projects){
+                if(userRole != undefined && userRole <= 1)
                     await project.setup()
+                else{
+                    await project.setup(userID)
+                }
+
+                if(userID){
+                    const submission = await fetchProjectUserSubmission(project.id, userID)
+                    if(submission && submission.grade != null){
+                        gradeSum += submission.grade
+                        subjectsGraded++
+                    }
+                }
+            }
             this.projects = projects
+            this.userGrade = isNaN(gradeSum / subjectsGraded) ? null : gradeSum / subjectsGraded
+            console.log('hi')
         }
     }
 }

@@ -25,10 +25,19 @@ export class UserModel {
 
     async setup(){
         const subjects: SubjectModel[] | null = await fetchUserSubjects(this.id)
+        let gradeSum = 0
+        let subjectsGraded = 0
         if(subjects){
-            for(const subject of subjects)
-                await subject.setup(this.role)
+            for(const subject of subjects){
+                await subject.setup(this.id, this.role)
+                if(subject.userGrade){
+                    gradeSum += subject.userGrade ?? 0
+                    subjectsGraded++
+                }
+                    
+            }
             this.subjects = subjects
+            this.averageGrade = gradeSum / subjectsGraded
         }
     }
 
