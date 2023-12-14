@@ -11,14 +11,16 @@ export class UserModel {
     lastName: string;
     role: number; // 0=admin, 1=professor, 2=student, 3=guest
     subjects: SubjectModel[];
+    averageGrade: number | null;
 
-    constructor({id, username, first_name, last_name, role, subjects = []}: IUser = IUserDefaults) {
+    constructor({id, username, first_name, last_name, role, subjects = [], averageGrade}: IUser = IUserDefaults) {
         this.id = id
         this.username = username
         this.firstName = first_name
         this.lastName = last_name
         this.role = role
         this.subjects = subjects
+        this.averageGrade = averageGrade
     }
 
     async setup(){

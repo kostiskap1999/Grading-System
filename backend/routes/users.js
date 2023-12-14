@@ -43,7 +43,6 @@ async function getUser(request) {
   }
 }
 
-
 module.exports = {
   getUsers: getUsers,
   getUser: getUser

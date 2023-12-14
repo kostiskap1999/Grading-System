@@ -9,14 +9,16 @@ export class SubjectModel {
     semester: number;
     projects: ProjectModel[];
     supervisorID: number;
+    userGrade: number | null;
 
-    constructor({id, name, description, semester, projects, supervisorID}: ISubject = ISubjectDefaults) {
+    constructor({id, name, description, semester, projects, supervisorID, userGrade}: ISubject = ISubjectDefaults) {
         this.id = id
         this.name = name
         this.description = description
         this.semester = semester
         this.projects = projects
         this.supervisorID = supervisorID
+        this.userGrade = userGrade
     }
 
     async setup(userRole?: number){

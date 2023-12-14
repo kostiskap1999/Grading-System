@@ -6,7 +6,8 @@ export interface IUser {
     first_name: string,
     last_name: string,
     role: number; // 0=admin, 1=professor, 2=student
-    subjects: SubjectModel[]
+    subjects: SubjectModel[];
+    averageGrade: number | null;
 }
 
 export const IUserDefaults = {
@@ -15,5 +16,6 @@ export const IUserDefaults = {
     first_name: "",
     last_name: "",
     role: 3,
-    subjects: new Array()
+    subjects: new Array(),
+    averageGrade: null
 }

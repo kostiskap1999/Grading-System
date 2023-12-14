@@ -7,6 +7,7 @@ export interface ISubject {
     semester: number;
     projects: ProjectModel[];
     supervisorID: number;
+    userGrade: number | null;
 }
 
 export const ISubjectDefaults = {
@@ -15,5 +16,6 @@ export const ISubjectDefaults = {
     description: "",
     semester: -1,
     projects: [],
-    supervisorID: -1
+    supervisorID: -1,
+    userGrade: null
 }
