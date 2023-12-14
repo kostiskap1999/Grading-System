@@ -66,6 +66,16 @@ export default function SubmissionsPage() {
                 <div className="header-text">{selectedProject.name}</div>
                 <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
               </div>
+              <div className="center" style={{padding:"10px"}}>
+                <div className="small-text">
+                  <span>Project Average Grade: </span>
+                  <span className={`grade-box ${selectedProject.averageGrade !== null ? (selectedProject.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                    {selectedProject.averageGrade !== null ?
+                      (selectedProject.averageGrade % 1 !== 0 ? selectedProject.averageGrade?.toFixed(1) : selectedProject.averageGrade) 
+                    : " - "}
+                  </span>
+                </div>
+              </div>
               <div style={{margin: "20px"}}>
                 <div className="large-text center">Project Description</div>
                 <div className="small-text">{selectedProject.description}</div>
@@ -77,7 +87,16 @@ export default function SubmissionsPage() {
               <button key={index} className="button"
                 onClick={() => {navigate('/submissions?project='+ params.get('project') +'&id=' + submission.id); setRerender(rerender+1)}}
               >
-                {submission.student?.firstName + " " + submission.student?.lastName}
+                <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
+                  <span>{}</span>
+                  <span>{submission.student?.firstName + " " + submission.student?.lastName}</span>
+                  <span className={`grade-box ${submission.grade !== null ? (submission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                    {submission.grade !== null ?
+                        (submission.grade % 1 !== 0 ? submission.grade?.toFixed(1) : submission.grade) 
+                    : " - "}
+                  </span>
+                </div>
+                
               </button>
             ))}
           </div>
@@ -90,6 +109,17 @@ export default function SubmissionsPage() {
               </div>
               <div style={{margin: "20px"}}>
                 <div className="large-text center">Submission Code</div>
+                
+                <div className="center" style={{padding:"10px"}}>
+                  <div className="small-text">
+                    <span>Submission Grade: </span>
+                    <span className={`grade-box ${selectedSubmission.grade !== null ? (selectedSubmission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                      {selectedSubmission.grade !== null ?
+                        (selectedSubmission.grade % 1 !== 0 ? selectedSubmission.grade?.toFixed(1) : selectedSubmission.grade)
+                      : " - "}
+                    </span>
+                  </div>
+                </div>
                 <CodeSandbox project={selectedProject} submission={selectedSubmission} />
               </div>
             </div>

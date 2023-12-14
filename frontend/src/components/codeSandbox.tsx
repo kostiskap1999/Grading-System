@@ -18,13 +18,13 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
   useEffect(() => {
     console.log("gay")
     if(grade !== null)
-      setLog((prevLog) => `${prevLog}Grade ${grade}<br>`)
-      
+      setLog((prevLog) => `${prevLog}Grade <span style="color: ${grade >= 5 ? 'green' : 'red'}">${grade}</span>`);
+
       if(isSubmittingGrade !== null)
         if(isSubmittingGrade)
-          setLog((prevLog) => `${prevLog}Submission graded successfully<br>`);
+          setLog((prevLog) => `${prevLog} and submitted successfully<br>`);
         else
-          setLog((prevLog) => `${prevLog}Grade was not submitted<br>`);
+          setLog((prevLog) => `${prevLog} and not submitted<br>`);
       
       setIsSubmittingGrade(null)
       setGrade(null)
@@ -76,8 +76,9 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
       <div style={{marginBottom: "50px"}}>
         <CodeMirror value={code} onChange={setCode} height="200px" style={{marginBottom: "10px"}} extensions={[javascript({ jsx: true })]} />
         <div className="row" style={{justifyContent: "space-between"}}>
-          <button className="button" onClick={async () => await runCode(false)}>Run tests without grading</button>
+          <button className="button" onClick={async () => await runCode(false)}>Run tests</button>
           <button className="button" onClick={async () => await runCode(true)}>Run tests and grade</button>
+          <button className="button" onClick={() => {}}>Remove grade</button>
         </div>
       </div>
       

@@ -120,7 +120,17 @@ export default function ProjectsPage() {
               <button key={index} className="button"
                 onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
               >
-                {project.name}
+                <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
+                  <span>{}</span>
+                  <span>{project.name}</span>
+                  {userRole <= 1 ? 
+                    <span className={`grade-box ${project.averageGrade !== null ? (project.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                      {project.averageGrade !== null ?
+                        (project.averageGrade % 1 !== 0 ? project.averageGrade?.toFixed(1) : project.averageGrade) 
+                      : " - "}
+                    </span>
+                  : <span></span>}
+                </div>
               </button>
             ))}
           </div>
@@ -133,6 +143,18 @@ export default function ProjectsPage() {
                 <div className="header-text">{selectedProject.name}</div>
                 <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
               </div>
+              {userRole <= 1 ?
+              <div className="center" style={{padding:"10px"}}>
+                <div className="small-text">
+                  <span>Project Average Grade: </span>
+                  <span className={`grade-box ${selectedProject.averageGrade !== null ? (selectedProject.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                    {selectedProject.averageGrade !== null ?
+                      (selectedProject.averageGrade % 1 !== 0 ? selectedProject.averageGrade?.toFixed(1) : selectedProject.averageGrade) 
+                    : " - "}
+                  </span>
+                </div>
+              </div>
+              :<></>}
               <div style={{margin: "20px"}}>
                 <div className="large-text center">Project Description</div>
                 <div className="small-text">{selectedProject.description}</div>

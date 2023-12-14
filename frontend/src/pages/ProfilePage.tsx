@@ -35,7 +35,7 @@ export default function ProfilePage() {
       <div className="header-title text center column" style={{flex: 1}}>
         <div>{user.firstName} {user.lastName}</div>
         <div className="row">
-          <div>Your average grade is {user.averageGrade}.</div>
+          <div>Your average grade is {user.averageGrade?.toFixed(2)}.</div>
         </div>
       </div>
       <div className="row" style={{flex: 6}}>
@@ -48,7 +48,9 @@ export default function ProfilePage() {
                       <span>{}</span>
                       <span>{subject.name}</span>
                       <span className={`grade-box ${subject.userGrade !== null ? (subject.userGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                        {subject.userGrade !== null ? subject.userGrade : " - "}
+                      {subject.userGrade !== null ? 
+                        (subject.userGrade % 1 !== 0 ? subject.userGrade.toFixed(1) : subject.userGrade)
+                      : " - "}
                       </span>
                     </div>
                   </button>
@@ -74,7 +76,9 @@ export default function ProfilePage() {
                       <span>{}</span>
                       <span>{submission.name}</span>
                       <span className={`grade-box ${submission.grade !== null ? (submission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                        {submission.grade !== null ? submission.grade : " - "}
+                        {submission.grade !== null ?
+                          (submission.grade % 1 !== 0 ? submission.grade.toFixed(1) : submission.grade) 
+                        : " - "}
                       </span>
                     </div>
                 </button>

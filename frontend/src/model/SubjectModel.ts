@@ -11,8 +11,9 @@ export class SubjectModel {
     projects: ProjectModel[];
     supervisorID: number;
     userGrade: number | null;
+    averageGrade: number | null;
 
-    constructor({id, name, description, semester, projects, supervisorID, userGrade}: ISubject = ISubjectDefaults) {
+    constructor({id, name, description, semester, projects, supervisorID, userGrade, averageGrade}: ISubject = ISubjectDefaults) {
         this.id = id
         this.name = name
         this.description = description
@@ -20,6 +21,7 @@ export class SubjectModel {
         this.projects = projects
         this.supervisorID = supervisorID
         this.userGrade = userGrade
+        this.averageGrade = averageGrade
     }
 
     async setup(userID?: number, userRole?: number){
@@ -41,6 +43,8 @@ export class SubjectModel {
                         subjectsGraded++
                     }
                 }
+
+
             }
             this.projects = projects
             this.userGrade = isNaN(gradeSum / subjectsGraded) ? null : gradeSum / subjectsGraded

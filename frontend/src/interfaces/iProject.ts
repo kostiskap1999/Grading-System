@@ -8,6 +8,7 @@ export interface IProject {
     deadline: Date | string;
     submissions: SubmissionModel[];
     tests: TestModel[]
+    averageGrade: number | null;
 }
 
 export const IProjectDefaults = {
@@ -16,5 +17,6 @@ export const IProjectDefaults = {
     description: "",
     deadline: new Date(),
     submissions: [],
-    tests: []
+    tests: [],
+    averageGrade: null
 }

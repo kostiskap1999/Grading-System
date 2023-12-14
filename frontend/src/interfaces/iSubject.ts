@@ -8,6 +8,7 @@ export interface ISubject {
     projects: ProjectModel[];
     supervisorID: number;
     userGrade: number | null;
+    averageGrade: number | null;
 }
 
 export const ISubjectDefaults = {
@@ -17,5 +18,6 @@ export const ISubjectDefaults = {
     semester: -1,
     projects: [],
     supervisorID: -1,
-    userGrade: null
+    userGrade: null,
+    averageGrade: null
 }
