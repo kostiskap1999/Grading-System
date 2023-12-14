@@ -7,13 +7,13 @@ const query = util.promisify(config.query).bind(config)
 const error = require('../errors/errorTypes')
 const { errorHandling } = require('../errors/errorHandling')
 
-async function getTests(request) {
+async function getTests(pID, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     var sql = `SELECT * FROM tests WHERE project_id = ?`
-    const projectID = [request.params.projectID]
+    const projectID = [pID]
     const testsGroupResult = await query(sql, projectID)
 
     const groupedJSON = []
@@ -68,26 +68,26 @@ async function getTests(request) {
   }
 }
 
-async function postTestsFromPostProjects(request, insertedID) {
+async function postTestsFromPostProjects(tests, insertedID, token) {
   try{
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
   
-    for(let i=0; i<request.body.tests.length; i++){
+    for(let i=0; i<tests.length; i++){
       sql = `INSERT INTO tests (project_id, main_function) VALUES (?, ?)`
-      const testValues = [insertedID[0].id, request.body.tests[i].main]
+      const testValues = [insertedID, tests[i].main]
       await query(sql, testValues)
       
       sql = `SELECT id FROM tests WHERE id >= LAST_INSERT_ID()`
       const lastTestID = await query(sql)
       const groupID = lastTestID[0].id
   
-      sql = `INSERT INTO inputs (code, group_id) VALUES ${request.body.tests[i].inputs.map(() => '(?, ?)').join(', ')}`
-      const inputValues = request.body.tests[i].inputs.flatMap(input => [input.code, groupID])
+      sql = `INSERT INTO inputs (code, group_id) VALUES ${tests[i].inputs.map(() => '(?, ?)').join(', ')}`
+      const inputValues = tests[i].inputs.flatMap(input => [input.code, groupID])
       await query(sql, inputValues)
   
       sql = `INSERT INTO outputs (code, group_id) VALUES (?, ?)`
-      const outputValues = [request.body.tests[i].output.code, groupID]
+      const outputValues = [tests[i].output.code, groupID]
       await query(sql, outputValues)
     }
   

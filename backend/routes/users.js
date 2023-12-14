@@ -8,9 +8,9 @@ const error = require('../errors/errorTypes')
 const { errorHandling } = require('../errors/errorHandling')
 
 
-async function getUsers(request) {
+async function getUsers(token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     const sql = `SELECT * FROM users`
@@ -23,12 +23,12 @@ async function getUsers(request) {
   }
 }
 
-async function getUser(request) {
+async function getUser(userid, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
     
-    const sql = `SELECT * FROM users WHERE id='${request.params.userid}'`
+    const sql = `SELECT * FROM users WHERE id='${userid}'`
     const user = await query(sql)
     
     if(user.length > 1)

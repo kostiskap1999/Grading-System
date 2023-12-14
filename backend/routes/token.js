@@ -31,9 +31,9 @@ async function checkToken(token) {
   }
 }
 
-async function getUserIDFromToken(request) {
+async function getUserIDFromToken(token) {
   try {
-    const decoded = await checkToken(request.headers.token)
+    const decoded = await checkToken(token)
 
     return decoded.user_id
   } catch (err) {
@@ -41,9 +41,9 @@ async function getUserIDFromToken(request) {
   }
 }
 
-async function getRoleFromToken(request) {
+async function getRoleFromToken(token) {
   try {
-    const decoded = await checkToken(request.headers.token)
+    const decoded = await checkToken(token)
     
     return decoded.role
   } catch (err) {

@@ -8,9 +8,9 @@ const query = util.promisify(config.query).bind(config)
 const error = require('../errors/errorTypes')
 const { errorHandling } = require('../errors/errorHandling')
 
-async function getProjects(request) {
+async function getProjects(token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
     
     const sql = `SELECT * FROM projects`
@@ -23,13 +23,13 @@ async function getProjects(request) {
   }
 }
 
-async function getProject(request) {
+async function getProject(id, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     const sql = `SELECT * FROM projects WHERE id = ?`
-    const projectID = [request.params.id]
+    const projectID = [id]
     const project = await query(sql, projectID)
     
     if(project.length > 1)
@@ -44,13 +44,13 @@ async function getProject(request) {
   }
 }
 
-async function getUserProjects(request) {
+async function getUserProjects(userid, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
     
     var sql = `SELECT subject_id FROM user_subject WHERE user_id = ?`
-    const userID = [request.params.userid]
+    const userID = [userid]
     const subjectIDs = await query(sql, userID)
 
     var userProjects = [] // initialise in case it is empty    
@@ -67,13 +67,13 @@ async function getUserProjects(request) {
   }
 }
 
-async function getSubjectProjects(request) {
+async function getSubjectProjects(subjectid, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     const sql = `SELECT * FROM projects WHERE subject_id = ?`
-    const subjectID = request.params.subjectid
+    const subjectID = subjectid
     const subjectProjects = await query(sql, subjectID)
     
     util.promisify(config.end)
@@ -83,19 +83,19 @@ async function getSubjectProjects(request) {
   }
 }
 
-async function postProjects(request) {
+async function postProjects(project, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     var sql = 'INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)'
-    const projectValues = [request.body.name, request.body.description, request.body.deadline, request.body.subjectID]
+    const projectValues = [project.name, project.description, project.deadline, project.subjectID]
     await query(sql, projectValues)
     
     sql = `SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`
     const insertedID = await query(sql)
 
-    await dbtests.postTestsFromPostProjects(request, insertedID)
+    await dbtests.postTestsFromPostProjects(project.tests, insertedID[0].id, token)
     
     util.promisify(config.end)
     return true

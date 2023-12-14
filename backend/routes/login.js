@@ -8,12 +8,12 @@ const { errorHandling } = require('../errors/errorHandling')
 
 const query = util.promisify(config.query).bind(config)
 
-async function login(request) {
+async function login(loggingUser) {
   try {
     util.promisify(config.connect)
 
     var sql = `SELECT id FROM credentials WHERE username = ? AND password = ?`
-    const credentials = [request.body.username, request.body.password]
+    const credentials = [loggingUser.username, loggingUser.password]
     const loggedID = await query(sql, credentials)
 
     if(loggedID.length > 1)
@@ -31,7 +31,7 @@ async function login(request) {
       throw new error.NotFoundError("Id didn't match any users")
  
     const token = await dbtoken.createToken({user_id: user[0].id, role: user[0].role})
-    user[0].username = request.body.username
+    user[0].username = loggingUser.username
     
     util.promisify(config.end) 
     return {user: user[0], token: token}

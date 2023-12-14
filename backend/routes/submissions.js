@@ -7,13 +7,13 @@ const query = util.promisify(config.query).bind(config)
 const error = require('../errors/errorTypes')
 const { errorHandling } = require('../errors/errorHandling')
 
-async function getProjectSubmissions(request) {
+async function getProjectSubmissions(projectid, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
     
     const sql = `SELECT * FROM submissions WHERE project_id = ?`
-    const projectID = request.params.projectid
+    const projectID = projectid
     const projectSubmissions = await query(sql, projectID)
     
     util.promisify(config.end)
@@ -23,25 +23,25 @@ async function getProjectSubmissions(request) {
   }
 }
 
-async function getProjectUserSubmission(request) {
+async function getProjectUserSubmission(projectUserSubmission, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
     
     const sql = `SELECT * FROM submissions WHERE project_id = ? AND submitee_id = ?`
-    const values = [request.params.projectid, request.params.userid]
+    const values = [projectUserSubmission.projectid, projectUserSubmission.userid]
     const projectUserSubmissions = await query(sql, values)
     
     util.promisify(config.end)
     return projectUserSubmissions
   } catch (err) {
-    errorHandling(err, "getProjectUserSubmissions")
+    errorHandling(err, "getProjectUserSubmission")
   }
 }
 
-async function postSubmission(request) {
+async function postSubmission(submission, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     var date = new Date()
@@ -53,7 +53,7 @@ async function postSubmission(request) {
     var formattedDate = year + '-' + month + '-' + day
 
     const sql = 'INSERT INTO submissions (code, date, comment, submitee_id, project_id) VALUES (?, ?, ?, ?, ?)';
-    const submissionValues = [request.body.code, formattedDate, request.body.comment, request.body.submitee_id, request.body.project_id];
+    const submissionValues = [submission.code, formattedDate, submission.comment, submission.submitee_id, submission.project_id];
     await query(sql, submissionValues)
     
     util.promisify(config.end)
@@ -63,12 +63,12 @@ async function postSubmission(request) {
   }
 }
 
-async function patchSubmission(request) {
+async function patchSubmission(submission, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
-    var date = new Date(request.body.date)
+    var date = new Date(submission.date)
 
     var year = date.getFullYear()
     var month = (date.getMonth() + 1).toString().padStart(2, '0')
@@ -77,7 +77,7 @@ async function patchSubmission(request) {
     var formattedDate = year + '-' + month + '-' + day
 
     const sql = 'UPDATE submissions SET code = ?, date = ?, grade = ?, comment = ? WHERE id = ?;';
-    const submissionValues = [request.body.code, formattedDate, request.body.grade, request.body.comment, request.body.id];
+    const submissionValues = [submission.code, formattedDate, submission.grade, submission.comment, submission.id];
     
     await query(sql, submissionValues)
     

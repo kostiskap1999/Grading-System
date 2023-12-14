@@ -7,12 +7,12 @@ const query = util.promisify(config.query).bind(config)
 const error = require('../errors/errorTypes')
 const { errorHandling } = require('../errors/errorHandling')
 
-async function getSubjects(request) {
+async function getSubjects(token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
-    const sql = `SELECT * FROM subjects`    
+    const sql = `SELECT * FROM subjects`
     const subjects = await query(sql)
 
     util.promisify(config.end)
@@ -22,13 +22,13 @@ async function getSubjects(request) {
   }
 }
 
-async function getSubject(request) {
+async function getSubject(userid, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
     
     const sql = `SELECT * FROM subjects WHERE id = ?`
-    const userID = [request.params.userid]
+    const userID = [userid]
     const subject = await query(sql, userID)
     
     if(subject.length > 1)
@@ -44,13 +44,13 @@ async function getSubject(request) {
 }
 
 
-async function getUserSubjects(request) {
+async function getUserSubjects(userid, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     const sql = `SELECT subject_id FROM user_subject WHERE user_id = ?`
-    const userID = request.params.userid
+    const userID = userid
     const subjectIDs = await query(sql, userID)
 
     var userSubjects = []
@@ -67,13 +67,13 @@ async function getUserSubjects(request) {
   }
 }
 
-async function postUserSubject(request) {
+async function postUserSubject(userSubject, token) {
   try {
-    await dbtoken.checkToken(request.headers.token)
+    await dbtoken.checkToken(token)
     util.promisify(config.connect)
 
     const sql = 'INSERT INTO user_subject (user_id, subject_id) VALUES (?, ?)';
-    const userSubjectValues = [request.body.userID, request.body.subjectID];
+    const userSubjectValues = [userSubject.userID, userSubject.subjectID];
     await query(sql, userSubjectValues)
     
     util.promisify(config.end)
@@ -83,13 +83,13 @@ async function postUserSubject(request) {
   }
 }
 
-async function deleteUserSubject(request) {
+async function deleteUserSubject(userSubject, token) {
   try {
-    await dbtoken.checkToken(request.headers.token);
+    await dbtoken.checkToken(token);
     util.promisify(config.connect);
 
     const sql = 'DELETE FROM user_subject WHERE user_id = ? AND subject_id = ?';
-    const userSubjectValues = [request.body.userID, request.body.subjectID];
+    const userSubjectValues = [userSubject.userID, userSubject.subjectID];
     await query(sql, userSubjectValues);
 
     util.promisify(config.end);
