@@ -11,8 +11,9 @@ import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/newProject.scss';
 import { fetchTokenID } from "../api/tokenApi";
+import { SubmissionModel } from "../model/SubmissionModel";
 
-export default function HomePage() {
+export default function ProfilePage() {
 
   const navigate = useNavigate();
   const [user, setUser] = useState<UserModel>(new UserModel())
@@ -25,21 +26,16 @@ export default function HomePage() {
         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
       }
-        
-      
-      
-      
     }
-
     fetchData()
   }, [])
 
   return (
     <div className="page column">
       <div className="header-title text center column" style={{flex: 1}}>
-        <div>{user.username}</div>
+        <div>{user.firstName} {user.lastName}</div>
         <div className="row">
-          <div>There are {user.getProjects().length} pending projects from {user.subjects.length} subjects.</div>
+          <div>Your average grade is {}.</div>
         </div>
       </div>
       <div className="row" style={{flex: 6}}>
@@ -59,6 +55,16 @@ export default function HomePage() {
             {user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
                   {project.name}
+                </button>
+            ))}
+          </div>
+        </div>
+        <div className="column container" style={{flex: 1}}>
+          <div className="text center header-title">My Submissions</div>
+          <div className="column" style={{overflow:'scroll'}}>
+            {user.getSubmissions().map((submission: SubmissionModel, index: number) => (
+                <button key={index} className="button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
+                  {submission.name}
                 </button>
             ))}
           </div>

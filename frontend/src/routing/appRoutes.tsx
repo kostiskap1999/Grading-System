@@ -3,12 +3,13 @@ import { RouteType } from "./config";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 
-import { Class, Code } from "@mui/icons-material";
+import { AccountBox, Class, Code } from "@mui/icons-material";
 import Home from '@mui/icons-material/Home';
 import NewProjectPage from "../pages/NewProjectPage";
 import ProjectsPage from "../pages/ProjectsPage";
 import SubjectsPage from "../pages/SubjectsPage";
 import SubmissionsPage from "../pages/SubmissionsPage";
+import ProfilePage from "../pages/ProfilePage";
 
 const appRoutes: RouteType[] = [
   {
@@ -24,6 +25,15 @@ const appRoutes: RouteType[] = [
     sidebarProps: {
       displayText: "Home",
       icon: <Home/>
+    }
+  },
+  {
+    protected: 1,
+    element: <ProfilePage/>,
+    path: "/profile",
+    sidebarProps: {
+      displayText: "Profile",
+      icon: <AccountBox/>
     }
   },
   {

@@ -2,6 +2,7 @@ import { fetchUserSubjects } from "../api/subjectsApi";
 import { IUser, IUserDefaults } from "../interfaces/iUser";
 import { ProjectModel } from "./ProjectModel";
 import { SubjectModel } from "./SubjectModel";
+import { SubmissionModel } from "./SubmissionModel";
 
 export class UserModel {
     id: number; // unique id
@@ -53,5 +54,30 @@ export class UserModel {
                 projects.push(project)
         
         return projects
+    }
+
+    getUnsubmittedProjects() {
+        const unsubmittedProjects: ProjectModel[] = [];
+    
+        for (const subject of this.subjects)
+            for (const project of subject.projects) {
+                const userSubmission = project.submissions.find(submission => submission.submitee_id === this.id)
+                if (!userSubmission)
+                    unsubmittedProjects.push(project)
+            }
+    
+        return unsubmittedProjects;
+    }
+    
+
+    getSubmissions(){
+        var submissions: SubmissionModel[] = []
+        for(const subject of this.subjects)
+            for(const project of subject.projects)
+                for(const submission of project.submissions)
+                    if(submission.submitee_id == this.id)
+                        submissions.push(submission)
+        
+        return submissions
     }
 }
