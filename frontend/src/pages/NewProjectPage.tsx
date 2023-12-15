@@ -31,7 +31,7 @@ export default function NewProjectPage() {
 
   const createTest = () => {
     setNewProject((prevProject: ProjectModel) => {
-        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, getUserSubmission: prevProject.getUserSubmission }
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
         const newTest = new TestModel()
         newTest.id = newProjectCopy.tests.length+1
         newTest.output.id = newTest.id
@@ -44,7 +44,7 @@ export default function NewProjectPage() {
 
   const copyTest = (index: number) => {
     setNewProject((prevProject: ProjectModel) => {
-        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, getUserSubmission: prevProject.getUserSubmission }
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
         const copiedTest = new TestModel(newProjectCopy.tests[index])
         copiedTest.id = newProjectCopy.tests.length + 1
         copiedTest.output.id = copiedTest.id
@@ -55,7 +55,7 @@ export default function NewProjectPage() {
 
   const deleteTest = (index: number) => {
       setNewProject((prevProject: ProjectModel) => {
-          const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, getUserSubmission: prevProject.getUserSubmission }
+          const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
           newProjectCopy.tests = [
               ...newProjectCopy.tests.slice(0, index),
               ...newProjectCopy.tests.slice(index + 1),
@@ -67,7 +67,7 @@ export default function NewProjectPage() {
 
   const createInput = (testIndex: number) => {
     setNewProject((prevProject: ProjectModel) => {
-        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, getUserSubmission: prevProject.getUserSubmission }
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
         const newInput = new TestInputModel()
         newInput.id = newProjectCopy.tests[testIndex].inputs.length + 1
         newProjectCopy.tests[testIndex].inputs.push(newInput)
@@ -78,7 +78,7 @@ export default function NewProjectPage() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setNewProject((prevProject: ProjectModel) => {
-        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, getUserSubmission: prevProject.getUserSubmission }
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
 
         switch(event.target.id) {
             case "name" :
@@ -105,7 +105,7 @@ export default function NewProjectPage() {
 
   const handleTestChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, testIndex: number, inputIndex?: number) => {
     setNewProject((prevProject: ProjectModel) => {
-        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, getUserSubmission: prevProject.getUserSubmission }
+        const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
         switch(event.target.id) {
             case `main-function-${testIndex}` :
                 newProjectCopy.tests[testIndex].main = event.target.value

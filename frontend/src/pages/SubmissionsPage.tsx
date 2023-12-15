@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import Cookies from "universal-cookie";
 import CodeSandbox from "../components/codeSandbox";
-import { fetchAndSetupSubmissions, fetchAndSetupUser } from "../api/helpers/massSetups";
+import { fetchAndSetupSubmissions } from "../api/helpers/massSetups";
 import { SubmissionModel } from "../model/SubmissionModel";
-import { UserModel } from "../model/UserModel";
 import { ProjectModel } from "../model/ProjectModel";
-import { fetchProject, fetchProjects } from "../api/projectsApi";
+import { fetchProject } from "../api/projectsApi";
+import { ProjectEntry } from "../components/pageComponents";
+import { PageButtonDescription } from "../components/pageComponents";
 
 export default function SubmissionsPage() {
 
@@ -60,43 +60,13 @@ export default function SubmissionsPage() {
       </div>
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
-          {selectedProject != undefined ?
-            <div>
-              <div className="center" style={{padding:"30px"}}>
-                <div className="header-text">{selectedProject.name}</div>
-                <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
-              </div>
-              <div className="center" style={{padding:"10px"}}>
-                <div className="small-text">
-                  <span>Project Average Grade: </span>
-                  <span className={`grade-box ${selectedProject.averageGrade !== null ? (selectedProject.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                    {selectedProject.averageGrade !== null ?
-                      (selectedProject.averageGrade % 1 !== 0 ? selectedProject.averageGrade?.toFixed(1) : selectedProject.averageGrade) 
-                    : " - "}
-                  </span>
-                </div>
-              </div>
-              <div style={{margin: "20px"}}>
-                <div className="large-text center">Project Description</div>
-                <div className="small-text">{selectedProject.description}</div>
-              </div>
-            </div>
-          : <></>}
+          {selectedProject ? <ProjectEntry project={selectedProject} /> : <></>}
           <div className="column" style={{overflow:'scroll'}}>
             {submissions.map((submission, index) => (
               <button key={index} className="button"
                 onClick={() => {navigate('/submissions?project='+ params.get('project') +'&id=' + submission.id); setRerender(rerender+1)}}
               >
-                <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
-                  <span>{}</span>
-                  <span>{submission.student?.firstName + " " + submission.student?.lastName}</span>
-                  <span className={`grade-box ${submission.grade !== null ? (submission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                    {submission.grade !== null ?
-                        (submission.grade % 1 !== 0 ? submission.grade?.toFixed(1) : submission.grade) 
-                    : " - "}
-                  </span>
-                </div>
-                
+                <PageButtonDescription component={submission} />
               </button>
             ))}
           </div>

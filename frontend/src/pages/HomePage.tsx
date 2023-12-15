@@ -11,6 +11,7 @@ import '../styles/general.scss';
 import '../styles/home.scss';
 import '../styles/newProject.scss';
 import { fetchTokenID } from "../api/tokenApi";
+import { PageButtonDescription } from "../components/pageComponents";
 
 export default function HomePage() {
 
@@ -24,11 +25,7 @@ export default function HomePage() {
       if(tokenID){
         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
-      }
-        
-      
-      
-      
+      }      
     }
 
     fetchData()
@@ -47,9 +44,9 @@ export default function HomePage() {
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user.subjects.map((subject: SubjectModel, index: number) => (
-                  <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
-                    {subject.name}
-                  </button>
+              <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
+                <PageButtonDescription component={subject} />
+              </button>
             ))}
           </div>
         </div>
@@ -57,9 +54,9 @@ export default function HomePage() {
           <div className="text center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
-                <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
-                  {project.name}
-                </button>
+              <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
+                <PageButtonDescription component={project} userRole={1} />
+              </button>
             ))}
           </div>
         </div>

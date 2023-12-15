@@ -50,10 +50,11 @@ export class ProjectModel {
         }
     }
 
-    getUserSubmission(userID: number) {
-        for (const submission of this.submissions)
-            if(submission.submitee_id == userID)
-                return submission
-    }   
-
+    isWithinDeadline() {
+        if (typeof this.deadline === 'string')
+            return new Date() <= new Date(this.deadline)
+        else
+            return this.deadline >= new Date();
+    }
+    
 }

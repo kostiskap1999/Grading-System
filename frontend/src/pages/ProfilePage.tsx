@@ -4,7 +4,6 @@ import { ProjectModel } from "../model/ProjectModel";
 import { UserModel } from "../model/UserModel";
 
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { SubjectModel } from "../model/SubjectModel";
 import '../styles/button.scss';
 import '../styles/general.scss';
@@ -12,6 +11,7 @@ import '../styles/home.scss';
 import '../styles/newProject.scss';
 import { fetchTokenID } from "../api/tokenApi";
 import { SubmissionModel } from "../model/SubmissionModel";
+import { PageButtonDescription } from "../components/pageComponents";
 
 export default function ProfilePage() {
 
@@ -43,17 +43,9 @@ export default function ProfilePage() {
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user.subjects.map((subject: SubjectModel, index: number) => (
-                  <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
-                    <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
-                      <span>{}</span>
-                      <span>{subject.name}</span>
-                      <span className={`grade-box ${subject.userGrade !== null ? (subject.userGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                      {subject.userGrade !== null ? 
-                        (subject.userGrade % 1 !== 0 ? subject.userGrade.toFixed(1) : subject.userGrade)
-                      : " - "}
-                      </span>
-                    </div>
-                  </button>
+              <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
+                <PageButtonDescription component={subject} userRole={1} />
+              </button>
             ))}
           </div>
         </div>
@@ -62,7 +54,7 @@ export default function ProfilePage() {
           <div className="column" style={{overflow:'scroll'}}>
             {user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
-                  {project.name}
+                  <PageButtonDescription component={project} />
                 </button>
             ))}
           </div>
@@ -72,15 +64,7 @@ export default function ProfilePage() {
           <div className="column" style={{overflow:'scroll'}}>
             {user.getSubmissions().map((submission: SubmissionModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
-                    <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
-                      <span>{}</span>
-                      <span>{submission.name}</span>
-                      <span className={`grade-box ${submission.grade !== null ? (submission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                        {submission.grade !== null ?
-                          (submission.grade % 1 !== 0 ? submission.grade.toFixed(1) : submission.grade) 
-                        : " - "}
-                      </span>
-                    </div>
+                  <PageButtonDescription component={submission} userRole={1} />
                 </button>
             ))}
           </div>

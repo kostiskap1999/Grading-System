@@ -16,7 +16,6 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
   }, [submission.code])
 
   useEffect(() => {
-    console.log("gay")
     if(grade !== null)
       setLog((prevLog) => `${prevLog}Grade <span style="color: ${grade >= 5 ? 'green' : 'red'}">${grade}</span>`);
 

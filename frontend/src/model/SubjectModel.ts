@@ -48,7 +48,6 @@ export class SubjectModel {
             }
             this.projects = projects
             this.userGrade = isNaN(gradeSum / subjectsGraded) ? null : gradeSum / subjectsGraded
-            console.log('hi')
         }
     }
 }

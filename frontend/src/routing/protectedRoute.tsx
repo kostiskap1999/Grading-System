@@ -16,7 +16,6 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, protectionLe
   useEffect(() => {
     const fetchData = async () => {
       const role = await fetchTokenRole()
-      console.log(role)
       if(!role)
         return
       setUserRole(role);

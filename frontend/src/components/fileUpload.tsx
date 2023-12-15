@@ -18,7 +18,6 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
     useEffect(() => {
       const fetchSubmission = async () => {
         const userSubmission = await fetchProjectUserSubmission(pID, user.id)
-        console.log(userSubmission)
         if(userSubmission && userSubmission.id !== -1)
           setFile(userSubmission)
         else

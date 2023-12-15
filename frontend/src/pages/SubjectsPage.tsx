@@ -9,9 +9,10 @@ import '../styles/button.scss';
 import { UserModel } from "../model/UserModel";
 import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import Cookies from "universal-cookie";
-import { fetchTokenID } from "../api/tokenApi";
+import { fetchTokenID, fetchTokenRole } from "../api/tokenApi";
 import { deleteUserSubject, postUserSubject } from "../api/subjectsApi";
+import { SubjectEntry } from "../components/pageComponents";
+import { PageButtonDescription } from "../components/pageComponents";
 
 export default function SubjectsPage() {
 
@@ -25,11 +26,11 @@ export default function SubjectsPage() {
   
   const [rerender, setRerender] = useState<number>(0)
 
-  const filterOptions = [
+  const [userRole, setUserRole] = useState<number>(3)
+
+  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([
     {value: "my", label: "My Subjects"},
-    {value: "available", label: "Available Subjects"},
-    {value: "all", label: "All Subjects"},
-    {value: "supervising", label: "Supervising Subjects"}]  // my = my subjects, all = all subjects, supervising = for profs and admins
+    {value: "all", label: "All Subjects"}])  // my = my subjects, all = all subjects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([new SubjectModel()])
 
@@ -67,16 +68,24 @@ export default function SubjectsPage() {
   }, [])
 
   useEffect(() => {
-    console.log(filter + " ga")
+    const fetchRole = async () => {
+      const role: number | null = await fetchTokenRole()
+      if(role != null){
+        setUserRole(role)
+        if(role <= 1)
+          setFilterOptions([...filterOptions, { value: "supervising", label: "Supervising Projects" }])
+      } 
+    }
+    fetchRole()
+  }, [])
+
+  useEffect(() => {
     if (filter === "my")
       setFilteredSubjects(user.subjects)
-    else if (filter === "available")
-      setFilteredSubjects(subjects.filter(subject => !user.subjects.map(subject => subject.id).includes(subject.id))) //get user subjects' ids and if they are included in the total subjects list, filter them out
     else if (filter === "all")
       setFilteredSubjects(subjects)
     else if (filter === "supervising")
       setFilteredSubjects([])
-      console.log(filter + " y")
   }, [filter])
 
   const joinSubject = async () => {
@@ -103,50 +112,44 @@ export default function SubjectsPage() {
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">
-              <ReactDropdown
-                controlClassName="row center"
-                menuClassName="dropdown-menu"        
-                options={filterOptions}
-                onChange={(option) => {setFilter(option.value);}}
-                value={filter}
-                placeholder={filter}
-                arrowClosed={<KeyboardArrowDown/>}
-                arrowOpen={<KeyboardArrowUp/>}
-              />
+            <ReactDropdown
+              controlClassName="row center"
+              menuClassName="dropdown-menu"        
+              options={filterOptions}
+              onChange={(option) => {setFilter(option.value);}}
+              value={"My Subjects"}
+              placeholder={filter}
+              arrowClosed={<KeyboardArrowDown/>}
+              arrowOpen={<KeyboardArrowUp/>}
+            />
             </div>
             <div className="column" style={{overflow:'scroll'}}>
               {filteredSubjects.map((subject, index) => (
                 <button key={index} className="button"
                   onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
                 >
-                  {subject.name}
+                  <PageButtonDescription component={subject} />
                 </button>
               ))}
             </div>
         </div>
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
             {selectedSubject.id === -1 ? <></> : <>
-            <div>
-              <div className="center">
-                <div className="header-text">{selectedSubject.name}</div>
-                <div className="small-text">Semester: {selectedSubject.semester}</div>
+              <SubjectEntry subject={selectedSubject} />
+              {user.hasSubject(selectedSubject.id) ?
+                <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+              :
+                <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+              }
+              <div className="column" style={{overflow:'scroll'}}>
+                {selectedSubject.projects.map((project, index) => (
+                  <button key={index} className="button"
+                    onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                  >
+                    <PageButtonDescription component={project} userRole={userRole} />
+                  </button>
+                ))}
               </div>
-              <div className="small-text">{selectedSubject.description}</div>
-            </div>
-            {user.hasSubject(selectedSubject.id) ?
-              <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
-            :
-              <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
-            }
-            <div className="column" style={{overflow:'scroll'}}>
-              {selectedSubject.projects.map((project, index) => (
-                <button key={index} className="button"
-                  onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
-                >
-                  {project.name}
-                </button>
-              ))}
-            </div>
             </>}
         </div>
       </div>

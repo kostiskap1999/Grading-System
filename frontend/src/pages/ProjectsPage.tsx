@@ -8,6 +8,8 @@ import { fetchAndSetupProjects, fetchAndSetupUser } from "../api/helpers/massSet
 import { ProjectModel } from "../model/ProjectModel";
 import { UserModel } from "../model/UserModel";
 import { fetchTokenID, fetchTokenRole } from "../api/tokenApi";
+import { ProjectEntry } from "../components/pageComponents";
+import { PageButtonDescription } from "../components/pageComponents";
 
 export default function ProjectsPage() {
 
@@ -24,11 +26,7 @@ export default function ProjectsPage() {
 
   const [userRole, setUserRole] = useState<number>(3)
 
-  const filterOptions = [
-    {value: "my", label: "My Projects"},
-    {value: "available", label: "Available Projects"},
-    {value: "all", label: "All Projects"},
-    {value: "supervising", label: "Supervising Projects"}]  // my = my projects, all = all projects, supervising = for profs and admins
+  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "my", label: "My Projects"}])  // my = my projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([new ProjectModel()])
   
@@ -54,11 +52,14 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchRole = async () => {
       const role: number | null = await fetchTokenRole()
-      if(role != null)
+      if(role != null){
         setUserRole(role)
+        if(role <= 1)
+          setFilterOptions([...filterOptions, { value: "supervising", label: "Supervising Projects" }])
+      } 
     }
     fetchRole()
-  }, [userRole])
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,10 +79,6 @@ export default function ProjectsPage() {
   useEffect(() => {
     if (filter === "my")
       setFilteredProjects(user.getProjects())
-    else if (filter === "available")
-      setFilteredProjects(projects.filter(project => !user.getProjects().map(project => project.id).includes(project.id))) //get user project' ids and if they are included in the total projects list, filter them out
-    else if (filter === "all")
-      setFilteredProjects(projects)
     else if (filter === "supervising")
       setFilteredProjects([])
 
@@ -104,33 +101,27 @@ export default function ProjectsPage() {
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
           <div className="text center header-title">
-            <ReactDropdown
-              controlClassName="row center"
-              menuClassName="dropdown-menu"        
-              options={filterOptions}
-              onChange={(option) => {setFilter(option.value);}}
-              value={"My Projects"}
-              placeholder={filter}
-              arrowClosed={<KeyboardArrowDown/>}
-              arrowOpen={<KeyboardArrowUp/>}
-            />
+            {userRole <= 1 ?
+              <ReactDropdown
+                controlClassName="row center"
+                menuClassName="dropdown-menu"        
+                options={filterOptions}
+                onChange={(option) => {setFilter(option.value);}}
+                value={"My Projects"}
+                placeholder={filter}
+                arrowClosed={<KeyboardArrowDown/>}
+                arrowOpen={<KeyboardArrowUp/>}
+              />
+            : <div>My Projects</div>
+            }
+
           </div>
           <div className="column" style={{overflow:'scroll'}}>
             {filteredProjects.map((project, index) => (
               <button key={index} className="button"
                 onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
               >
-                <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
-                  <span>{}</span>
-                  <span>{project.name}</span>
-                  {userRole <= 1 ? 
-                    <span className={`grade-box ${project.averageGrade !== null ? (project.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                      {project.averageGrade !== null ?
-                        (project.averageGrade % 1 !== 0 ? project.averageGrade?.toFixed(1) : project.averageGrade) 
-                      : " - "}
-                    </span>
-                  : <span></span>}
-                </div>
+                <PageButtonDescription component={project} userRole={userRole} />
               </button>
             ))}
           </div>
@@ -138,38 +129,21 @@ export default function ProjectsPage() {
         
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
             {selectedProject.id === -1 ? <></> : <>
-            <div>
-              <div className="center" style={{padding:"30px"}}>
-                <div className="header-text">{selectedProject.name}</div>
-                <div className="small-text">Deadline: {selectedProject.deadline.toLocaleString('el-GR', { timeZone: 'UTC' })}</div>
+              <ProjectEntry project={selectedProject} userRole={userRole} />
+              <div className="center">
+                {user.hasProject(selectedProject.id) ?
+                  selectedProject.isWithinDeadline() ?
+                    <FileUpload user={user} pID={selectedProject.id} />
+                  :
+                    <div className="button">You can not upload a submission because the deadline has been exceeded.</div>  
+                :
+                  <div className="button">You can not upload a submission because you have not joined this subject.</div>
+                }
               </div>
-              {userRole <= 1 ?
-              <div className="center" style={{padding:"10px"}}>
-                <div className="small-text">
-                  <span>Project Average Grade: </span>
-                  <span className={`grade-box ${selectedProject.averageGrade !== null ? (selectedProject.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                    {selectedProject.averageGrade !== null ?
-                      (selectedProject.averageGrade % 1 !== 0 ? selectedProject.averageGrade?.toFixed(1) : selectedProject.averageGrade) 
-                    : " - "}
-                  </span>
-                </div>
-              </div>
-              :<></>}
-              <div style={{margin: "20px"}}>
-                <div className="large-text center">Project Description</div>
-                <div className="small-text">{selectedProject.description}</div>
-              </div>
-            </div>
-            {user.hasProject(selectedProject.id) ?
-              <FileUpload user={user} pID={selectedProject.id} />
-            :
-              <div className="button">You can not upload a submission for a subject you are not joined. Please join subject and try again.</div>
-            }
-            
-            
-            {userRole <= 1 ? <>
-              <button className="button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
-            </> : <></>}
+
+              {userRole <= 1 ? <>
+                <button className="button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
+              </> : <></>}
             </>}
         </div>
       </div>
