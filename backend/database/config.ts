@@ -1,6 +1,6 @@
-var mysql = require('mysql');
+import { createConnection } from 'mysql';
 
-const config = mysql.createConnection({
+export default createConnection({
   host: "127.0.0.1",
   user: "root",
   password: "Root123!",
@@ -8,6 +8,3 @@ const config = mysql.createConnection({
   database: "grading_system",
   insecureAuth: true
 });
-
-module.exports = config;
-  
