@@ -1,5 +1,3 @@
-import { Credentials } from "./credentials"
-
 export const Role = {
   ADMIN: 0,
   PROFESSOR: 1,
@@ -24,5 +22,17 @@ export class User {
     this.lastName = user.last_name
     this.role = user.role
     this.credentials = credentials
+  }
+}
+
+export class Credentials {
+  id: number
+  username: string
+  password: string
+
+  constructor(creds: any) {
+    this.id = creds.id
+    this.username = creds.username
+    this.password = creds.password
   }
 }

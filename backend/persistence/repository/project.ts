@@ -6,7 +6,7 @@ export class UserRepository {
 
   async findById(id: number) {
     const tm = await this.transactionManager
-    return new User((await tm.query("SELECT * FROM users WHERE id = ?", id) as any[])[0])
+    return new User(await tm.query("SELECT * FROM users WHERE id = ?", id))
   }
 
   async findUserByCredentials(username: string, password: string) {
