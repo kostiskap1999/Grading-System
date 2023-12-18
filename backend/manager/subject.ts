@@ -1,4 +1,4 @@
-import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from '../errors/errorTypes'
+import { BadRequestError, InternalServerError, NotFoundError } from '../errors/errorTypes'
 import { SubjectRepository } from '../persistence/repository/subject'
 import * as dbtoken from './token'
 
@@ -38,6 +38,7 @@ export class SubjectManager {
       throw new BadRequestError("Incorrect user id")
     
     const subjects = await this.repository.findByUser(userId)
+    console.log(subjects)
   
     if(!subjects)
       throw new NotFoundError("Subjects not found")

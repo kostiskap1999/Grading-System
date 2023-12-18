@@ -1,4 +1,4 @@
-import { BadRequestError, InternalServerError, NotFoundError, UnauthorizedError } from '../errors/errorTypes'
+import { BadRequestError, NotFoundError } from '../errors/errorTypes'
 import { UserRepository } from '../persistence/repository/user'
 import * as dbtoken from './token'
 

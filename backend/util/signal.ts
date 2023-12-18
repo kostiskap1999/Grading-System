@@ -1,7 +1,3 @@
-import { NextHandleFunction } from "connect";
-import { NextFunction } from "express";
-import { IncomingMessage, ServerResponse } from "http";
-
 type AnyFunction = { (...args: any): any };
 
 export class Signal<Fn extends AnyFunction> {

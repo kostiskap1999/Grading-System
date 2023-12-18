@@ -23,8 +23,8 @@ export class SubjectRepository {
     if(!subjectIDs)
       return null
 
-    return (await tm.query(`SELECT * FROM projects WHERE ${subjectIDs.map(() => 'id = ?').join(' OR ')}`, subjectIDs) as any[])
-      .map(subject => new Subject(subject))[0]
+    return (await tm.query(`SELECT * FROM subjects WHERE ${subjectIDs.map(() => 'id = ?').join(' OR ')}`, ...subjectIDs) as any[])
+      .map(subject => new Subject(subject))
   }
   
   async postUserSubject(userId: number, subjectId: number) {

@@ -38,9 +38,9 @@ export class ProjectRepository {
     const tm = await this.transactionManager
     await tm.query(`INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)`, project.name, project.description, project.deadline, project.subject_id)
     
-    const insertedID = tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`)
+    const insertedID = (await tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`) as any[])[0]
 
     const testRepository = new TestRepository()
-    testRepository.postTests(project.tests, insertedID[0].id )
+    testRepository.postTests(project.tests, insertedID.id)
   }
 }

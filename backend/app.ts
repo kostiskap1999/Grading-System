@@ -45,12 +45,14 @@ app.use(errorHandling);
 
 // LOGIN ROUTER
 router.route('/login').post(async (req, res) => {
+  console.log('/login')
   let data = await handle(new UserManager().login(req.body))
   res.json(data);
 })
 
 // GET USER ROUTER
 router.route('/users/:userId').get(async (req, res) => {
+  console.log('/users/:userId')
   let data = await handle(new UserManager().getUser(parseInt(req.params.userId), req.headers.token as string))
   res.json(data);
 });
@@ -62,13 +64,15 @@ router.route('/users/:userId').get(async (req, res) => {
 
 // GET TOKEN USER ID ROUTER
 router.route('/token/id').get(async (req, res) => {
-  let data = await handle((await checkToken(req.headers.token as string)).userId)
+  console.log('/token/id')
+  let data = (await checkToken(req.headers.token as string)).userId
   res.json(data);
 });
 
 // GET TOKEN ROLE ROUTER
 router.route('/token/role').get(async (req, res) => {
-  let data = await handle((await checkToken(req.headers.token as string)).role)
+  console.log('/token/role')
+  let data = (await checkToken(req.headers.token as string)).role
   res.json(data);
 });
 
@@ -79,18 +83,21 @@ router.route('/token/role').get(async (req, res) => {
 
 // GET SUBJECTS ROUTER
 router.route('/subjects').get(async (req, res) => {
+  console.log('/subjects')
   let data = await handle(new SubjectManager().getSubjects(req.headers.token as string))
   res.json(data);
 });
 
 // GET SUBJECT ROUTER
 router.route('/subjects/:id').get(async (req, res) => {
+  console.log('/subjects/:id')
   let data = await handle(new SubjectManager().getSubject(parseInt(req.params.id), req.headers.token as string))
   res.json(data);
 });
 
 // GET USER-SUBJECT ROUTER
 router.route('/user-subjects/:userId').get(async (req, res) => {
+  console.log('/user-subjects/:userId')
   let data = await handle(new SubjectManager().getUserSubjects(parseInt(req.params.userId), req.headers.token as string))
   res.json(data);
 });
@@ -102,30 +109,35 @@ router.route('/user-subjects/:userId').get(async (req, res) => {
 
 // GET PROJECTS ROUTER
 router.route('/projects').get(async (req, res) => {
+  console.log('/projects')
   let data = await handle(new ProjectManager().getProjects(req.headers.token as string))
   res.json(data);
 });
 
 // GET PROJECT ROUTER
 router.route('/projects/:id').get(async (req, res) => {
+  console.log('/projects/:id')
   let data = await handle(new ProjectManager().getProject(parseInt(req.params.id), req.headers.token as string))
   res.json(data);
 });
 
 // GET SUBJECT-PROJECTS ROUTER
 router.route('/subject-projects/:subjectId').get(async (req, res) => {
+  console.log('/subject-projects/:subjectId')
   let data = await handle(new ProjectManager().getSubjectProjects(parseInt(req.params.subjectId), req.headers.token as string))
   res.json(data);
 });
 
 // GET USER-PROJECTS ROUTER
 router.route('/subject-projects/:userId').get(async (req, res) => {
+  console.log('/subject-projects/:userId')
   let data = await handle(new ProjectManager().getUserProjects(parseInt(req.params.userId), req.headers.token as string))
   res.json(data);
 });
 
 // POST PROJECTS ROUTER
 router.route('/subject-projects').post(async (req, res) => {
+  console.log('/subject-projects')
   let data = await handle(new ProjectManager().postProject(req.body, req.headers.token as string))
   res.json(data);
 });
@@ -136,12 +148,14 @@ router.route('/subject-projects').post(async (req, res) => {
 
 // GET SUBMISSIONS ROUTER
 router.route('/submissions/:projectId').get(async (req, res) => {
+  console.log('/submissions/:projectId')
   let data = await handle(new SubmissionManager().getSubmissions(parseInt(req.params.projectId), req.headers.token as string))
   res.json(data);
 });
 
 // POST SUBMISSIONS ROUTER
 router.route('/submissions').post(async (req, res) => {
+  console.log('/submissions')
   let data = await handle(new SubmissionManager().postSubmission(req.body, req.headers.token as string))
   res.json(data);
 });
@@ -153,6 +167,7 @@ router.route('/submissions').post(async (req, res) => {
 
 // GET TESTS ROUTER
 router.route('/tests/:projectId').get(async (req, res) => {
+  console.log('/tests/:projectId')
   let data = await handle(new TestManager().getTests(parseInt(req.params.projectId), req.headers.token as string))
   res.json(data);
 });
