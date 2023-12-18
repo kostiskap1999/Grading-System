@@ -1,23 +1,46 @@
 import { TransactionManager } from "../../manager/transaction";
-import { Credentials, User } from "../entities/user";
+import { Project } from "../entities/project";
+import { TestRepository } from './test'
 
-export class UserRepository {
+export class ProjectRepository {
   constructor(public transactionManager = TransactionManager.createTransaction()) {}
+
+  async findAll() {
+    const tm = await this.transactionManager
+    return (await tm.query(`SELECT * FROM projects`) as any[])
+      .map(project => new Project(project))[0]
+  }
 
   async findById(id: number) {
     const tm = await this.transactionManager
-    return new User(await tm.query("SELECT * FROM users WHERE id = ?", id))
+    return new Project((await tm.query(`SELECT * FROM projects WHERE id = ?`, id) as any[])[0])
   }
 
-  async findUserByCredentials(username: string, password: string) {
+  async findByUser(userId: number) {
     const tm = await this.transactionManager
-    const credentials = (await tm.query("SELECT * FROM credentials WHERE username = ? AND password = ?", username, password) as any[])
-      .map(creds => new Credentials(creds))[0]
+    const subjectIDs = (await tm.query(`SELECT subject_id FROM user_subject WHERE user_id = ?`, userId) as any[])
+      .map(subject => subject.subject_id)
 
-    if (!credentials)
+    if(!subjectIDs)
       return null
+
+    return (await tm.query(`SELECT * FROM projects WHERE ${subjectIDs.map(() => 'id = ?').join(' OR ')}`, subjectIDs) as any[])
+      .map(project => new Project(project))[0]
+  }
+
+  async findBySubject(subjectId: number) {
+    const tm = await this.transactionManager
+    return (await tm.query(`SELECT * FROM projects WHERE subject_id = ?`, subjectId) as any[])
+      .map(project => new Project(project))[0]
+  }
+
+  async postProject(project: any) {
+    const tm = await this.transactionManager
+    await tm.query(`INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)`, project.name, project.description, project.deadline, project.subject_id)
     
-    return (await tm.query("SELECT * FROM users WHERE credentials_id = ?", credentials.id) as any[])
-      .map(user => new User(user))[0]
+    const insertedID = tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`)
+
+    const testRepository = new TestRepository()
+    testRepository.postTests(project.tests, insertedID[0].id )
   }
 }
