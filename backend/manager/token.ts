@@ -2,7 +2,6 @@ import { sign, verify } from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();
 
-import { errorHandling } from '../errors/errorHandling';
 import { UnauthorizedError } from '../errors/errorTypes';
 
 interface JwtToken {
@@ -26,9 +25,9 @@ export async function checkToken(token?: string | null) {
   const decoded: any = verify(token, TOKEN_KEY);
 
   const timeLeft = (decoded.exp - Math.floor(Date.now()/1000));
-  if (timeLeft <= 0){
+  if (timeLeft <= 0)
       throw new UnauthorizedError(`Token expired`);
-  }
+
   return decoded
 }
 

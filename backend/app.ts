@@ -1,12 +1,17 @@
 
-import express, { Express, response } from 'express'
+import express, { Express } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import { errorHandling } from './errors/errorHandling';
-import { UserManager } from './manager/login';
+import { UserManager } from './manager/user';
 import * as Signal from './util/signal';
 import util from 'util'
 import db from './database/config'
+import { checkToken, getToken } from './manager/token';
+import { SubjectManager } from './manager/subject';
+import { ProjectManager } from './manager/project';
+import { SubmissionManager } from './manager/submission';
+import { TestManager } from './manager/test';
 
 util.promisify(db.connect)
 
@@ -18,8 +23,8 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use('/', router);
 
-router.use((request, response, next) => {
-  // console.log(request.originalUrl);
+router.use((req, res, next) => {
+  // console.log(req.originalUrl);
   next();
 });
 
@@ -34,229 +39,122 @@ function handle(p: Promise<unknown>) {
 
 app.use(errorHandling);
 
-// let dblogin = require('./routes/login');
-// let dbtoken = require('./routes/token');
-// let dbusers = require('./routes/users');
-// let dbsubjects = require('./routes/subjects');
-// let dbprojects = require('./routes/projects');
-// let dbsubmissions = require('./routes/submissions');
-// let dbtests = require('./routes/tests');
+// *******************
+// ****** USER ******
+// *******************
 
 // LOGIN ROUTER
-// router.route('/login').post(async (request, response) => {
-//   try {
-//     const data = await dblogin.login(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
 router.route('/login').post(async (req, res) => {
   let data = await handle(new UserManager().login(req.body))
   res.json(data);
 })
 
+// GET USER ROUTER
+router.route('/users/:userId').get(async (req, res) => {
+  let data = await handle(new UserManager().getUser(parseInt(req.params.userId), req.headers.token as string))
+  res.json(data);
+});
+
+
+// *******************
+// ****** TOKEN ******
+// *******************
+
+// GET TOKEN USER ID ROUTER
+router.route('/token/id').get(async (req, res) => {
+  let data = await handle((await checkToken(req.headers.token as string)).userId)
+  res.json(data);
+});
+
+// GET TOKEN ROLE ROUTER
+router.route('/token/role').get(async (req, res) => {
+  let data = await handle((await checkToken(req.headers.token as string)).role)
+  res.json(data);
+});
+
+
+// *******************
+// ****** SUBJECTS ******
+// *******************
+
+// GET SUBJECTS ROUTER
+router.route('/subjects').get(async (req, res) => {
+  let data = await handle(new SubjectManager().getSubjects(req.headers.token as string))
+  res.json(data);
+});
+
+// GET SUBJECT ROUTER
+router.route('/subjects/:id').get(async (req, res) => {
+  let data = await handle(new SubjectManager().getSubject(parseInt(req.params.id), req.headers.token as string))
+  res.json(data);
+});
+
+// GET USER-SUBJECT ROUTER
+router.route('/user-subjects/:userId').get(async (req, res) => {
+  let data = await handle(new SubjectManager().getUserSubjects(parseInt(req.params.userId), req.headers.token as string))
+  res.json(data);
+});
+
+
+// *******************
+// ****** PROJECTS ******
+// *******************
+
+// GET PROJECTS ROUTER
+router.route('/projects').get(async (req, res) => {
+  let data = await handle(new ProjectManager().getProjects(req.headers.token as string))
+  res.json(data);
+});
+
+// GET PROJECT ROUTER
+router.route('/projects/:id').get(async (req, res) => {
+  let data = await handle(new ProjectManager().getProject(parseInt(req.params.id), req.headers.token as string))
+  res.json(data);
+});
+
+// GET SUBJECT-PROJECTS ROUTER
+router.route('/subject-projects/:subjectId').get(async (req, res) => {
+  let data = await handle(new ProjectManager().getSubjectProjects(parseInt(req.params.subjectId), req.headers.token as string))
+  res.json(data);
+});
+
+// GET USER-PROJECTS ROUTER
+router.route('/subject-projects/:userId').get(async (req, res) => {
+  let data = await handle(new ProjectManager().getUserProjects(parseInt(req.params.userId), req.headers.token as string))
+  res.json(data);
+});
+
+// POST PROJECTS ROUTER
+router.route('/subject-projects').post(async (req, res) => {
+  let data = await handle(new ProjectManager().postProject(req.body, req.headers.token as string))
+  res.json(data);
+});
+
+// *******************
+// ****** SUBMISSIONS ******
+// *******************
+
+// GET SUBMISSIONS ROUTER
+router.route('/submissions/:projectId').get(async (req, res) => {
+  let data = await handle(new SubmissionManager().getSubmissions(parseInt(req.params.projectId), req.headers.token as string))
+  res.json(data);
+});
+
+// POST SUBMISSIONS ROUTER
+router.route('/submissions').post(async (req, res) => {
+  let data = await handle(new SubmissionManager().postSubmission(req.body, req.headers.token as string))
+  res.json(data);
+});
+
+
+// *******************
+// ****** TESTS ******
+// *******************
+
+// GET TESTS ROUTER
+router.route('/tests/:projectId').get(async (req, res) => {
+  let data = await handle(new TestManager().getTests(parseInt(req.params.projectId), req.headers.token as string))
+  res.json(data);
+});
+
 module.exports = app
-
-// // *******************
-// // ****** USERS ******
-// // *******************
-
-// // USERS ROUTER
-// router.route('/users').get(async (request, response) => {
-//   try {
-//     const data = await dbusers.getUsers(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // USER ROUTER
-// router.route('/users/:userid').get(async (request, response) => {
-//   try {
-//     const data = await dbusers.getUser(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // *******************
-// // ****** TOKEN ******
-// // *******************
-
-// // TOKEN USER ID ROUTER
-// router.route('/token/id').get(async (request, response) => {
-//   try {
-//     const data = await dbtoken.getToken(request).userId;
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // TOKEN ROLE ROUTER
-// router.route('/token/role').get(async (request, response) => {
-//   try {
-//     const data = await dbtoken.getToken(request).role;
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-
-
-// // *******************
-// // ****** SUBJECTS ******
-// // *******************
-
-// // SUBJECTS ROUTER
-// router.route('/subjects').get(async (request, response) => {
-//   try {
-//     const data = await dbsubjects.getSubjects(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // SUBJECT ROUTER
-// router.route('/subjects/:id').get(async (request, response) => {
-//   try {
-//     const data = await dbsubjects.getSubject(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // USER-SUBJECT ROUTER
-// router.route('/user-subjects/:userid').get(async (request, response) => {
-//   try {
-//     const data = await dbsubjects.getUserSubjects(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-
-// // *******************
-// // ****** PROJECTS ******
-// // *******************
-
-// // PROJECTS ROUTER
-// router.route('/projects').get(async (request, response) => {
-//   try {
-//     const data = await dbprojects.getProjects(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // PROJECT ROUTER
-// router.route('/projects/:id').get(async (request, response) => {
-//   try {
-//     const data = await dbprojects.getProject(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // SUBJECT-PROJECTS ROUTER
-// router.route('/subject-projects/:subjectid').get(async (request, response) => {
-//   try {
-//     const data = await dbprojects.getSubjectProjects(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // USER-PROJECTS ROUTER
-// router.route('/user-projects/:userid').get(async (request, response) => {
-//   try {
-//     const data = await dbprojects.getUserProjects(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // PROJECT ROUTER
-// router.route('/projects/:id').get(async (request, response) => {
-//   try {
-//     const data = await dbprojects.getProject(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // POST PROJECTS ROUTER
-// router.route('/projects').post(async (request, response) => {
-//   try {
-//     const data = await dbprojects.postProjects(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // *******************
-// // ****** SUBMISSIONS ******
-// // *******************
-
-// // SUBMISSIONS ROUTER
-// router.route('/submissions/:projectid').get(async (request, response) => {
-//   try {
-//     const data = await dbsubmissions.getProjectSubmissions(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // GET SUBMISSIONS ROUTER
-// router.route('/submissions').post(async (request, response) => {
-//   try {
-//     const data = await dbsubmissions.postSubmission(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// // GET INPUTS_OUTPUTS ROUTER
-// router.route('/tests/:projectID').get(async (request, response) => {
-//   try {
-//     const data = await dbtests.getTests(request);
-//     response.json(data);
-//   } catch (err) {
-//     response.statusMessage=err.message
-//     response.status(err.statusCode).json({error: err.message});
-//   }
-// });
-
-// module.exports = app;
