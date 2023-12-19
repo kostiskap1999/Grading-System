@@ -9,6 +9,9 @@ export class TestManager {
   async getTests(projectId: number, token: string) {
     await dbtoken.checkToken(token)
     
+    if(!projectId)
+      return null
+
     const tests = await this.repository.findByProjectId(projectId)
   
     if(!tests)
