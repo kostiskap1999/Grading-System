@@ -38,7 +38,6 @@ export class SubjectManager {
       throw new BadRequestError("Incorrect user id")
     
     const subjects = await this.repository.findByUser(userId)
-    console.log(subjects)
   
     if(!subjects)
       throw new NotFoundError("Subjects not found")
@@ -46,5 +45,22 @@ export class SubjectManager {
     return subjects
   }
 
+  async postUserSubject(body: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!body.userId || !body.subjectId)
+      throw new BadRequestError("Incorrect user or subject id")
+    
+    await this.repository.postUserSubject(body.userId, body.subjectId)
+  }
+
+  async deleteUserSubject(body: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!body.userId || !body.subjectId)
+      throw new BadRequestError("Incorrect user or subject id")
+    
+    await this.repository.deleteUserSubject(body.userId, body.subjectId)
+  }
   
 }

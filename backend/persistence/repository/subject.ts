@@ -7,7 +7,7 @@ export class SubjectRepository {
   async findAll() {
     const tm = await this.transactionManager
     return (await tm.query(`SELECT * FROM subjects`) as any[])
-      .map(subject => new Subject(subject))[0]
+      .map(subject => new Subject(subject))
   }
 
   async findById(id: number) {

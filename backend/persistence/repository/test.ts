@@ -19,7 +19,7 @@ export class TestRepository {
       LEFT JOIN outputs o ON i.group_id = o.group_id
       LEFT JOIN tests t ON i.group_id = t.id
       WHERE i.group_id IN (${testIDs.map(() => '?').join(', ')})
-      ORDER BY i.group_id;`, testIDs) as any[])
+      ORDER BY i.group_id;`, ...testIDs) as any[])
 
     tests.sort((a, b) => a.group_id - b.group_id)
 

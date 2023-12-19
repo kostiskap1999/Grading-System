@@ -102,6 +102,19 @@ router.route('/user-subjects/:userId').get(async (req, res) => {
   res.json(data);
 });
 
+// POST USER-SUBJECT ROUTER
+router.route('/user-subjects').get(async (req, res) => {
+  console.log('/user-subjects')
+  let data = await handle(new SubjectManager().postUserSubject(req.body, req.headers.token as string))
+  res.json(data);
+});
+
+// DELETE USER-SUBJECT ROUTER
+router.route('/user-subjects').delete(async (req, res) => {
+  console.log('/user-subjects')
+  let data = await handle(new SubjectManager().deleteUserSubject(req.body, req.headers.token as string))
+  res.json(data);
+});
 
 // *******************
 // ****** PROJECTS ******
@@ -129,15 +142,15 @@ router.route('/subject-projects/:subjectId').get(async (req, res) => {
 });
 
 // GET USER-PROJECTS ROUTER
-router.route('/subject-projects/:userId').get(async (req, res) => {
-  console.log('/subject-projects/:userId')
+router.route('/user-projects/:userId').get(async (req, res) => {
+  console.log('/user-projects/:userId')
   let data = await handle(new ProjectManager().getUserProjects(parseInt(req.params.userId), req.headers.token as string))
   res.json(data);
 });
 
 // POST PROJECTS ROUTER
-router.route('/subject-projects').post(async (req, res) => {
-  console.log('/subject-projects')
+router.route('/projects').post(async (req, res) => {
+  console.log('/projects')
   let data = await handle(new ProjectManager().postProject(req.body, req.headers.token as string))
   res.json(data);
 });
@@ -153,6 +166,13 @@ router.route('/submissions/:projectId').get(async (req, res) => {
   res.json(data);
 });
 
+// GET SUBMISSION ROUTER
+router.route('/submissions/:projectId/:userId').get(async (req, res) => {
+  console.log('/submissions/:projectId/:userId')
+  let data = await handle(new SubmissionManager().getSubmissionBySubmitee(parseInt(req.params.projectId), parseInt(req.params.userId), req.headers.token as string))
+  res.json(data);
+});
+
 // POST SUBMISSIONS ROUTER
 router.route('/submissions').post(async (req, res) => {
   console.log('/submissions')
@@ -160,6 +180,12 @@ router.route('/submissions').post(async (req, res) => {
   res.json(data);
 });
 
+// PATCH SUBMISSIONS ROUTER
+router.route('/submissions').patch(async (req, res) => {
+  console.log('/submissions')
+  let data = await handle(new SubmissionManager().patchSubmission(req.body, req.headers.token as string))
+  res.json(data);
+});
 
 // *******************
 // ****** TESTS ******

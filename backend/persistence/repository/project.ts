@@ -8,7 +8,7 @@ export class ProjectRepository {
   async findAll() {
     const tm = await this.transactionManager
     return (await tm.query(`SELECT * FROM projects`) as any[])
-      .map(project => new Project(project))[0]
+      .map(project => new Project(project))
   }
 
   async findById(id: number) {
@@ -31,7 +31,7 @@ export class ProjectRepository {
   async findBySubject(subjectId: number) {
     const tm = await this.transactionManager
     return (await tm.query(`SELECT * FROM projects WHERE subject_id = ?`, subjectId) as any[])
-      .map(project => new Project(project))[0]
+      .map(project => new Project(project))
   }
 
   async postProject(project: any) {

@@ -17,7 +17,7 @@ export class SubmissionManager {
     return submissions
   }
 
-  async getSubmission(projectId: number, submiteeId: number, token: string) {
+  async getSubmissionBySubmitee(projectId: number, submiteeId: number, token: string) {
     await dbtoken.checkToken(token)
     
     if (!projectId || !submiteeId)

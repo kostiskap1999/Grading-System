@@ -16,12 +16,13 @@ export class SubmissionRepository {
   async findByProjectId(projectId: number) {
     const tm = await this.transactionManager
     return (await tm.query(`SELECT * FROM submissions WHERE project_id = ?`, projectId) as any[])
-      .map(submission => new Submission(submission))[0]
+      .map(submission => new Submission(submission))
   }
 
   async findByProjectIdAndSubmiteeId(projectId: number, submiteeId: number) {
     const tm = await this.transactionManager
-    return new Submission((await tm.query(`SELECT * FROM submissions WHERE project_id = ? AND submitee_id = ?`, projectId, submiteeId) as any[])[0])
+    return (await tm.query(`SELECT * FROM submissions WHERE project_id = ? AND submitee_id = ?`, projectId, submiteeId) as any[])
+      .map(submission => new Submission(submission))
   }
 
   async postSubmission(submission: any) {
