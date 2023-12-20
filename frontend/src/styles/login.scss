@@ -1,9 +1,6 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
-
-.login-screen {
-	text-align: center;
-}
+@import './general.scss';
 
 .sidebar-margin {
 	margin-left: 200px;
@@ -11,11 +8,40 @@
 
 .login-header {
 	background-color: $background-color;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	font-size: $dynamic-text;
 	color: $text-color;
+}
+
+.login-form {
+
+	& > * {
+		margin: 20px 0;
+	}
+
+	& label {
+		@extend .column;
+		margin: 0 10px;
+	}
+
+	& span {
+		text-align: left;
+		margin-bottom: 10px;
+	}
+}
+
+.register-login-switch {
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  display: inline-block;
+	width: auto;
+
+  &:hover {
+    background: none;
+    text-decoration: underline;
+  }
 }
