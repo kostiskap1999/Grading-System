@@ -16,11 +16,11 @@ export default function ProjectsPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const [projects, setProjects] = useState<ProjectModel[]>([new ProjectModel()])
-  const [selectedProject, setSelectedProject] = useState<ProjectModel>(new ProjectModel())
+  const [projects, setProjects] = useState<ProjectModel[]>([])
+  const [selectedProject, setSelectedProject] = useState<ProjectModel>()
 
   
-  const [user, setUser] = useState<UserModel>(new UserModel())
+  const [user, setUser] = useState<UserModel>()
 
   const [rerender, setRerender] = useState<number>(0)
 
@@ -28,7 +28,7 @@ export default function ProjectsPage() {
 
   const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "my", label: "My Projects"}])  // my = my projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
-  const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([new ProjectModel()])
+  const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([])
   
   useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +77,7 @@ export default function ProjectsPage() {
   }, [])
 
   useEffect(() => {
-    if (filter === "my")
+    if (filter === "my" && user)
       setFilteredProjects(user.getProjects())
     else if (filter === "supervising")
       setFilteredProjects([])
@@ -128,20 +128,22 @@ export default function ProjectsPage() {
         </div>
         
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
-            {selectedProject.id === -1 ? <></> : <>
-              <ProjectEntry project={selectedProject} userRole={userRole} />
+            {selectedProject && selectedProject.id === -1 ? <></> : <>
+              {selectedProject && <ProjectEntry project={selectedProject && selectedProject} userRole={userRole} />}
               <div className="center">
-                {user.hasProject(selectedProject.id) ?
-                  selectedProject.isWithinDeadline() ?
-                    <FileUpload user={user} pID={selectedProject.id} />
+                {user && selectedProject ?
+                  user.hasProject(selectedProject.id) ?
+                    selectedProject.isWithinDeadline() ?
+                      <FileUpload user={user} pID={selectedProject && selectedProject.id} />
+                    :
+                      <div className="button">You can not upload a submission because the deadline has been exceeded.</div>  
                   :
-                    <div className="button">You can not upload a submission because the deadline has been exceeded.</div>  
-                :
-                  <div className="button">You can not upload a submission because you have not joined this subject.</div>
+                    <div className="button">You can not upload a submission because you have not joined this subject.</div>
+                : <></>
                 }
               </div>
 
-              {userRole <= 1 ? <>
+              {userRole <= 1 && selectedProject ? <>
                 <button className="button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
               </> : <></>}
             </>}

@@ -33,7 +33,10 @@ export default function NewProjectPage() {
     setNewProject((prevProject: ProjectModel) => {
         const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
         const newTest = new TestModel()
-        newTest.id = newProjectCopy.tests.length+1
+        if(newProjectCopy.tests)
+          newTest.id = newProjectCopy.tests.length + 1
+        else
+          newTest.id = 0
         newTest.output.id = newTest.id
         newProjectCopy.tests.push(newTest)
         createInput(newProjectCopy.tests.length - 1)
@@ -170,7 +173,7 @@ export default function NewProjectPage() {
         </section>
 
         <section>
-          {newProject.tests.map((test, index) => (
+          {newProject.tests && newProject.tests.map((test, index) => (
             <section key={test.id}>
               <header>
                 <button style={{flex: 0.3, padding: 20, borderRadius: "2px"}} type="button" onClick={() => copyTest(index)}>Copy Test</button>
@@ -195,7 +198,7 @@ export default function NewProjectPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {test.inputs.map((input, idx) => (
+                      {test.inputs && test.inputs.map((input, idx) => (
                         <tr key={input.id}>
                           <td style={{ flex: 0.01 }}>
                             <div>{idx+1}.</div>

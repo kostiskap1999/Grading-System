@@ -1,4 +1,3 @@
-import { ISubject } from "../interfaces/iSubject";
 import { SubjectModel } from "../model/SubjectModel";
 import { DELETEHEADERS, GETHEADERS, HOSTNAME, POSTHEADERS, SUBJECTS, SUPERVISINGSUBJECTS, USERSUBJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
@@ -11,7 +10,7 @@ export async function fetchSubjects() {
         else
             return response.json()
     })
-    .then((subjects: ISubject[]) => {
+    .then((subjects: any[]) => {
         const returnedSubjects: SubjectModel[] = []
         for(const subject of subjects)
             returnedSubjects.push(new SubjectModel(subject))
@@ -32,7 +31,7 @@ export async function fetchSubject(id: number) {
         else
             return response.json();
     })
-    .then((subjects: ISubject[]) => {
+    .then((subjects: any[]) => {
         const returnedSubjects: SubjectModel[] = []
         for(const subject of subjects)
             returnedSubjects.push(new SubjectModel(subject))
@@ -53,7 +52,7 @@ export async function fetchUserSubjects(userID: number) {
         else
             return response.json();
     })
-    .then((userSubjects: ISubject[]) => {
+    .then((userSubjects: any[]) => {
         const returnedSubjects: SubjectModel[] = []
         for(const subject of userSubjects)
             returnedSubjects.push(new SubjectModel(subject))
@@ -74,7 +73,7 @@ export async function fetchSupervisingSubjects(userID: number) {
         else
             return response.json();
     })
-    .then((userSubjects: ISubject[]) => {
+    .then((userSubjects: any[]) => {
         const returnedSubjects: SubjectModel[] = []
         for(const subject of userSubjects)
             returnedSubjects.push(new SubjectModel(subject))

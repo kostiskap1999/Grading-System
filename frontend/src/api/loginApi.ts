@@ -1,9 +1,18 @@
 import Cookies from "universal-cookie";
-import { ICredentials, ILoggedIn } from "../interfaces/iCredentials";
-import { UserModel } from "../model/UserModel";
+import { IUser, UserModel } from "../model/UserModel";
 import { HOSTNAME, LOGIN, LOGINHEADERS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
+export interface ICredentials {
+    username: string;
+    password: string;
+}
+
+
+interface ILoggedIn {
+    user: IUser;
+    token: string;
+}
 
 export async function login(credentials: ICredentials) {
     return await fetch(HOSTNAME + LOGIN, LOGINHEADERS(credentials))

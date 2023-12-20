@@ -1,6 +1,4 @@
-import { IUser } from "../interfaces/iUser";
-import { UserModel } from "../model/UserModel";
-import { GETHEADERS, HOSTNAME, TOKEN, USERS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, TOKEN } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function checkToken() {

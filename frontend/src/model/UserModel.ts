@@ -1,8 +1,17 @@
 import { fetchUserSubjects } from "../api/subjectsApi";
-import { IUser, IUserDefaults } from "../interfaces/iUser";
 import { ProjectModel } from "./ProjectModel";
 import { SubjectModel } from "./SubjectModel";
 import { SubmissionModel } from "./SubmissionModel";
+
+export interface IUser {
+    id: number,
+    username: string,
+    first_name: string,
+    last_name: string,
+    role: number; // 0=admin, 1=professor, 2=student
+    subjects: SubjectModel[];
+    averageGrade: number | null;
+}
 
 export class UserModel {
     id: number; // unique id
@@ -13,14 +22,14 @@ export class UserModel {
     subjects: SubjectModel[];
     averageGrade: number | null;
 
-    constructor({id, username, first_name, last_name, role, subjects = [], averageGrade}: IUser = IUserDefaults) {
-        this.id = id
-        this.username = username
-        this.firstName = first_name
-        this.lastName = last_name
-        this.role = role
-        this.subjects = subjects
-        this.averageGrade = averageGrade
+    constructor(user: IUser = {} as IUser) {
+        this.id = user.id
+        this.username = user.username
+        this.firstName = user.first_name
+        this.lastName = user.last_name
+        this.role = user.role
+        this.subjects = user.subjects ?? []
+        this.averageGrade = user.averageGrade
     }
 
     async setup(){

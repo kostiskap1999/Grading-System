@@ -1,5 +1,5 @@
 import Cookies from "universal-cookie"
-import { ICredentials } from "../interfaces/iCredentials"
+import { ICredentials } from "../api/loginApi"
 
 export const HOSTNAME: string = 'http://localhost:8000'
 

@@ -16,7 +16,7 @@ import { PageButtonDescription } from "../components/pageComponents";
 export default function ProfilePage() {
 
   const navigate = useNavigate();
-  const [user, setUser] = useState<UserModel>(new UserModel())
+  const [user, setUser] = useState<UserModel>()
   
   useEffect(() => {
     const fetchData = async () => {
@@ -33,16 +33,16 @@ export default function ProfilePage() {
   return (
     <div className="page column">
       <div className="header-title text center column" style={{flex: 1}}>
-        <div>{user.firstName} {user.lastName}</div>
+        <div>{user && user.firstName} {user && user.lastName}</div>
         <div className="row">
-          <div>Your average grade is {user.averageGrade?.toFixed(2)}.</div>
+          <div>Your average grade is {user && user.averageGrade?.toFixed(2)}.</div>
         </div>
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.subjects.map((subject: SubjectModel, index: number) => (
+            {user && user.subjects.map((subject: SubjectModel, index: number) => (
               <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
                 <PageButtonDescription component={subject} userRole={1} />
               </button>
@@ -52,7 +52,7 @@ export default function ProfilePage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
+            {user && user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
                   <PageButtonDescription component={project} />
                 </button>
@@ -62,7 +62,7 @@ export default function ProfilePage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Submissions</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.getSubmissions().map((submission: SubmissionModel, index: number) => (
+            {user && user.getSubmissions().map((submission: SubmissionModel, index: number) => (
                 <button key={index} className="button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
                   <PageButtonDescription component={submission} userRole={1} />
                 </button>

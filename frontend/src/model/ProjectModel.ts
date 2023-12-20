@@ -1,8 +1,17 @@
 import { fetchProjectUserSubmission, fetchSubmissions } from "../api/submissionsApi";
 import { fetchTests } from "../api/testsApi";
-import { IProject, IProjectDefaults } from "../interfaces/iProject";
 import { SubmissionModel } from "./SubmissionModel";
 import { TestModel } from "./TestModel";
+
+export interface IProject {
+    id: number;
+    name: string;
+    description: string;
+    deadline: Date | string;
+    submissions: SubmissionModel[];
+    tests: TestModel[]
+    averageGrade: number | null;
+}
 
 export class ProjectModel {
     id: number;
@@ -14,14 +23,14 @@ export class ProjectModel {
     subjectID: number | null;
     averageGrade: number | null;
 
-    constructor({id, name, description, deadline, submissions, tests, averageGrade}: IProject = IProjectDefaults) {
-        this.id = id
-        this.name = name
-        this.description = description
-        this.deadline = deadline
-        this.submissions = submissions
-        this.tests = tests
-        this.averageGrade = averageGrade
+    constructor(project: IProject = {} as IProject) {
+        this.id = project.id
+        this.name = project.name
+        this.description = project.description
+        this.deadline = project.deadline
+        this.submissions = project.submissions ?? []
+        this.tests = project.tests ?? []
+        this.averageGrade = project.averageGrade
 
         // only used in posting
         this.subjectID = null

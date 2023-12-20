@@ -14,9 +14,9 @@ export default function SubmissionsPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const [submissions, setSubmissions] = useState<SubmissionModel[]>([new SubmissionModel()])
+  const [submissions, setSubmissions] = useState<SubmissionModel[]>([])
   const [selectedProject, setSelectedProject] = useState<ProjectModel>(location.state?.project)
-  const [selectedSubmission, setSelectedSubmission] = useState<SubmissionModel>(new SubmissionModel())
+  const [selectedSubmission, setSelectedSubmission] = useState<SubmissionModel>()
 
   const [rerender, setRerender] = useState<number>(0)
 
@@ -72,7 +72,7 @@ export default function SubmissionsPage() {
           </div>
         </div>
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
-            {selectedSubmission.id === -1 ? <></> : <>
+            {selectedSubmission &&
             <div>
               <div className="center" style={{padding:"30px"}}>
                 <div className="header-text">{selectedSubmission.student?.firstName + " " + selectedSubmission.student?.lastName}</div>
@@ -93,7 +93,7 @@ export default function SubmissionsPage() {
                 <CodeSandbox project={selectedProject} submission={selectedSubmission} />
               </div>
             </div>
-            </>}
+            }
         </div>
       </div>
     </div>

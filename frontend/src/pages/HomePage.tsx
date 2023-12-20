@@ -4,7 +4,6 @@ import { ProjectModel } from "../model/ProjectModel";
 import { UserModel } from "../model/UserModel";
 
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { SubjectModel } from "../model/SubjectModel";
 import '../styles/button.scss';
 import '../styles/general.scss';
@@ -16,7 +15,7 @@ import { PageButtonDescription } from "../components/pageComponents";
 export default function HomePage() {
 
   const navigate = useNavigate();
-  const [user, setUser] = useState<UserModel>(new UserModel())
+  const [user, setUser] = useState<UserModel>()
   
   useEffect(() => {
     const fetchData = async () => {
@@ -34,16 +33,16 @@ export default function HomePage() {
   return (
     <div className="page column">
       <div className="header-title text center column" style={{flex: 1}}>
-        <div>{user.username}</div>
+        <div>{user && user.username}</div>
         <div className="row">
-          <div>There are {user.getProjects().length} pending projects from {user.subjects.length} subjects.</div>
+          <div>There are {user && user.getProjects().length} pending projects from {user && user.subjects.length} subjects.</div>
         </div>
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.subjects.map((subject: SubjectModel, index: number) => (
+            {user?.subjects && user.subjects.map((subject: SubjectModel, index: number) => (
               <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
                 <PageButtonDescription component={subject} />
               </button>
@@ -53,7 +52,7 @@ export default function HomePage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
+            {user && user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
               <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
                 <PageButtonDescription component={project} userRole={1} />
               </button>

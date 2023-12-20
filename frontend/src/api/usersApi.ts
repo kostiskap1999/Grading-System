@@ -1,4 +1,3 @@
-import { IUser } from "../interfaces/iUser";
 import { UserModel } from "../model/UserModel";
 import { GETHEADERS, HOSTNAME, USERS } from "../parameters/database";
 import { errorHandling } from "../util/error";
@@ -11,7 +10,7 @@ export async function fetchUsers() {
         else
             return response.json();
     })
-    .then((users: IUser[]) => {
+    .then((users: any[]) => {
         return users
     })
     .catch((error) => {
@@ -30,7 +29,7 @@ export async function fetchUser(id: number) {
         else
             return response.json()
     })
-    .then((user: IUser) => {
+    .then((user: any) => {
         return new UserModel(user)
     })
     .catch((error) => {

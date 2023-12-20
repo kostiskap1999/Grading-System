@@ -1,4 +1,3 @@
-import { IProject } from "../interfaces/iProject";
 import { ProjectModel } from "../model/ProjectModel";
 import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
@@ -13,7 +12,7 @@ export async function fetchProjects() {
         else
             return response.json()
     })
-    .then((projects: IProject[]) => {
+    .then((projects: any[]) => {
         const returnedProjects: ProjectModel[] = []
         for(const project of projects){
             project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
@@ -37,7 +36,7 @@ export async function fetchProject(id: number) {
         else
             return response.json()
     })
-    .then((project: IProject) => {
+    .then((project: any) => {
         project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
         return new ProjectModel(project)
     })
@@ -55,7 +54,7 @@ export async function fetchUserProjects(userID: number) {
         else
             return response.json()
     })
-    .then((userProjects: IProject[]) => {
+    .then((userProjects: any[]) => {
         const returnedProjects: ProjectModel[] = []
         for(const project of userProjects){
             project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
@@ -78,7 +77,7 @@ export async function fetchSubjectProjects(subjectID: number) {
         else
             return response.json()
     })
-    .then((userProjects: IProject[]) => {
+    .then((userProjects: any[]) => {
         const returnedProjects: ProjectModel[] = []
         for(const project of userProjects){
             project.deadline = new Date(project.deadline) // .toLocaleString('el-GR', { timeZone: 'UTC' })
