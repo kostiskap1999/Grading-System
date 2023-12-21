@@ -3,7 +3,6 @@ import { Submission } from "../entities/submission";
 import { TestRepository } from './test'
 
 export class SubmissionRepository {
-  constructor(public transactionManager = TransactionManager.createTransaction()) {}
 
   private formatDate(date: Date) {
     let year = date.getFullYear()
@@ -14,24 +13,24 @@ export class SubmissionRepository {
   }
 
   async findByProjectId(projectId: number) {
-    const tm = await this.transactionManager
+    const tm = await TransactionManager.instance
     return (await tm.query(`SELECT * FROM submissions WHERE project_id = ?`, projectId) as any[])
       .map(submission => new Submission(submission))
   }
 
   async findByProjectIdAndSubmiteeId(projectId: number, submiteeId: number) {
-    const tm = await this.transactionManager
+    const tm = await TransactionManager.instance
     return (await tm.query(`SELECT * FROM submissions WHERE project_id = ? AND submitee_id = ?`, projectId, submiteeId) as any[])
       .map(submission => new Submission(submission))
   }
 
   async postSubmission(submission: any) {
-    const tm = await this.transactionManager
+    const tm = await TransactionManager.instance
     await tm.query(`INSERT INTO submissions (code, date, comment, submitee_id, project_id) VALUES (?, ?, ?, ?, ?)`, submission.code, this.formatDate(submission.date), submission.comment, submission.submitee_id, submission.project_id)
   }
 
   async patchSubmission(submission: any) {
-    const tm = await this.transactionManager
+    const tm = await TransactionManager.instance
     await tm.query(`UPDATE submissions SET code = ?, date = ?, grade = ?, comment = ? WHERE id = ?`, submission.code, this.formatDate(submission.date), submission.grade, submission.comment, submission.id)
   }
 }

@@ -12,6 +12,7 @@ import { SubjectManager } from './manager/subject';
 import { ProjectManager } from './manager/project';
 import { SubmissionManager } from './manager/submission';
 import { TestManager } from './manager/test';
+import { TransactionManager } from './manager/transaction';
 
 util.promisify(db.connect)
 
@@ -37,6 +38,18 @@ function handle(p: Promise<unknown>) {
   })
 }
 
+async function transact<R>(context: { (): Promise<R> }): Promise<R> {
+  const tm = await TransactionManager.instance;
+  try {
+    return await context()
+  } catch(err) {
+    tm.onError()
+    throw err
+  } finally {
+    tm.commit()
+  }
+}
+
 app.use(errorHandling);
 
 // *******************
@@ -46,7 +59,8 @@ app.use(errorHandling);
 // LOGIN ROUTER
 router.route('/login').post(async (req, res) => {
   console.log('/login')
-  let data = await handle(new UserManager().login(req.body))
+  let data = transact(() => new UserManager().login(req.body))
+  console.log(data)
   res.json(data);
 })
 

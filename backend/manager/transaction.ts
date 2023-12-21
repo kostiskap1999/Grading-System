@@ -7,11 +7,9 @@ export class TransactionManager {
   transactionOpen = true
 
   private constructor() {
-    signal.onError.connect(() => this.onError())
-    signal.afterRequest.connect(() => this.destruct())
   }
 
-  static createTransaction(): Promise<TransactionManager> {
+  private static createTransaction(): Promise<TransactionManager> {
     return new Promise((resolve, reject) => {
       db.beginTransaction((err) => {
         if (err) return reject(err)
@@ -19,6 +17,8 @@ export class TransactionManager {
       })
     });
   }
+
+  static readonly instance = TransactionManager.createTransaction();
 
   async query(query: string, ...values: any[]) {
     if (!this.transactionOpen) {
@@ -37,7 +37,7 @@ export class TransactionManager {
     this.transactionOpen = false
   }
 
-  destruct() {
+  commit() {
     this.transactionOpen && db.commit()
     this.transactionOpen = false
   }

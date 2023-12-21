@@ -2,15 +2,9 @@ import { TransactionManager } from "../../manager/transaction";
 import { Input, Output, Test } from "../entities/test";
 
 export class TestRepository {
-  constructor(public transactionManager = TransactionManager.createTransaction()) {}
 
   async findByProjectId(projectId: number) {
-    const tm = await this.transactionManager
-    const testIDs = (await tm.query(`SELECT * FROM tests WHERE project_id = ?`, projectId) as any[])
-      .map(test => test.id)
-
-    if(!testIDs)
-      return null
+    const tm = await TransactionManager.instance
 
     const tests = (await tm.query(`SELECT i.group_id, i.id AS input_id, i.code AS input_code, 
       i.is_main_param AS input_is_main_param, o.id AS output_id, o.code AS output_code,
@@ -18,8 +12,8 @@ export class TestRepository {
       FROM inputs i
       LEFT JOIN outputs o ON i.group_id = o.group_id
       LEFT JOIN tests t ON i.group_id = t.id
-      WHERE i.group_id IN (${testIDs.map(() => '?').join(', ')})
-      ORDER BY i.group_id;`, ...testIDs) as any[])
+      WHERE i.group_id IN (SELECT id FROM tests WHERE project_id = ?)
+      ORDER BY i.group_id;`, projectId) as any[])
 
     tests.sort((a, b) => a.group_id - b.group_id)
 
@@ -46,7 +40,7 @@ export class TestRepository {
   }
 
   async postTests(tests: any, projectId: number) {
-    const tm = await this.transactionManager
+    const tm = await TransactionManager.instance
 
     const sqlValues = tests
     .map((test: any) => {

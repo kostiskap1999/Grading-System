@@ -17,7 +17,8 @@ export async function createToken(payload: JwtToken) {
 }
 
 export async function checkToken(token?: string | null) {
-  if (!token) {
+
+  if (!token || token == 'undefined') { // FIXME
     throw new UnauthorizedError(`Token required`);
   }
 
