@@ -1,5 +1,5 @@
 
-import express, { Express } from 'express'
+import express, { Express, Response, Request } from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import { errorHandling } from './errors/errorHandling';
@@ -29,28 +29,23 @@ router.use((req, res, next) => {
   next();
 });
 
-function handle(p: Promise<unknown>) {
-  return p.catch(Signal.onError.call)
-  .finally(() => {
-    Signal.afterRequest.call();
-    Signal.onError.clear();
-    Signal.afterRequest.clear();
-  })
-}
-
-async function transact<R>(context: { (): Promise<R> }): Promise<R> {
-  const tm = await TransactionManager.instance;
+async function transact<R>(res: Response, context: { (tm: TransactionManager): Promise<R> }) {
+  const tm = await TransactionManager.createTransaction();
   try {
-    return await context()
+    let data = await context(tm)
+    if (data)
+      res.json(data)
   } catch(err) {
     tm.onError()
-    throw err
+    errorHandling(err as Error, res)
   } finally {
     tm.commit()
   }
 }
 
-app.use(errorHandling);
+app.use((err: Error, req: Request, res: Response, next: unknown) => {
+  errorHandling(err as Error, res)
+})
 
 // *******************
 // ****** USER ******
@@ -59,16 +54,13 @@ app.use(errorHandling);
 // LOGIN ROUTER
 router.route('/login').post(async (req, res) => {
   console.log('/login')
-  let data = transact(() => new UserManager().login(req.body))
-  console.log(data)
-  res.json(data);
+  await transact(res, tm => new UserManager(tm).login(req.body))
 })
 
 // GET USER ROUTER
 router.route('/users/:userId').get(async (req, res) => {
   console.log('/users/:userId')
-  let data = await handle(new UserManager().getUser(parseInt(req.params.userId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new UserManager(tm).getUser(parseInt(req.params.userId), req.headers.token as string))
 });
 
 
@@ -79,15 +71,21 @@ router.route('/users/:userId').get(async (req, res) => {
 // GET TOKEN USER ID ROUTER
 router.route('/token/id').get(async (req, res) => {
   console.log('/token/id')
-  let data = (await checkToken(req.headers.token as string)).userId
-  res.json(data);
+  try {
+    return (await checkToken(req.headers.token as string)).userId
+  } catch (err) {
+    errorHandling(err as Error, res)
+  }
 });
 
 // GET TOKEN ROLE ROUTER
 router.route('/token/role').get(async (req, res) => {
   console.log('/token/role')
-  let data = (await checkToken(req.headers.token as string)).role
-  res.json(data);
+  try {
+    return (await checkToken(req.headers.token as string)).role
+  } catch (err) {
+    errorHandling(err as Error, res)
+  }
 });
 
 
@@ -98,36 +96,31 @@ router.route('/token/role').get(async (req, res) => {
 // GET SUBJECTS ROUTER
 router.route('/subjects').get(async (req, res) => {
   console.log('/subjects')
-  let data = await handle(new SubjectManager().getSubjects(req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubjectManager(tm).getSubjects(req.headers.token as string))
 });
 
 // GET SUBJECT ROUTER
 router.route('/subjects/:id').get(async (req, res) => {
   console.log('/subjects/:id')
-  let data = await handle(new SubjectManager().getSubject(parseInt(req.params.id), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubjectManager(tm).getSubject(parseInt(req.params.id), req.headers.token as string))
 });
 
 // GET USER-SUBJECT ROUTER
 router.route('/user-subjects/:userId').get(async (req, res) => {
   console.log('/user-subjects/:userId')
-  let data = await handle(new SubjectManager().getUserSubjects(parseInt(req.params.userId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubjectManager(tm).getUserSubjects(parseInt(req.params.userId), req.headers.token as string))
 });
 
 // POST USER-SUBJECT ROUTER
 router.route('/user-subjects').get(async (req, res) => {
   console.log('/user-subjects')
-  let data = await handle(new SubjectManager().postUserSubject(req.body, req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubjectManager(tm).postUserSubject(req.body, req.headers.token as string))
 });
 
 // DELETE USER-SUBJECT ROUTER
 router.route('/user-subjects').delete(async (req, res) => {
   console.log('/user-subjects')
-  let data = await handle(new SubjectManager().deleteUserSubject(req.body, req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubjectManager(tm).deleteUserSubject(req.body, req.headers.token as string))
 });
 
 // *******************
@@ -137,36 +130,31 @@ router.route('/user-subjects').delete(async (req, res) => {
 // GET PROJECTS ROUTER
 router.route('/projects').get(async (req, res) => {
   console.log('/projects')
-  let data = await handle(new ProjectManager().getProjects(req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new ProjectManager(tm).getProjects(req.headers.token as string))
 });
 
 // GET PROJECT ROUTER
 router.route('/projects/:id').get(async (req, res) => {
   console.log('/projects/:id')
-  let data = await handle(new ProjectManager().getProject(parseInt(req.params.id), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new ProjectManager(tm).getProject(parseInt(req.params.id), req.headers.token as string))
 });
 
 // GET SUBJECT-PROJECTS ROUTER
 router.route('/subject-projects/:subjectId').get(async (req, res) => {
   console.log('/subject-projects/:subjectId')
-  let data = await handle(new ProjectManager().getSubjectProjects(parseInt(req.params.subjectId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new ProjectManager(tm).getSubjectProjects(parseInt(req.params.subjectId), req.headers.token as string))
 });
 
 // GET USER-PROJECTS ROUTER
 router.route('/user-projects/:userId').get(async (req, res) => {
   console.log('/user-projects/:userId')
-  let data = await handle(new ProjectManager().getUserProjects(parseInt(req.params.userId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new ProjectManager(tm).getUserProjects(parseInt(req.params.userId), req.headers.token as string))
 });
 
 // POST PROJECTS ROUTER
 router.route('/projects').post(async (req, res) => {
   console.log('/projects')
-  let data = await handle(new ProjectManager().postProject(req.body, req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new ProjectManager(tm).postProject(req.body, req.headers.token as string))
 });
 
 // *******************
@@ -176,29 +164,25 @@ router.route('/projects').post(async (req, res) => {
 // GET SUBMISSIONS ROUTER
 router.route('/submissions/:projectId').get(async (req, res) => {
   console.log('/submissions/:projectId')
-  let data = await handle(new SubmissionManager().getSubmissions(parseInt(req.params.projectId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubmissionManager(tm).getSubmissions(parseInt(req.params.projectId), req.headers.token as string))
 });
 
 // GET SUBMISSION ROUTER
 router.route('/submissions/:projectId/:userId').get(async (req, res) => {
   console.log('/submissions/:projectId/:userId')
-  let data = await handle(new SubmissionManager().getSubmissionBySubmitee(parseInt(req.params.projectId), parseInt(req.params.userId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubmissionManager(tm).getSubmissionBySubmitee(parseInt(req.params.projectId), parseInt(req.params.userId), req.headers.token as string))
 });
 
 // POST SUBMISSIONS ROUTER
 router.route('/submissions').post(async (req, res) => {
   console.log('/submissions')
-  let data = await handle(new SubmissionManager().postSubmission(req.body, req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubmissionManager(tm).postSubmission(req.body, req.headers.token as string))
 });
 
 // PATCH SUBMISSIONS ROUTER
 router.route('/submissions').patch(async (req, res) => {
   console.log('/submissions')
-  let data = await handle(new SubmissionManager().patchSubmission(req.body, req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new SubmissionManager(tm).patchSubmission(req.body, req.headers.token as string))
 });
 
 // *******************
@@ -208,8 +192,7 @@ router.route('/submissions').patch(async (req, res) => {
 // GET TESTS ROUTER
 router.route('/tests/:projectId').get(async (req, res) => {
   console.log('/tests/:projectId')
-  let data = await handle(new TestManager().getTests(parseInt(req.params.projectId), req.headers.token as string))
-  res.json(data);
+  await transact(res, tm => new TestManager(tm).getTests(parseInt(req.params.projectId), req.headers.token as string))
 });
 
 module.exports = app

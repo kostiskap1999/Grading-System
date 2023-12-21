@@ -1,10 +1,15 @@
 import { BadRequestError, InternalServerError, NotFoundError } from '../errors/errorTypes'
 import { SubmissionRepository } from '../persistence/repository/submission'
 import * as dbtoken from './token'
+import { TransactionManager } from './transaction';
 
 export class SubmissionManager {
 
-  constructor(private repository = new SubmissionRepository()) {}
+  repository: SubmissionRepository
+
+  constructor(tm: TransactionManager) {
+    this.repository = new SubmissionRepository(tm);
+  }
 
   async getSubmissions(projectId: number, token: string) {
     await dbtoken.checkToken(token)

@@ -3,10 +3,11 @@ import { Input, Output, Test } from "../entities/test";
 
 export class TestRepository {
 
-  async findByProjectId(projectId: number) {
-    const tm = await TransactionManager.instance
+  constructor(private tm: TransactionManager) {}
 
-    const tests = (await tm.query(`SELECT i.group_id, i.id AS input_id, i.code AS input_code, 
+  async findByProjectId(projectId: number) {
+
+    const tests = (await this.tm.query(`SELECT i.group_id, i.id AS input_id, i.code AS input_code, 
       i.is_main_param AS input_is_main_param, o.id AS output_id, o.code AS output_code,
       t.main_function AS main
       FROM inputs i
@@ -40,7 +41,6 @@ export class TestRepository {
   }
 
   async postTests(tests: any, projectId: number) {
-    const tm = await TransactionManager.instance
 
     const sqlValues = tests
     .map((test: any) => {
@@ -51,7 +51,7 @@ export class TestRepository {
     })
     .flat();
 
-    await tm.query(`INSERT INTO tests (project_id, main_function) VALUES ${tests.map(() => '(?, ?)').join(', ')}
+    await this.tm.query(`INSERT INTO tests (project_id, main_function) VALUES ${tests.map(() => '(?, ?)').join(', ')}
     ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID();
     INSERT INTO inputs (code, group_id) VALUES ${tests.flatMap((test: any, index: number) => test.inputs.map(() => '(?, LAST_INSERT_ID() + ?)')).join(', ')};
     INSERT INTO outputs (code, group_id) VALUES ${tests.map(() => '(?, LAST_INSERT_ID())').join(', ')}`, sqlValues.flat())

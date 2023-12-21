@@ -1,10 +1,15 @@
 import { BadRequestError, InternalServerError, NotFoundError } from '../errors/errorTypes'
 import { SubjectRepository } from '../persistence/repository/subject'
 import * as dbtoken from './token'
+import { TransactionManager } from './transaction';
 
 export class SubjectManager {
 
-  constructor(private repository = new SubjectRepository()) {}
+  repository: SubjectRepository
+
+  constructor(tm: TransactionManager) {
+    this.repository = new SubjectRepository(tm);
+  }
 
   async getSubjects(token: string) {
     await dbtoken.checkToken(token)

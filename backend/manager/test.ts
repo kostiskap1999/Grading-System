@@ -1,10 +1,15 @@
 import { InternalServerError } from '../errors/errorTypes'
 import { TestRepository } from '../persistence/repository/test'
 import * as dbtoken from './token'
+import { TransactionManager } from './transaction';
 
 export class TestManager {
 
-  constructor(private repository = new TestRepository()) {}
+  repository: TestRepository
+  
+  constructor(tm: TransactionManager) {
+    this.repository = new TestRepository(tm);
+  }
 
   async getTests(projectId: number, token: string) {
     await dbtoken.checkToken(token)

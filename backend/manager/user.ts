@@ -1,10 +1,15 @@
 import { BadRequestError, NotFoundError } from '../errors/errorTypes'
 import { UserRepository } from '../persistence/repository/user'
 import * as dbtoken from './token'
+import { TransactionManager } from './transaction'
 
 export class UserManager {
 
-  constructor(private repository = new UserRepository()) {}
+  repository: UserRepository
+
+  constructor(tm: TransactionManager) {
+    this.repository = new UserRepository(tm);
+  }
 
   async login({username, password}: {username?: string, password?: string}) {
     if (!username || !password) 
