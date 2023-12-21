@@ -7,20 +7,14 @@ import Cookies from 'universal-cookie';
 import appRoutes from '../routing/appRoutes';
 import { LOGOUT_USER } from '../store/types';
 import '../styles/login.scss';
+import { logout } from '../util/logout';
 
 export default function Sidebar() {
-
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
     
-    const logout = async (e: React.MouseEvent) => {
-        e.preventDefault()
-
-        dispatch({ type: LOGOUT_USER });
-        const cookies: Cookies = new Cookies();
-        cookies.remove("token")
-        navigate("/home")
-        }
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    logout()
+  }
 
   return (
       <Drawer
@@ -49,7 +43,7 @@ export default function Sidebar() {
                     </ListItemButton>
             ))}
             <ListItemButton
-                onClick={(event) => logout(event)}
+                onClick={(event) => handleLogout(event)}
                 key={appRoutes.length+1}>
                 <ListItemIcon><Logout/></ListItemIcon>
                 <ListItemText primary={"Logout"} />
