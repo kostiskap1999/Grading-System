@@ -1,4 +1,9 @@
-import { ITest, ITestDefaults, ITestInput, ITestInputDefaults, ITestOutput, ITestOutputDefaults } from "../interfaces/iTest";
+export interface ITest {
+    id: number;
+    main: string;
+    inputs: ITestInput[];
+    output: ITestOutput;
+}
 
 export class TestModel {
     id: number;
@@ -6,35 +11,47 @@ export class TestModel {
     inputs: TestInputModel[];
     output: TestOutputModel;
 
-    constructor({id, main, inputs, output}: ITest = ITestDefaults) {
-        this.id = id
-        this.main = main
+    constructor(test: ITest = {} as ITest) {
+        this.id = test.id
+        this.main = test.main
         this.inputs = []
-        inputs.forEach(input => {
+        test.inputs && test.inputs.forEach(input => {
             this.inputs.push(new TestInputModel(input))
         });
-        this.output = new TestOutputModel(output)
+        this.output = new TestOutputModel(test.output)
     }
 }
+
+export interface ITestInput {
+    id: number;
+    code: string;
+    isMainParam: boolean;
+}
+
 
 export class TestInputModel {
     id: number;
     code: string;
     isMainParam: boolean;
 
-    constructor({id, code, isMainParam}: ITestInput = ITestInputDefaults) {
-        this.id = id
-        this.code = code
-        this.isMainParam = isMainParam
+    constructor(input: ITestInput = {} as ITestInput) {
+        this.id = input.id
+        this.code = input.code
+        this.isMainParam = input.isMainParam
     }
+}
+
+export interface ITestOutput {
+    id: number;
+    code: string;
 }
 
 export class TestOutputModel {
     id: number;
     code: string;
 
-    constructor({id, code}: ITestOutput = ITestOutputDefaults) {
-        this.id = id
-        this.code = code
+    constructor(output: ITestOutput = {} as ITestOutput) {
+        this.id = output.id
+        this.code = output.code
     }
 }

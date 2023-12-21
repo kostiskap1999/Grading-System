@@ -5,7 +5,7 @@
 
 $border-radius: 5px;
 
-.form {
+.new-form {
 	@extend .column;
 	justify-content:"space-between";
 	flex-wrap: wrap;
@@ -74,25 +74,7 @@ $border-radius: 5px;
 
 	// *** STYLE FOR THE FIELDS ***
 	// Style for the inputs
-	input, textarea {
-		font-size: 16px;
-		color: $text-color;
-		padding: 10px;
-		background-color: transparent;
-		border: 2px solid lighten($alt-color2, 20%);
-		border-radius: $border-radius;
-		transition: border-color 0.3s ease;
 
-		&:focus {
-			outline: none;
-			border-color: $alt-color2;
-			box-shadow: 0 0 5px darken($alt-color2, 10%);
-		}
-
-		&::placeholder {
-			color: lighten($alt-color2, 40%);
-		}
-	}
 
 	textarea {
 		width: 100%;
@@ -124,12 +106,6 @@ $border-radius: 5px;
 		&:hover {
 		border-color: darken($alt-color2, 10%);
 		}
-	}
-
-	// Style for the buttons
-	input[type=submit], button {
-		@extend button;
-		width: 100%;
 	}
 
 	// Style for the dropdown

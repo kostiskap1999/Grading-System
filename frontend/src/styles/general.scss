@@ -1,6 +1,8 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
 
+$border-radius: 5px;
+
 .page {
 	height: 100vh;
 	overflow: scroll;
@@ -72,4 +74,30 @@
   
 .gray-box {
 	background-color: gray;
+}
+
+input, textarea {
+	font-size: 16px;
+	color: $text-color;
+	padding: 10px;
+	background-color: transparent;
+	border: 2px solid lighten($alt-color2, 20%);
+	border-radius: $border-radius;
+	transition: border-color 0.3s ease;
+
+	&:focus {
+		outline: none;
+		border-color: $alt-color2;
+		box-shadow: 0 0 5px darken($alt-color2, 10%);
+	}
+
+	&::placeholder {
+		color: lighten($alt-color2, 40%);
+	}
+}
+
+// Style for the buttons
+input[type=submit], button {
+	@extend button;
+	width: 100%;
 }

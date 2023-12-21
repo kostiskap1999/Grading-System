@@ -1,5 +1,5 @@
 import { Provider } from "react-redux";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import DashboardItem from "../components/dashboardItem";
 import store, { persistor } from "../store/store";
@@ -31,7 +31,7 @@ export default function App() {
                             }/>
                           )
                         ))}
-                        
+                        <Route path="*" element={<div>404 Not Found</div>} />
                     </Routes>
                 </BrowserRouter>
             </PersistGate>

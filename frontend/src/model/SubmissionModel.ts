@@ -1,6 +1,18 @@
 import { fetchUser } from "../api/usersApi";
-import { ISubmission, ISubmissionDefaults } from "../interfaces/iSubmission";
 import { UserModel } from "./UserModel";
+
+export interface ISubmission {
+    id: number;
+    name: string;
+    student?: UserModel;
+    code: string;
+    date: Date;
+    grade: number | null;
+    comment: string;
+    submitee_id: number
+    project_id: number
+}
+
 
 export class SubmissionModel {
     id: number;
@@ -14,16 +26,16 @@ export class SubmissionModel {
     submitee_id: number; //only used for setup
     project_id: number; //only used for posting
 
-    constructor({id, name, student, code, date, grade, comment, submitee_id, project_id}: ISubmission = ISubmissionDefaults) {
-        this.id = id
-        this.name = name
-        this.student = student
-        this.code = code
-        this.date = date
-        this.grade = grade
-        this.comment = comment
-        this.submitee_id = submitee_id
-        this.project_id = project_id
+    constructor(submission: ISubmission = {} as ISubmission) {
+        this.id = submission.id
+        this.name = submission.name
+        this.student = submission.student
+        this.code = submission.code
+        this.date = submission.date
+        this.grade = submission.grade
+        this.comment = submission.comment
+        this.submitee_id = submission.submitee_id
+        this.project_id = submission.project_id
     }
 
     async setup(){

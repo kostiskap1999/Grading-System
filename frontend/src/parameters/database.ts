@@ -1,9 +1,10 @@
 import Cookies from "universal-cookie"
-import { ICredentials } from "../interfaces/iCredentials"
+import { ICredentials } from "../api/loginApi"
 
 export const HOSTNAME: string = 'http://localhost:8000'
 
 export const LOGIN: string = '/login'
+export const REGISTER: string = '/register'
 
 export const TOKEN: string = '/token'
 
@@ -24,7 +25,7 @@ export const TESTS: string = '/tests'
 
 const cookies = new Cookies()
 
-export const LOGINHEADERS = (credentials: ICredentials) => (
+export const LOGINREGISTERHEADERS = (credentials: ICredentials) => (
     {
         method: "POST",
         headers: {

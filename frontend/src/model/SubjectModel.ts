@@ -1,7 +1,17 @@
 import { fetchSubjectProjects } from "../api/projectsApi";
 import { fetchProjectUserSubmission } from "../api/submissionsApi";
-import { ISubject, ISubjectDefaults } from "../interfaces/iSubject";
 import { ProjectModel } from "./ProjectModel";
+
+export interface ISubject {
+    id: number;
+    name: string;
+    description: string;
+    semester: number;
+    projects: ProjectModel[];
+    supervisorID: number;
+    userGrade: number | null;
+    averageGrade: number | null;
+}
 
 export class SubjectModel {
     id: number;
@@ -13,15 +23,15 @@ export class SubjectModel {
     userGrade: number | null;
     averageGrade: number | null;
 
-    constructor({id, name, description, semester, projects, supervisorID, userGrade, averageGrade}: ISubject = ISubjectDefaults) {
-        this.id = id
-        this.name = name
-        this.description = description
-        this.semester = semester
-        this.projects = projects
-        this.supervisorID = supervisorID
-        this.userGrade = userGrade
-        this.averageGrade = averageGrade
+    constructor(subject: ISubject = {} as ISubject) {
+        this.id = subject.id
+        this.name = subject.name
+        this.description = subject.description
+        this.semester = subject.semester
+        this.projects = subject.projects ?? []
+        this.supervisorID = subject.supervisorID
+        this.userGrade = subject.userGrade
+        this.averageGrade = subject.averageGrade
     }
 
     async setup(userID?: number, userRole?: number){

@@ -19,10 +19,10 @@ export default function SubjectsPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
 
-  const [user, setUser] = useState<UserModel>(new UserModel())
+  const [user, setUser] = useState<UserModel>()
 
-  const [subjects, setSubjects] = useState<SubjectModel[]>([new SubjectModel()])
-  const [selectedSubject, setSelectedSubject] = useState<SubjectModel>(new SubjectModel())
+  const [subjects, setSubjects] = useState<SubjectModel[]>([])
+  const [selectedSubject, setSelectedSubject] = useState<SubjectModel>()
   
   const [rerender, setRerender] = useState<number>(0)
 
@@ -32,7 +32,7 @@ export default function SubjectsPage() {
     {value: "my", label: "My Subjects"},
     {value: "all", label: "All Subjects"}])  // my = my subjects, all = all subjects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
-  const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([new SubjectModel()])
+  const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +80,7 @@ export default function SubjectsPage() {
   }, [])
 
   useEffect(() => {
-    if (filter === "my")
+    if (filter === "my" && user)
       setFilteredSubjects(user.subjects)
     else if (filter === "all")
       setFilteredSubjects(subjects)
@@ -89,16 +89,20 @@ export default function SubjectsPage() {
   }, [filter])
 
   const joinSubject = async () => {
-    setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
-    await postUserSubject(user.id, selectedSubject.id)
-    window.location.reload()
+    if(user && selectedSubject){
+      setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
+      await postUserSubject(user.id, selectedSubject.id)
+      window.location.reload()
+    }
   }
 
   const leaveSubject = async () => {
-    setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
-    await deleteUserSubject(user.id, selectedSubject.id)
-    navigate('/subjects')
-    window.location.reload()
+    if(user && selectedSubject){
+      setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
+      await deleteUserSubject(user.id, selectedSubject.id)
+      navigate('/subjects')
+      window.location.reload()
+    }
   }
 
   return (
@@ -134,15 +138,17 @@ export default function SubjectsPage() {
             </div>
         </div>
         <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
-            {selectedSubject.id === -1 ? <></> : <>
-              <SubjectEntry subject={selectedSubject} />
-              {user.hasSubject(selectedSubject.id) ?
-                <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
-              :
-                <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+            {selectedSubject && selectedSubject.id === -1 ? <></> : <>
+            {selectedSubject && <SubjectEntry subject={selectedSubject} />}
+              {user && selectedSubject ?
+                user.hasSubject(selectedSubject.id) ?
+                  <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                :
+                  <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+              : <></>
               }
               <div className="column" style={{overflow:'scroll'}}>
-                {selectedSubject.projects.map((project, index) => (
+                {selectedSubject && selectedSubject.projects.map((project, index) => (
                   <button key={index} className="button"
                     onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
                   >
