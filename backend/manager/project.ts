@@ -69,7 +69,7 @@ export class ProjectManager {
     
     if (!project)
       throw new BadRequestError("Incorrect project")
-    
+
     const projects = await this.repository.postProject(project)
     
     return projects

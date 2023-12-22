@@ -7,7 +7,7 @@ import { UserManager } from './manager/user';
 import * as Signal from './util/signal';
 import util from 'util'
 import db from './database/config'
-import { checkToken, getToken } from './manager/token';
+import { checkToken } from './manager/token';
 import { SubjectManager } from './manager/subject';
 import { ProjectManager } from './manager/project';
 import { SubmissionManager } from './manager/submission';
@@ -72,7 +72,7 @@ router.route('/users/:userId').get(async (req, res) => {
 router.route('/token/id').get(async (req, res) => {
   console.log('/token/id')
   try {
-    return (await checkToken(req.headers.token as string)).userId
+    return res.json((await checkToken(req.headers.token as string)).userId)
   } catch (err) {
     errorHandling(err as Error, res)
   }
@@ -82,7 +82,7 @@ router.route('/token/id').get(async (req, res) => {
 router.route('/token/role').get(async (req, res) => {
   console.log('/token/role')
   try {
-    return (await checkToken(req.headers.token as string)).role
+    return res.json((await checkToken(req.headers.token as string)).role)
   } catch (err) {
     errorHandling(err as Error, res)
   }

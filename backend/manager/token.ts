@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { sign, verify } from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();
@@ -21,7 +22,7 @@ export async function checkToken(token?: string | null) {
   if (!token || token == 'undefined') { // FIXME
     throw new UnauthorizedError(`Token required`);
   }
-
+  
   const TOKEN_KEY = process.env.TOKEN_KEY!;
   const decoded: any = verify(token, TOKEN_KEY);
 
@@ -30,8 +31,4 @@ export async function checkToken(token?: string | null) {
       throw new UnauthorizedError(`Token expired`);
 
   return decoded
-}
-
-export async function getToken(request: Request) {
-  return await checkToken(request.headers.get('token'));
 }

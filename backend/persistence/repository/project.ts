@@ -32,11 +32,12 @@ export class ProjectRepository {
   }
 
   async postProject(project: any) {
-    await this.tm.query(`INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)`, project.name, project.description, project.deadline, project.subject_id)
+    await this.tm.query(`INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)`, project.name, project.description, project.deadline, project.subjectID)
     
     const insertedID = (await this.tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`) as any[])[0]
 
     const testRepository = new TestRepository(this.tm)
-    testRepository.postTests(project.tests, insertedID.id)
+    if(project.tests.length > 0)
+      testRepository.postTests(project.tests, insertedID.id)
   }
 }

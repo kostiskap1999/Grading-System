@@ -41,19 +41,17 @@ export class TestRepository {
   }
 
   async postTests(tests: any, projectId: number) {
+    for (const test of tests) {
+        const testValues = [projectId, test.main]
+        const testResult: any = await this.tm.query('INSERT INTO tests (project_id, main_function) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID();', ...testValues)
+        
+        const lastInsertedId = testResult.insertId;
 
-    const sqlValues = tests
-    .map((test: any) => {
-      const testValues = [projectId, test.main];
-      const inputValues = test.inputs.map((input: any) => [input.code]);
-      const outputValue = [test.output.code];
-      return [testValues, inputValues, outputValue];
-    })
-    .flat();
+        const inputValues = test.inputs.flatMap((input: any) => [input.code, lastInsertedId])
+        await this.tm.query('INSERT INTO inputs (code, group_id) VALUES ' + test.inputs.map(() => '(?, ?)').join(', '), ...inputValues);
 
-    await this.tm.query(`INSERT INTO tests (project_id, main_function) VALUES ${tests.map(() => '(?, ?)').join(', ')}
-    ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID();
-    INSERT INTO inputs (code, group_id) VALUES ${tests.flatMap((test: any, index: number) => test.inputs.map(() => '(?, LAST_INSERT_ID() + ?)')).join(', ')};
-    INSERT INTO outputs (code, group_id) VALUES ${tests.map(() => '(?, LAST_INSERT_ID())').join(', ')}`, sqlValues.flat())
+        const outputValues = [test.output.code, lastInsertedId]
+        await this.tm.query('INSERT INTO outputs (code, group_id) VALUES (?, ?);', ...outputValues);
+    }
   }
 }
