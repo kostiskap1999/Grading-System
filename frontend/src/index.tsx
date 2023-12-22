@@ -2,6 +2,14 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import App from "./routing/app";
 
+import './styles/general.scss';
+import './styles/button.scss';
+import './styles/text.scss';
+
+import './styles/login.scss';
+import './styles/newProject.scss';
+
+import './styles/gradeBox.scss';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

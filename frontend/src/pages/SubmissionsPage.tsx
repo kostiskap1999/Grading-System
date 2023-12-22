@@ -59,7 +59,7 @@ export default function SubmissionsPage() {
           {selectedProject ? <ProjectEntry project={selectedProject} /> : <></>}
           <div className="column" style={{overflow:'scroll'}}>
             {submissions.map((submission, index) => (
-              <button key={index} className="button"
+              <button key={index} className="list-button"
                 onClick={() => {navigate('/submissions?project='+ params.get('project') +'&id=' + submission.id); setRerender(rerender+1)}}
               >
                 <PageButtonDescription component={submission} />

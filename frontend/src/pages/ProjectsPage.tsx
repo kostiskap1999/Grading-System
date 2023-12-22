@@ -111,6 +111,8 @@ export default function ProjectsPage() {
                 placeholder={filter}
                 arrowClosed={<KeyboardArrowDown/>}
                 arrowOpen={<KeyboardArrowUp/>}
+                className="dropdown-menu-root"
+                baseClassName="center column dropdown-menu "
               />
             : <div>My Projects</div>
             }
@@ -118,7 +120,7 @@ export default function ProjectsPage() {
           </div>
           <div className="column" style={{overflow:'scroll'}}>
             {filteredProjects.map((project, index) => (
-              <button key={index} className="button"
+              <button key={index} className="list-button"
                 onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
               >
                 <PageButtonDescription component={project} userRole={userRole} />
@@ -136,15 +138,15 @@ export default function ProjectsPage() {
                     selectedProject.isWithinDeadline() ?
                       <FileUpload user={user} pID={selectedProject && selectedProject.id} />
                     :
-                      <div className="button">You can not upload a submission because the deadline has been exceeded.</div>  
+                      <div className="list-button">You can not upload a submission because the deadline has been exceeded.</div>  
                   :
-                    <div className="button">You can not upload a submission because you have not joined this subject.</div>
+                    <div className="list-button">You can not upload a submission because you have not joined this subject.</div>
                 : <></>
                 }
               </div>
 
               {userRole <= 1 && selectedProject ? <>
-                <button className="button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
+                <button className="list-button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
               </> : <></>}
             </>}
         </div>

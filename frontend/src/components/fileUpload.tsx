@@ -121,13 +121,13 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
         <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px"}}>
             <span className='column center' style={{backgroundColor: 'white', flex: 3}}>{(file && file.name) ? `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
             {file instanceof SubmissionModel ?
-              <button className="button" style={{flex: 1, padding: "15px"}} onClick={handleDownloadClick}>Download my Submission</button>
+              <button className="list-button" style={{flex: 1, padding: "15px"}} onClick={handleDownloadClick}>Download my Submission</button>
             :
               <></>
         }
         </div>
 
-        <button className="button" style={{padding: "15px"}} onClick={handleUploadClick}>Upload Submission</button>
+        <button className="list-button" style={{padding: "15px"}} onClick={handleUploadClick}>Upload Submission</button>
     </div>    
   )
 }

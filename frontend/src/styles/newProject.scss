@@ -1,6 +1,7 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
 @import './general.scss';
+@import './text.scss';
 @import './button.scss';
 
 $border-radius: 5px;
@@ -170,6 +171,5 @@ $border-radius: 5px;
 	// *** STYLE FOR THE TEXT*
 	text{
 		@extend .text
-	}	
-
+	}
 }

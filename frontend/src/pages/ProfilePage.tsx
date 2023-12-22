@@ -5,10 +5,6 @@ import { UserModel } from "../model/UserModel";
 
 import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel";
-import '../styles/button.scss';
-import '../styles/general.scss';
-import '../styles/home.scss';
-import '../styles/newProject.scss';
 import { fetchTokenID } from "../api/tokenApi";
 import { SubmissionModel } from "../model/SubmissionModel";
 import { PageButtonDescription } from "../components/pageComponents";
@@ -43,7 +39,7 @@ export default function ProfilePage() {
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.subjects.map((subject: SubjectModel, index: number) => (
-              <button key={index} className="button" onClick={() => navigate('/subjects?id=' + subject.id)}>
+              <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id)}>
                 <PageButtonDescription component={subject} userRole={1} />
               </button>
             ))}
@@ -53,7 +49,7 @@ export default function ProfilePage() {
           <div className="text center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
-                <button key={index} className="button" onClick={() => navigate('/projects?id=' + project.id)}>
+                <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
                   <PageButtonDescription component={project} />
                 </button>
             ))}
@@ -63,7 +59,7 @@ export default function ProfilePage() {
           <div className="text center header-title">My Submissions</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getSubmissions().map((submission: SubmissionModel, index: number) => (
-                <button key={index} className="button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
+                <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
                   <PageButtonDescription component={submission} userRole={1} />
                 </button>
             ))}

@@ -8,24 +8,24 @@
 
 .login-header {
 	background-color: $background-color;
-	font-size: $dynamic-text;
+	font-size: $text;
 	color: $text-color;
 }
 
 .login-form {
-
-	& > * {
+	
+	& > input {
 		margin: 20px 0;
 	}
 
 	& label {
 		@extend .column;
-		margin: 0 10px;
-	}
+		margin: 10px;
 
-	& span {
-		text-align: left;
-		margin-bottom: 10px;
+		& span {
+			text-align: left;
+			margin-bottom: 10px;
+		}
 	}
 }
 

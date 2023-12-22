@@ -2,10 +2,6 @@ import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
-
-import '../styles/general.scss';
-import '../styles/home.scss';
-import '../styles/button.scss';
 import { UserModel } from "../model/UserModel";
 import ReactDropdown from "react-dropdown";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
@@ -117,19 +113,20 @@ export default function SubjectsPage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">
             <ReactDropdown
-              controlClassName="row center"
-              menuClassName="dropdown-menu"        
+              controlClassName="row center"       
               options={filterOptions}
               onChange={(option) => {setFilter(option.value);}}
               value={"My Subjects"}
               placeholder={filter}
               arrowClosed={<KeyboardArrowDown/>}
               arrowOpen={<KeyboardArrowUp/>}
+              className="dropdown-menu-root"
+              baseClassName="center column dropdown-menu "
             />
             </div>
             <div className="column" style={{overflow:'scroll'}}>
               {filteredSubjects.map((subject, index) => (
-                <button key={index} className="button"
+                <button key={index} className="list-button"
                   onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
                 >
                   <PageButtonDescription component={subject} />
@@ -142,14 +139,14 @@ export default function SubjectsPage() {
             {selectedSubject && <SubjectEntry subject={selectedSubject} />}
               {user && selectedSubject ?
                 user.hasSubject(selectedSubject.id) ?
-                  <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                  <button className="list-button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
                 :
-                  <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+                  <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
               : <></>
               }
               <div className="column" style={{overflow:'scroll'}}>
                 {selectedSubject && selectedSubject.projects.map((project, index) => (
-                  <button key={index} className="button"
+                  <button key={index} className="list-button"
                     onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
                   >
                     <PageButtonDescription component={project} userRole={userRole} />

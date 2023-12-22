@@ -16,6 +16,16 @@ input[type=submit], button {
 		background-color: $alt-color2
 	}
 
+	&:disabled {
+		background-color: gray;
+		color: white;
+		cursor: not-allowed;
+	}
+}
+
+.list-button {
+	height: 100px;
+
 	&:nth-child(even) {
 		background-color: $button-color;
 		color: white;
@@ -27,12 +37,6 @@ input[type=submit], button {
 		&:active {
 			background-color: $alt-color
 		}
-	}
-
-	&:disabled {
-		background-color: gray;
-		color: white;
-		cursor: not-allowed;
 	}
 }
 

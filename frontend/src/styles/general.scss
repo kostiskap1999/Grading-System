@@ -33,54 +33,19 @@ $border-radius: 5px;
 	max-height: 70px;
 }
 
-
 .header-title {
 	padding: 10px;
-}
-
-.header-text {
-	font-size: $header-text;
-	color: $text-color;
-}
-
-.large-text {
-	font-size: $large-text;
-	color: $text-color;
-}
-
-.text {
-	font-size: $text;
-	color: $text-color;
-}
-
-.small-text {
-	font-size: $small-text;
-	color: $text-color;
 }
 
 .dropdown-menu {
 	position: relative;
 	background-color: $background-color;
 	width: inherit;
+	cursor: pointer;
 }
 
-.grade-box {
-	padding: 10px;
-	width: 20px;
-	height: 20px;
-	border-radius: 3px;
-	color: white;
-}
-.green-box {
-	background-color: green;
-}
-  
-.red-box {
-	background-color: red;
-}
-  
-.gray-box {
-	background-color: gray;
+.dropdown-menu-root {
+	cursor: default !important;
 }
 
 input, textarea {

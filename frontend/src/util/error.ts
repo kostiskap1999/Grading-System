@@ -10,8 +10,7 @@ export const errorHandling = (err: Error) => {
     if(error.status === 401)
         logout()
     else if(error.status === 403) {}
-    else if(error.status === 404)
-        alert(error.message + ". Try again.")
+    else if(error.status === 404) {}
     else {}
 
 }
