@@ -119,7 +119,7 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
         </label>
         <input style={{display: "none"}} id="file-upload" type="file" accept=".js, .ts, .jsx, .tsx, .mjs, .cjs, .es, .es6, .coffee, .vue" onChange={handleFileChange}/>
         <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px"}}>
-            <span className='column center' style={{backgroundColor: 'white', flex: 3}}>{file != null ? file && `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
+            <span className='column center' style={{backgroundColor: 'white', flex: 3}}>{(file && file.name) ? `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
             {file instanceof SubmissionModel ?
               <button className="button" style={{flex: 1, padding: "15px"}} onClick={handleDownloadClick}>Download my Submission</button>
             :

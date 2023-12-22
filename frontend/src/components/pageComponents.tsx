@@ -13,8 +13,8 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
             <div className="center" style={{padding:"10px"}}>
             <div className="small-text">
                 <span>Project Average Grade: </span>
-                <span className={`grade-box ${project.averageGrade !== null ? (project.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                {project.averageGrade !== null ?
+                <span className={`grade-box ${project.averageGrade !== null && !isNaN(project.averageGrade) ? (project.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                {project.averageGrade !== null  && !isNaN(project.averageGrade) ?
                     (project.averageGrade % 1 !== 0 ? project.averageGrade?.toFixed(1) : project.averageGrade) 
                 : " - "}
                 </span>
@@ -55,8 +55,8 @@ export function PageButtonDescription({ component, userRole }: { component: Subj
       <span>{}</span>
       <span>{component.name}</span>
       {userRole != null ? userRole <= 1 ? 
-        <span className={`grade-box ${grade !== null ? (grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-          {grade !== null ?
+        <span className={`grade-box ${grade !== null && !isNaN(grade) ? (grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+          {grade !== null && !isNaN(grade) ?
             (grade % 1 !== 0 ? grade?.toFixed(1) : grade) 
           : " - "}
         </span>
