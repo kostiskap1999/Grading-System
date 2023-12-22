@@ -51,12 +51,8 @@ export default function SubmissionsPage() {
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="header-title row">
-        <div style={{flex: 1}}></div>
-        <div className="text center" style={{flex: 4}}>
-          <div>This is a list of all the submissions for project {selectedProject != undefined ? selectedProject.name: "undefined"}.</div>
-        </div>
-        <div style={{flex: 1}}></div>
+      <div className="top-header text center column">
+        <div>This is a list of all the submissions for project {selectedProject != undefined ? selectedProject.name: "undefined"}.</div>
       </div>
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>

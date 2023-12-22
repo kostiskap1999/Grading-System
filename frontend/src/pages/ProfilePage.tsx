@@ -32,7 +32,7 @@ export default function ProfilePage() {
 
   return (
     <div className="page column">
-      <div className="header-title text center column" style={{flex: 1}}>
+      <div className="top-header text center column" style={{flex: 1}}>
         <div>{user && user.firstName} {user && user.lastName}</div>
         <div className="row">
           <div>Your average grade is {user && user.averageGrade?.toFixed(2)}.</div>

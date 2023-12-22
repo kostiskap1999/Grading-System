@@ -32,7 +32,7 @@ export default function HomePage() {
 
   return (
     <div className="page column">
-      <div className="header-title text center column" style={{flex: 1}}>
+      <div className="top-header text center column" style={{flex: 1}}>
         <div>{user && user.username}</div>
         <div className="row">
           <div>There are {user && user.getProjects().length} pending projects from {user && user.subjects.length} subjects.</div>

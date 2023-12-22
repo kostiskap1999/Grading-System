@@ -27,6 +27,13 @@ $border-radius: 5px;
 	align-content: center;
 }
 
+.top-header {
+	padding: 10px;
+	min-height: 70px;
+	max-height: 70px;
+}
+
+
 .header-title {
 	padding: 10px;
 }
@@ -100,4 +107,12 @@ input, textarea {
 input[type=submit], button {
 	@extend button;
 	width: 100%;
+}
+
+.container {
+	border-width: 2px;
+	border-color: black;
+	border-style: solid;
+	overflow-y: auto;
+	height: calc(100vh - 94px);
 }

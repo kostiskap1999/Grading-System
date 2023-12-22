@@ -85,8 +85,8 @@ export default function ProjectsPage() {
   }, [filter])
 
   return (
-    <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="header-title row">
+    <div className="page column">
+      <div className="top-header text row">
         {userRole <= 1 ? <>
           <button style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}

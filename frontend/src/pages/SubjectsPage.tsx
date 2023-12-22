@@ -107,7 +107,7 @@ export default function SubjectsPage() {
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="header-title text center column" style={{flex: 1}}>
+      <div className="top-header text center column" style={{flex: 1}}>
         <div>This is a list of all the subjects</div>
         <div className="row">
           <div>There are pending projects from subjects.</div>
