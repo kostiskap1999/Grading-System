@@ -67,7 +67,7 @@ export default function SubmissionsPage() {
             ))}
           </div>
         </div>
-        <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
+        <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
             {selectedSubmission &&
             <div>
               <div className="center" style={{padding:"30px"}}>

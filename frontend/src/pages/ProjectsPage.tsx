@@ -129,7 +129,7 @@ export default function ProjectsPage() {
           </div>
         </div>
         
-        <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
+        <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
             {selectedProject && selectedProject.id === -1 ? <></> : <>
               {selectedProject && <ProjectEntry project={selectedProject && selectedProject} userRole={userRole} />}
               <div className="center">

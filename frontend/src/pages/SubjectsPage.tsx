@@ -134,7 +134,7 @@ export default function SubjectsPage() {
               ))}
             </div>
         </div>
-        <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
+        <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
             {selectedSubject && selectedSubject.id === -1 ? <></> : <>
             {selectedSubject && <SubjectEntry subject={selectedSubject} />}
               {user && selectedSubject ?

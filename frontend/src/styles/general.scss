@@ -68,12 +68,6 @@ input, textarea {
 	}
 }
 
-// Style for the buttons
-input[type=submit], button {
-	@extend button;
-	width: 100%;
-}
-
 .container {
 	border-width: 2px;
 	border-color: black;
