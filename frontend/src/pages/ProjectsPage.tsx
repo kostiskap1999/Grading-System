@@ -133,21 +133,17 @@ export default function ProjectsPage() {
             {selectedProject && selectedProject.id === -1 ? <></> : <>
               {selectedProject && <ProjectEntry project={selectedProject && selectedProject} userRole={userRole} />}
               <div className="center">
-                {user && selectedProject ?
-                  user.hasProject(selectedProject.id) ?
-                    selectedProject.isWithinDeadline() ?
-                      <FileUpload user={user} pID={selectedProject && selectedProject.id} />
-                    :
-                      <div className="list-button">You can not upload a submission because the deadline has been exceeded.</div>  
-                  :
-                    <div className="list-button">You can not upload a submission because you have not joined this subject.</div>
+                {user && selectedProject ? user.hasProject(selectedProject.id) ?
+                    <FileUpload user={user} project={selectedProject && selectedProject} />
+                :
+                    <div className="list-button text">You can not upload a submission because you have not joined this subject.</div>
                 : <></>
                 }
               </div>
 
               {userRole <= 1 && selectedProject ? <>
                 <button className="list-button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>
-              </> : <></>}
+              </> : <div></div>}
             </>}
         </div>
       </div>
