@@ -7,13 +7,16 @@ input[type=submit], button {
 	border: 0;
 	padding: 30px;
 	font-size: $button-text;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	height: 80px;
 
 	&:hover {
-		background-color: rgb(228, 228, 228);
+		background-color: darken(rgb(228, 228, 228), 10%);
 	}
 
 	&:active {
-		background-color: $alt-color2
+		background-color: darken($alt-color2, 10%)
 	}
 
 	&:disabled {
@@ -27,17 +30,27 @@ input[type=submit], button {
 	height: 100px;
 
 	&:nth-child(even) {
-		background-color: $button-color;
-		color: white;
-
-		&:hover {
-			background-color: $button-color-hover
-		}
-
-		&:active {
-			background-color: $alt-color
-		}
+		@extend .button-alt
 	}
+}
+
+.button-alt {
+	background-color: $button-color;
+	color: white;
+
+	&:hover {
+		background-color: $button-color-hover
+	}
+
+	&:active {
+		background-color: $alt-color
+	}
+}
+
+.icon-button-small {
+	padding: 20px;
+	height: auto;
+	border-radius: 5px;
 }
 
 .file-upload {
