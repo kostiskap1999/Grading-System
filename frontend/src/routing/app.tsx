@@ -6,6 +6,7 @@ import store, { persistor } from "../store/store";
 import appRoutes from "./appRoutes";
 import ProtectedRoute from "./protectedRoute";
 import PublicRoute from "./publicRoute";
+import ErrorPage from '../pages/ErrorPage';
 
 export default function App() {
     return (
@@ -31,7 +32,7 @@ export default function App() {
                             }/>
                           )
                         ))}
-                        <Route path="*" element={<div>404 Not Found</div>} />
+                        <Route path="*" element={<ErrorPage/>} />
                     </Routes>
                 </BrowserRouter>
             </PersistGate>
