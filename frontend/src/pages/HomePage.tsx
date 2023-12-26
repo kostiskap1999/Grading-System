@@ -50,7 +50,7 @@ export default function HomePage() {
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
               <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
-                <PageButtonDescription component={project} userRole={1} />
+                <PageButtonDescription component={project} />
               </button>
             ))}
           </div>

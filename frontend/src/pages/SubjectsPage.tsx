@@ -25,8 +25,8 @@ export default function SubjectsPage() {
   const [userRole, setUserRole] = useState<number>(3)
 
   const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([
-    {value: "my", label: "My Subjects"},
-    {value: "all", label: "All Subjects"}])  // my = my subjects, all = all subjects, supervising = for profs and admins
+    {value: "all", label: "All Subjects"},
+    {value: "my", label: "My Subjects"}])  // my = my subjects, all = all subjects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([])
 
@@ -76,7 +76,7 @@ export default function SubjectsPage() {
   }, [])
 
   useEffect(() => {
-    if (filter === "my" && user)
+    if (filter === "me" && user)
       setFilteredSubjects(user.subjects)
     else if (filter === "all")
       setFilteredSubjects(subjects)
@@ -86,7 +86,7 @@ export default function SubjectsPage() {
 
   const joinSubject = async () => {
     if(user && selectedSubject){
-      setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
+      setFilter(prevFilter => (prevFilter === "all" ? "" : "all"))
       await postUserSubject(user.id, selectedSubject.id)
       window.location.reload()
     }
@@ -94,7 +94,7 @@ export default function SubjectsPage() {
 
   const leaveSubject = async () => {
     if(user && selectedSubject){
-      setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
+      setFilter(prevFilter => (prevFilter === "all" ? "" : "all"))
       await deleteUserSubject(user.id, selectedSubject.id)
       navigate('/subjects')
       window.location.reload()
@@ -116,7 +116,7 @@ export default function SubjectsPage() {
               controlClassName="row center"       
               options={filterOptions}
               onChange={(option) => {setFilter(option.value);}}
-              value={"My Subjects"}
+              value={"All Subjects"}
               placeholder={filter}
               arrowClosed={<KeyboardArrowDown/>}
               arrowOpen={<KeyboardArrowUp/>}
@@ -135,24 +135,22 @@ export default function SubjectsPage() {
             </div>
         </div>
         <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
-            {selectedSubject && selectedSubject.id === -1 ? <></> : <>
-            {selectedSubject && <SubjectEntry subject={selectedSubject} />}
-              {user && selectedSubject ?
-                user.hasSubject(selectedSubject.id) ?
-                  <button className="list-button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+            {selectedSubject && <>
+                <SubjectEntry subject={selectedSubject} userRole={userRole}/>
+                {user && user.hasSubject(selectedSubject.id) ?
+                    <button className="list-button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
                 :
-                  <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
-              : <></>
-              }
-              <div className="column" style={{overflow:'scroll'}}>
-                {selectedSubject && selectedSubject.projects.map((project, index) => (
-                  <button key={index} className="list-button"
-                    onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
-                  >
-                    <PageButtonDescription component={project} userRole={userRole} />
-                  </button>
-                ))}
-              </div>
+                    <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+                }
+                <div className="column" style={{overflow:'scroll'}}>
+                    {selectedSubject.projects.map((project, index) => (
+                    <button key={index} className="list-button"
+                        onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                    >
+                        <PageButtonDescription component={project} userRole={userRole} />
+                    </button>
+                    ))}
+                </div>
             </>}
         </div>
       </div>

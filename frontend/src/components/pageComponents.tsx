@@ -9,18 +9,18 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
             <div className="header-text center">{project.name}</div>
             <div className="small-text center">Deadline: {project.deadline.toLocaleString('el-GR', { year: 'numeric', month: 'numeric', day: 'numeric' })}</div>
             </div>
-            {userRole != null ? userRole <= 1 ?
+            {userRole != null && userRole <= 1 &&
             <div className="center" style={{padding:"10px"}}>
-            <div className="small-text center">
-                <span>Project Average Grade: </span>
-                <span className={`grade-box ${project.averageGrade !== null && !isNaN(project.averageGrade) ? (project.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
-                {project.averageGrade !== null  && !isNaN(project.averageGrade) ?
-                    (project.averageGrade % 1 !== 0 ? project.averageGrade?.toFixed(1) : project.averageGrade) 
-                : " - "}
-                </span>
+                <div className="small-text center">
+                    <span>Project Average Grade: </span>
+                    <span className={`grade-box ${project.averageGrade !== null && !isNaN(project.averageGrade) ? (project.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                    {project.averageGrade !== null  && !isNaN(project.averageGrade) ?
+                        (project.averageGrade % 1 !== 0 ? project.averageGrade?.toFixed(1) : project.averageGrade) 
+                    : "-"}
+                    </span>
+                </div>
             </div>
-            </div>
-            :<></> : <></>}
+            }
             <div style={{margin: "20px"}}>
             <div className="large-text center">Project Description</div>
             <div className="small-text center">{project.description}</div>
@@ -29,12 +29,24 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
     );
 }
 
-export function SubjectEntry({ subject }: { subject: SubjectModel }) {
+export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, userRole?: number }) {
     return (
         <div>
             <div className="center">
                 <div className="header-text center">{subject.name}</div>
                 <div className="small-text center">Semester: {subject.semester}</div>
+                {userRole != null && userRole <= 1 &&
+                <div className="center" style={{padding:"10px"}}>
+                    <div className="small-text row center">
+                        <span>Subject Average Grade: </span>
+                        <span className={`grade-box ${subject.averageGrade !== null && !isNaN(subject.averageGrade) ? (subject.averageGrade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
+                        {subject.averageGrade !== null  && !isNaN(subject.averageGrade) ?
+                            (subject.averageGrade % 1 !== 0 ? subject.averageGrade?.toFixed(1) : subject.averageGrade) 
+                        : "-"}
+                        </span>
+                    </div>
+                </div>
+                }
             </div>
             <div className="small-text center">{subject.description}</div>
         </div>

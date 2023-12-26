@@ -123,7 +123,7 @@ export default function ProjectsPage() {
               <button key={index} className="list-button"
                 onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
               >
-                <PageButtonDescription component={project} userRole={userRole} />
+                <PageButtonDescription component={project} />
               </button>
             ))}
           </div>
