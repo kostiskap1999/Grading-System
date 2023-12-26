@@ -67,22 +67,23 @@ export class UserModel {
         return subjects
     }
 
-    getProjects(){
+    getProjects(deadline?: Date){
         var projects: ProjectModel[] = []
         for(const subject of this.subjects)
             for(const project of subject.projects)
-                projects.push(project)
+                if (!deadline || (project.deadline as Date).getTime() > deadline.getTime())
+                    projects.push(project)
         
         return projects
     }
 
-    getUnsubmittedProjects() {
+    getUnsubmittedProjects(deadline?: Date) {
         const unsubmittedProjects: ProjectModel[] = [];
     
         for (const subject of this.subjects)
             for (const project of subject.projects) {
                 const userSubmission = project.submissions.find(submission => submission.submitee_id === this.id)
-                if (!userSubmission)
+                if (!userSubmission && (!deadline || (project.deadline as Date).getTime() > deadline.getTime()))
                     unsubmittedProjects.push(project)
             }
     

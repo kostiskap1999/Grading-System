@@ -9,8 +9,6 @@ input[type=submit], button {
 	font-size: $button-text;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
-	height: 70px;
-
 	&:hover {
 		background-color: darken(rgb(228, 228, 228), 10%);
 	}
@@ -30,22 +28,36 @@ input[type=submit], button {
 	height: 70px;
 
 	&:nth-child(even) {
-		@extend .button-alt
+		@extend .alt-button
 	}
 }
 
-.button-alt {
+.alt-button {
 	background-color: $button-color;
 	color: white;
 
 	&:hover {
-		background-color: $button-color-hover
+		background-color: lighten($button-color, 10%)
 	}
 
 	&:active {
 		background-color: $alt-color
 	}
 }
+
+.remove-button {
+	background-color: $alt-color;
+	color: white;
+
+	&:hover {
+		background-color: darken($alt-color, 10%)
+	}
+
+	&:active {
+		background-color: $button-color
+	}
+}
+
 
 .icon-button-small {
 	padding: 20px;

@@ -77,7 +77,7 @@ export default function SubmissionsPage() {
                 <div className="large-text center">Submission Code</div>
                 
                 <div className="center" style={{padding:"10px"}}>
-                  <div className="small-text">
+                  <div>
                     <span>Submission Grade: </span>
                     <span className={`grade-box ${selectedSubmission.grade !== null ? (selectedSubmission.grade >= 5 ? 'green-box' : 'red-box') : 'gray-box'}`}>
                       {selectedSubmission.grade !== null ?

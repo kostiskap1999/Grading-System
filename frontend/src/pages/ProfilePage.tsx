@@ -48,7 +48,7 @@ export default function ProfilePage() {
         <div className="column container" style={{flex: 1}}>
           <div className="text center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
-            {user && user.getUnsubmittedProjects().map((project: ProjectModel, index: number) => (
+            {user && user.getUnsubmittedProjects(new Date()).map((project: ProjectModel, index: number) => (
                 <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
                   <PageButtonDescription component={project} />
                 </button>

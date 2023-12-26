@@ -78,7 +78,7 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     if (filter === "my" && user)
-      setFilteredProjects(user.getProjects())
+      setFilteredProjects(user.getProjects(new Date()))
     else if (filter === "supervising")
       setFilteredProjects([])
 
