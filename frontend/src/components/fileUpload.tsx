@@ -123,17 +123,17 @@ export default function FileUpload({ user, project }: FileUploadProps) {
             <div className="list-button small-text">You can not upload a {file && ' new'} submission because the deadline has been exceeded{file && ' but you can download your submission'}.</div>
         }
         <div className='column center'>
-            <div className='row center' style={{width: "90%", height: "100px", margin: "20px"}}>
+            <div className='row center' style={{width: "90%", margin: "20px"}}>
                 {project.isWithinDeadline() && <>
                     <label htmlFor="file-upload">
-                        <div className="row alt-button" style={{padding: "0 15px", minHeight: "100px"}}>
+                        <div className="row alt-button" style={{padding: "0 15px", minHeight: "70px"}}>
                             <CloudUpload style={{flex: 0.6, margin: "auto", marginRight: "10px"}}/>
                             <span style={{flex: 3, margin: "auto"}}>Select File</span>
                         </div>
                     </label>
                     <input style={{display: "none"}} id="file-upload" type="file" accept=".js, .ts, .jsx, .tsx, .mjs, .cjs, .es, .es6, .coffee, .vue" onChange={handleFileChange}/>
                 </>}
-                <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px", minHeight: "100px"}}>
+                <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px", minHeight: "70px"}}>
                     <span className='column center' style={{backgroundColor: 'white', color: "black", flex: 3}}>{(file && file.name) ? `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
                     {project.isWithinDeadline() &&
                         <button className="alt-button" style={{flex: 1, padding: "15px"}} onClick={handleUploadClick}>Upload File</button>

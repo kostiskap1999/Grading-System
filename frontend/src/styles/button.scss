@@ -9,6 +9,8 @@ input[type=submit], button {
 	font-size: $button-text;
 	cursor: pointer;
 	transition: background-color 0.3s ease;
+	min-height: 70px;
+
 	&:hover {
 		background-color: darken(rgb(228, 228, 228), 10%);
 	}
@@ -25,7 +27,7 @@ input[type=submit], button {
 }
 
 .list-button {
-	height: 70px;
+	min-height: 70px;
 
 	&:nth-child(even) {
 		@extend .alt-button

@@ -33,53 +33,44 @@ export default function SubjectsPage() {
   useEffect(() => {
     const fetchData = async () => {
       const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
-      if(subjectsOBJ){
+      if(subjectsOBJ)
         setSubjects(subjectsOBJ)
 
-        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-        for(const subject of subjectsOBJ)
-          if(subject.id === parseInt(parsedID)){
-            setSelectedSubject(subject)
-            break;
-          }
-      }
-    }
-
-    fetchData()
-  }, [rerender])
-
-  useEffect(() => {
-    const fetchData = async () => {
       const tokenID: number | null = await fetchTokenID()
-
       if(tokenID){
         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
       }
 
-      setFilter(filterOptions[0].value)
-    }
-
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    const fetchRole = async () => {
       const role: number | null = await fetchTokenRole()
       if(role != null){
         setUserRole(role)
         if(role <= 1)
           setFilterOptions([...filterOptions, { value: "supervising", label: "Supervising Projects" }])
       } 
+      setFilter(params.get('nav-filter') ?? filterOptions[0].value)
     }
-    fetchRole()
+
+    fetchData()
   }, [])
 
   useEffect(() => {
-    if (filter === "me" && user)
+      if(subjects){
+        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        for(const subject of subjects)
+          if(subject.id === parseInt(parsedID)){
+            setSelectedSubject(subject)
+            break;
+          }
+      }
+  }, [rerender, subjects])
+
+
+  useEffect(() => {
+      if (filter === "all")
+    setFilteredSubjects(subjects)
+    else if (filter === "my" && user)
       setFilteredSubjects(user.subjects)
-    else if (filter === "all")
-      setFilteredSubjects(subjects)
     else if (filter === "supervising")
       setFilteredSubjects([])
   }, [filter])
@@ -116,7 +107,7 @@ export default function SubjectsPage() {
               controlClassName="row center"       
               options={filterOptions}
               onChange={(option) => {setFilter(option.value);}}
-              value={"All Subjects"}
+              value={(filterOptions.find(option => option.value === params.get('nav-filter')) ?? filterOptions[0]).label}
               placeholder={filter}
               arrowClosed={<KeyboardArrowDown/>}
               arrowOpen={<KeyboardArrowUp/>}
@@ -147,7 +138,7 @@ export default function SubjectsPage() {
                     <button key={index} className="list-button"
                         onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
                     >
-                        <PageButtonDescription component={project} userRole={userRole} />
+                        <PageButtonDescription component={project} showGrade={userRole > 1} />
                     </button>
                     ))}
                 </div>

@@ -39,8 +39,8 @@ export default function ProfilePage() {
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.subjects.map((subject: SubjectModel, index: number) => (
-              <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id)}>
-                <PageButtonDescription component={subject} userRole={1} />
+              <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
+                <PageButtonDescription component={subject} showGrade={user.role > 1} />
               </button>
             ))}
           </div>
@@ -60,7 +60,7 @@ export default function ProfilePage() {
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getSubmissions().map((submission: SubmissionModel, index: number) => (
                 <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
-                  <PageButtonDescription component={submission} userRole={1} />
+                  <PageButtonDescription component={submission} showGrade={user.role > 1} />
                 </button>
             ))}
           </div>
