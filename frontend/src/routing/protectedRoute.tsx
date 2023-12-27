@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { fetchTokenRole } from "../api/tokenApi";
 
 interface IProtectedRouteProps{
