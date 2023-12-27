@@ -20,7 +20,7 @@ export default function ProjectsPage() {
   
   const [rerender, setRerender] = useState<number>(0)
 
-  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "my", label: "My Projects"}])  // my = my projects, supervising = for profs and admins
+  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "unsubmitted", label: "Unsubmitted Projects"}])  // my = my projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([])
   
@@ -32,7 +32,16 @@ export default function ProjectsPage() {
         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
         if(userOBJ && userOBJ.role < 1)
-          setFilterOptions([...filterOptions, { value: "supervising", label: "Supervising Projects" }])
+          setFilterOptions([ ...filterOptions, 
+            { value: "supervising", label: "Supervising Projects" }
+          ])
+        else
+          setFilterOptions([ ...filterOptions, 
+            {value: "submitted", label: "Submitted Projects"},
+            {value: "ungraded", label: "Ungraded Projects"},
+            {value: "graded", label: "Graded Projects"},
+            {value: "all", label: "All Projects"}
+          ])
       }
 
       setFilter(filterOptions[0].value)
@@ -53,8 +62,10 @@ export default function ProjectsPage() {
 }, [rerender, user])
 
   useEffect(() => {
-    if (filter === "my" && user)
-      setFilteredProjects(user.getProjects(new Date()))
+    if (filter === "unsubmitted" && user)
+      setFilteredProjects(user.getUnsubmittedProjects(new Date()))
+    else if (filter === "all" && user)
+      setFilteredProjects(user.getProjects())
     else if (filter === "supervising")
       setFilteredProjects([])
 
@@ -77,22 +88,18 @@ export default function ProjectsPage() {
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
           <div className="text center header-title">
-            {user && user.role <= 1 ?
               <ReactDropdown
                 controlClassName="row center"
                 menuClassName="dropdown-menu"        
                 options={filterOptions}
                 onChange={(option) => {setFilter(option.value);}}
-                value={"My Projects"}
+                value={filterOptions[0].label}
                 placeholder={filter}
                 arrowClosed={<KeyboardArrowDown/>}
                 arrowOpen={<KeyboardArrowUp/>}
                 className="dropdown-menu-root"
                 baseClassName="center column dropdown-menu "
               />
-            : <div>My Projects</div>
-            }
-
           </div>
           <div className="column" style={{overflow:'scroll'}}>
             {filteredProjects.map((project, index) => (
