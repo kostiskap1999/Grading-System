@@ -10,8 +10,7 @@ import { fetchTokenID } from "../api/tokenApi";
 import { ProjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faClock, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProjectsPage() {
   const navigate = useNavigate()
@@ -23,12 +22,11 @@ export default function ProjectsPage() {
   
   const [rerender, setRerender] = useState<number>(0)
 
-  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "unsubmitted", label: "Unsubmitted Projects"}])  // my = my projects, supervising = for profs and admins
+  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "all", label: "All Projects"}])  // my = my projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([])
 
-  const [filterGrades, setFilterGrades] = useState<number>(0) // -1 negative, 0 neutral, 1 positive
-  const [filterDeadline, setFilterDeadline] = useState<number>(0) // -1 negative, 0 neutral, 1 positive
+  const [filterValues, setFilterValues] = useState<{submitted: number, graded: number, deadline: number}>({submitted: 0, graded: 0, deadline: 0}) // -1 negative, 0 neutral, 1 positive
   
   useEffect(() => {
     const fetchData = async () => {
@@ -40,13 +38,6 @@ export default function ProjectsPage() {
         if(userOBJ && userOBJ.role < 1)
           setFilterOptions([ ...filterOptions, 
             { value: "supervising", label: "Supervising Projects" }
-          ])
-        else
-          setFilterOptions([ ...filterOptions, 
-            {value: "submitted", label: "Submitted Projects"},
-            {value: "ungraded", label: "Ungraded Projects"},
-            {value: "graded", label: "Graded Projects"},
-            {value: "all", label: "All Projects"}
           ])
       }
 
@@ -69,30 +60,31 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     if(user){
-      if (filter === "unsubmitted")
-        setFilteredProjects(user.getProjects({filterSubmitted: -1, filterDeadline: filterDeadline, filterGrades: filterGrades}))
-      else if (filter === "submitted")
-        setFilteredProjects(user.getProjects({filterSubmitted: 1, filterDeadline: filterDeadline, filterGrades: filterGrades}))
-      else if (filter === "all")
-        setFilteredProjects(user.getProjects())
+      if (filter === "all")
+        setFilteredProjects(user.getProjects({filterSubmitted: filterValues['submitted'], filterDeadline: filterValues['deadline'], filterGrades: filterValues['graded']}))
       else if (filter === "supervising")
         setFilteredProjects([])
     }
-  }, [filter, filterDeadline, filterGrades])
-
-  const changeFilterGrade = () => {
-    if(filterGrades == 1)
-      setFilterGrades(-1)
-    else
-      setFilterGrades(filterGrades+1)
+  }, [filter, filterValues])
+  
+  const changeFilterValue = (prop: keyof typeof filterValues) => {
+    if (filterValues[prop] === 1) {
+      setFilterValues((prevFilterValues) => {
+        const updatedValues = { ...prevFilterValues }
+        updatedValues[prop] = -1
+        return updatedValues
+      })
+    } else {
+      setFilterValues((prevFilterValues) => {
+        const updatedValues = { ...prevFilterValues }
+        updatedValues[prop] = updatedValues[prop] + 1
+        return updatedValues
+      })
+    }
   }
-
-  const changeFilterDeadline = () => {
-    if(filterDeadline == 1)
-      setFilterDeadline(-1)
-    else
-      setFilterDeadline(filterDeadline+1)
-  }
+  
+  
+  
 
   return (
     <div className="page column">
@@ -111,24 +103,34 @@ export default function ProjectsPage() {
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
           <div className="text row center header-title">
-              <ReactDropdown
-                controlClassName="row center"
-                menuClassName="dropdown-menu"        
-                options={filterOptions}
-                onChange={(option) => {setFilter(option.value);}}
-                value={filterOptions[0].label}
-                placeholder={filter}
-                arrowClosed={<KeyboardArrowDown/>}
-                arrowOpen={<KeyboardArrowUp/>}
-                className="dropdown-menu-root"
-                baseClassName="center column dropdown-menu "
-              />
-              <button className="filter-button icon-button-small" title={"Filter by grades"} style={filterGrades == -1 ? {color: "firebrick"} : filterGrades == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterGrade()}>
-                <FontAwesomeIcon icon={faStar} />
-              </button>
-              <button className="filter-button icon-button-small" title={"Filter by deadline"} style={filterDeadline == -1 ? {color: "firebrick"} : filterDeadline == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterDeadline()}>
-                <FontAwesomeIcon icon={faClock} />
-              </button>
+              <div style={{flex: 1}}></div>
+              {filterOptions.length > 1 ?
+                <ReactDropdown
+                  controlClassName="row center"
+                  menuClassName="dropdown-menu"        
+                  options={filterOptions}
+                  onChange={(option) => {setFilter(option.value);}}
+                  value={filterOptions[0].label}
+                  placeholder={filter}
+                  arrowClosed={<KeyboardArrowDown/>}
+                  arrowOpen={<KeyboardArrowUp/>}
+                  className="dropdown-menu-root"
+                  baseClassName="center column dropdown-menu "
+                />
+              :
+                <div style={{flex: 1}}>{filterOptions[0].label}</div>              
+              }
+              <div className="row" style={{flex: 1, justifyContent: 'flex-end'}}>
+                <button className="filter-button icon-button-small" title={"Filter submitted projects"} style={filterValues['submitted'] == -1 ? {color: "firebrick"} : filterValues['submitted'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('submitted')}>
+                  <FontAwesomeIcon icon={faCheckCircle} />
+                </button>
+                <button className="filter-button icon-button-small" title={"Filter graded projects"} style={filterValues['graded'] == -1 ? {color: "firebrick"} : filterValues['graded'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('graded')}>
+                  <FontAwesomeIcon icon={faStar} />
+                </button>
+                <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['deadline'] == -1 ? {color: "firebrick"} : filterValues['deadline'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('deadline')}>
+                  <FontAwesomeIcon icon={faClock} />
+                </button>
+              </div>
           </div>
           <div className="column" style={{overflow:'scroll'}}>
             {filteredProjects.map((project, index) => (
