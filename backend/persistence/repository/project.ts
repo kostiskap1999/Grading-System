@@ -4,7 +4,7 @@ import { TestRepository } from './test'
 
 export class ProjectRepository {
 
-  constructor(private tm: TransactionManager) {}
+  constructor(private tm: TransactionManager, private testRepository = new TestRepository(tm)) {}
 
   async findAll() {
     return (await this.tm.query(`SELECT * FROM projects`) as any[])
@@ -36,8 +36,7 @@ export class ProjectRepository {
     
     const insertedID = (await this.tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`) as any[])[0]
 
-    const testRepository = new TestRepository(this.tm)
     if(project.tests.length > 0)
-      await testRepository.postTests(project.tests, insertedID.id)
+      await this.testRepository.postTests(project.tests, insertedID.id)
   }
 }
