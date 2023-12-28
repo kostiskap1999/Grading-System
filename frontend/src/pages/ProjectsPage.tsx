@@ -10,7 +10,7 @@ import { fetchTokenID } from "../api/tokenApi";
 import { ProjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faClock, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faClock, faCheckCircle, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProjectsPage() {
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ export default function ProjectsPage() {
   const [filter, setFilter] = useState<string>("")
   const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([])
 
-  const [filterValues, setFilterValues] = useState<{submitted: number, graded: number, deadline: number}>({submitted: 0, graded: 0, deadline: 0}) // -1 negative, 0 neutral, 1 positive
+  const [filterValues, setFilterValues] = useState<{submitted: number, graded: number, deadline: number, supervising: number}>({submitted: 0, graded: 0, deadline: 0, supervising: 0}) // -1 negative, 0 neutral, 1 positive
   
   useEffect(() => {
     const fetchData = async () => {
@@ -61,12 +61,12 @@ export default function ProjectsPage() {
   useEffect(() => {
     if(user){
       if (filter === "all")
-        setFilteredProjects(user.getProjects({filterSubmitted: filterValues['submitted'], filterDeadline: filterValues['deadline'], filterGrades: filterValues['graded']}))
+        setFilteredProjects(user.getProjects({filterSubmitted: filterValues['submitted'], filterDeadline: filterValues['deadline'], filterGrades: filterValues['graded'], filterSupervising: filterValues['supervising']}))
       else if (filter === "supervising")
         setFilteredProjects([])
     }
   }, [filter, filterValues])
-  
+
   const changeFilterValue = (prop: keyof typeof filterValues) => {
     if (filterValues[prop] === 1) {
       setFilterValues((prevFilterValues) => {
@@ -82,8 +82,6 @@ export default function ProjectsPage() {
       })
     }
   }
-  
-  
   
 
   return (
@@ -103,7 +101,14 @@ export default function ProjectsPage() {
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
           <div className="text row center header-title">
-              <div style={{flex: 1}}></div>
+              <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
+                {user && user.role <= 1 ?
+                  <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['deadline'] == -1 ? {color: "firebrick"} : filterValues['deadline'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
+                    <FontAwesomeIcon icon={faChalkboardTeacher} />
+                  </button>
+                : <></>
+                }
+              </div>
               {filterOptions.length > 1 ?
                 <ReactDropdown
                   controlClassName="row center"
