@@ -1,35 +1,41 @@
 import React, { useState } from 'react';
 import { ICredentials, login, register } from '../api/loginApi';
-import '../styles/login.scss';
-
 import { useDispatch } from 'react-redux';
 import { LOGIN_USER } from "../store/types";
 
 export default function LoginPage() {
   const [credentials, setCredentials] = useState<ICredentials>({username: "", password: ""})
   
-  const [password, setPassword] = useState<string>()
-  const [confirmPassword, setConfirmPassword] = useState<string>()
+  const [password, setPassword] = useState<string>("")
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
 
   const [isRegistering, setIsRegistering] = useState<boolean>(false)
+
+  const [wrongCredentials, setWrongCredentials] = useState<boolean>(false)
+
   const dispatch = useDispatch()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     if(credentials){
       e.preventDefault()
 
-      if(isRegistering && password !== "" && confirmPassword !== "" && password !== confirmPassword){
-        alert("amogus")
+      if(isRegistering && password !== "" && confirmPassword !== "" && password !== confirmPassword)
         return
-      }
-        
 
       let user
       if(isRegistering)
         user = await register(credentials)
       else
         user = await login(credentials)
-      user && dispatch({ type: LOGIN_USER });
+
+      if(!user)
+        setWrongCredentials(true)
+      else{
+        setWrongCredentials(false)
+        dispatch({ type: LOGIN_USER })
+      }
+
+        
     }
   }
 
@@ -179,15 +185,16 @@ export default function LoginPage() {
               />
             </label>
           }
-          <div style={{minHeight: "35px"}}>
-          <span hidden={!isRegistering && password === "" || confirmPassword === "" || password === confirmPassword}>Passwords do not match</span>
+          <div className='column center' style={{minHeight: "35px", margin: "20px 0"}}>
+            {(!isRegistering && wrongCredentials) && <span>Wrong Credentials. Try again.</span>}
+            {(isRegistering && (password !== "" || confirmPassword !== "" || password !== confirmPassword)) && <span>Passwords do not match</span>}
           </div>
-          <input type="submit" disabled={isRegistering && confirmPassword !== "" && password !== "" && password !== confirmPassword} value={isRegistering ? "Register" : "Log In"}/>
+          <input type="submit" className='button' disabled={isRegistering && confirmPassword !== "" && password !== "" && password !== confirmPassword} value={isRegistering ? "Register" : "Log In"}/>
         </form>
         {isRegistering ?
           <span>Already have an account? <button className='register-login-switch' onClick={() => {setIsRegistering(false)}}>Log In</button></span>  
         :
-          <span>Don't have an account? <button className='register-login-switch' onClick={() => {setIsRegistering(true)}}>Register</button></span>  
+          <span>Don't have an account? <button className='register-login-switch' onClick={() => {setIsRegistering(true); setWrongCredentials(false)}}>Register</button></span>  
         }
       </div>
       <div></div>

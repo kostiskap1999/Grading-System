@@ -1,0 +1,22 @@
+@import './variables/colors.scss';
+@import './variables/typography.scss';
+
+.header-text {
+	font-size: $header-text;
+	color: $text-color;
+}
+
+.large-text {
+	font-size: $large-text;
+	color: $text-color;
+}
+
+.text {
+	font-size: $text;
+	color: $text-color;
+}
+
+.small-text {
+	font-size: $small-text;
+	color: $text-color;
+}

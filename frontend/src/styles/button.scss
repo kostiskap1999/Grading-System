@@ -1,32 +1,22 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
 
-input[type=submit], button {
+.button {
 	background-color: white;
 	color: black;
 	border: 0;
-	padding: 30px;
+	padding: 0 30px;
 	font-size: $button-text;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	min-height: 70px;
 
 	&:hover {
-		background-color: rgb(228, 228, 228);
+		background-color: darken(rgb(228, 228, 228), 10%);
 	}
 
 	&:active {
-		background-color: $alt-color2
-	}
-
-	&:nth-child(even) {
-		background-color: $button-color;
-		color: white;
-
-		&:hover {
-			background-color: $button-color-hover
-		}
-
-		&:active {
-			background-color: $alt-color
-		}
+		background-color: darken($alt-color2, 10%)
 	}
 
 	&:disabled {
@@ -36,7 +26,63 @@ input[type=submit], button {
 	}
 }
 
+.filter-button {
+	background-color: transparent;
+	border: none;
+	padding: 5px !important;
+
+}
+
+.list-button {
+	@extend .button;
+
+	min-height: 70px;
+
+	&:nth-child(even) {
+		@extend .alt-button
+	}
+}
+
+.alt-button {
+	@extend .button;
+
+	background-color: $button-color;
+	color: white;
+
+	&:hover {
+		background-color: lighten($button-color, 10%)
+	}
+
+	&:active {
+		background-color: $alt-color
+	}
+}
+
+.remove-button {
+	@extend .button;
+
+	background-color: $alt-color;
+	color: white;
+
+	&:hover {
+		background-color: darken($alt-color, 10%)
+	}
+
+	&:active {
+		background-color: $button-color
+	}
+}
+
+
+.icon-button-small {
+	padding: 20px;
+	height: auto;
+	border-radius: 5px;
+}
+
 .file-upload {
+	@extend .button;
+
 	background-color: white;
     border: 1px solid #ccc;
     // display: inline-block;

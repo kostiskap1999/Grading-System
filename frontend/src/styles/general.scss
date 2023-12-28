@@ -1,23 +1,25 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
+@import './text.scss';
 
 $border-radius: 5px;
 
 .page {
+    @extend .small-text;
+
 	height: 100vh;
 	overflow: scroll;
+    background-color: $background-color;
 }
 
 .column {
 	display: flex;
 	flex-direction: column;
-	background-color: $background-color;
 }
 
 .row {
 	display: flex;
 	flex-direction: row;
-	background-color: $background-color;
 }
 
 .center {
@@ -27,53 +29,25 @@ $border-radius: 5px;
 	align-content: center;
 }
 
+.top-header {
+	padding: 10px;
+	min-height: 70px;
+	max-height: 70px;
+}
+
 .header-title {
 	padding: 10px;
-}
-
-.header-text {
-	font-size: $header-text;
-	color: $text-color;
-}
-
-.large-text {
-	font-size: $large-text;
-	color: $text-color;
-}
-
-.text {
-	font-size: $text;
-	color: $text-color;
-}
-
-.small-text {
-	font-size: $small-text;
-	color: $text-color;
 }
 
 .dropdown-menu {
 	position: relative;
 	background-color: $background-color;
 	width: inherit;
+	cursor: pointer;
 }
 
-.grade-box {
-	padding: 10px;
-	width: 20px;
-	height: 20px;
-	border-radius: 3px;
-	color: white;
-}
-.green-box {
-	background-color: green;
-}
-  
-.red-box {
-	background-color: red;
-}
-  
-.gray-box {
-	background-color: gray;
+.dropdown-menu-root {
+	cursor: default !important;
 }
 
 input, textarea {
@@ -96,8 +70,10 @@ input, textarea {
 	}
 }
 
-// Style for the buttons
-input[type=submit], button {
-	@extend button;
-	width: 100%;
+.container {
+	border-width: 2px;
+	border-color: black;
+	border-style: solid;
+	overflow-y: auto;
+	height: calc(100vh - 94px);
 }

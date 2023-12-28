@@ -32,7 +32,10 @@ export async function fetchProjectUserSubmission(projectID: number, userID: numb
             return response.json();
     })
     .then((submission: any[]) => {
-        return new SubmissionModel(submission[0])
+        if(submission[0])
+            return new SubmissionModel(submission[0])
+        else
+            return null
     })
     .catch((error) => {
         errorHandling(error)

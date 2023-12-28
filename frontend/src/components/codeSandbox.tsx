@@ -73,11 +73,11 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
   return (
     <div>
       <div style={{marginBottom: "50px"}}>
-        <CodeMirror value={code} onChange={setCode} height="200px" style={{marginBottom: "10px"}} extensions={[javascript({ jsx: true })]} />
+        <CodeMirror value={code} onChange={setCode} height="200px" style={{marginBottom: "10px", color: "black", fontSize: "14px"}} extensions={[javascript({ jsx: true })]} />
         <div className="row" style={{justifyContent: "space-between"}}>
-          <button className="button" onClick={async () => await runCode(false)}>Run tests</button>
-          <button className="button" onClick={async () => await runCode(true)}>Run tests and grade</button>
-          <button className="button" onClick={() => {}}>Remove grade</button>
+          <button className="list-button" onClick={async () => await runCode(false)}>Run tests</button>
+          <button className="list-button" onClick={async () => await runCode(true)}>Run tests and grade</button>
+          <button className="list-button" onClick={() => {}}>Remove grade</button>
         </div>
       </div>
       

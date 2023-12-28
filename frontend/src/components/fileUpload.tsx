@@ -5,27 +5,31 @@ import '../styles/login.scss'
 import { UserModel } from '../model/UserModel'
 import { fetchProjectUserSubmission, postSubmission } from '../api/submissionsApi'
 import { SubmissionModel } from '../model/SubmissionModel'
+import { ProjectModel } from '../model/ProjectModel'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface FileUploadProps {
   user: UserModel
-  pID: number
+  project: ProjectModel
 }
 
-export default function FileUpload({ user, pID }: FileUploadProps) {
+export default function FileUpload({ user, project }: FileUploadProps) {
 
-    const [file, setFile] = useState<File | SubmissionModel | null>(null)
+    const [file, setFile] = useState<File | SubmissionModel | null>()
+    const [errorText, setErrorText] = useState<string>("")
 
     useEffect(() => {
       const fetchSubmission = async () => {
-        const userSubmission = await fetchProjectUserSubmission(pID, user.id)
-        if(userSubmission && userSubmission.id !== -1)
-          setFile(userSubmission)
-        else
-          setFile(null)
-          
+            const userSubmission = await fetchProjectUserSubmission(project.id, user.id)
+            if(userSubmission)
+                setFile(userSubmission)
+            else
+                setFile(null)
       }
       fetchSubmission()
-    })
+    }, [project])
 
     const hasNotAcceptableExtensions = (targetFile: File) => {
       if (!targetFile.name.toLowerCase().endsWith('.js') &&
@@ -58,14 +62,14 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
     
     
       const handleUploadClick = async () => {
-        if (!file || hasNotAcceptableExtensions(file as File)) {
-          alert('Invalid file type. Please submit a valid file type.')
+        if(!file || hasNotAcceptableExtensions(file as File) || file instanceof SubmissionModel) {
+          setErrorText('Invalid file type. Please submit a valid file type.')
           return
         }
         const fileContents = await readFileContents(file as File)
         let submission = new SubmissionModel()
         submission.submitee_id = user.id
-        submission.project_id = pID
+        submission.project_id = project.id
         submission.code = fileContents
         await postSubmission(submission)
       }
@@ -85,7 +89,11 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }
-      };
+      }
+
+      const handleRemoveClick = async () => {
+        if (file) {}
+      }
       
 
     const readFileContents = (file: File): Promise<string> => {
@@ -110,24 +118,42 @@ export default function FileUpload({ user, pID }: FileUploadProps) {
     }    
 
   return (
-    <div className='row' style={{width: "90%", height: "90px", margin: "20px"}}>
-        <label htmlFor="file-upload" className="file-upload column center">
-            <div className="row" style={{backgroundColor: "white"}}>
-                <CloudUpload style={{flex: 0.6, margin: "auto", marginRight: "10px"}}/>
-                <span style={{flex: 3, margin: "auto"}}>Custom Upload</span>
-            </div>
-        </label>
-        <input style={{display: "none"}} id="file-upload" type="file" accept=".js, .ts, .jsx, .tsx, .mjs, .cjs, .es, .es6, .coffee, .vue" onChange={handleFileChange}/>
-        <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px"}}>
-            <span className='column center' style={{backgroundColor: 'white', flex: 3}}>{file != null ? file && `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
-            {file instanceof SubmissionModel ?
-              <button className="button" style={{flex: 1, padding: "15px"}} onClick={handleDownloadClick}>Download my Submission</button>
-            :
-              <></>
+    <>
+        {!project.isWithinDeadline() &&
+            <div className="list-button small-text">You can not upload a {file && ' new'} submission because the deadline has been exceeded{file && ' but you can download your submission'}.</div>
         }
+        <div className='column center'>
+            <div className='row center' style={{width: "90%", margin: "20px"}}>
+                {project.isWithinDeadline() && <>
+                    <label htmlFor="file-upload">
+                        <div className="row alt-button" style={{padding: "0 15px", minHeight: "70px"}}>
+                            <CloudUpload style={{flex: 0.6, margin: "auto", marginRight: "10px"}}/>
+                            <span style={{flex: 3, margin: "auto"}}>Select File</span>
+                        </div>
+                    </label>
+                    <input style={{display: "none"}} id="file-upload" type="file" accept=".js, .ts, .jsx, .tsx, .mjs, .cjs, .es, .es6, .coffee, .vue" onChange={handleFileChange}/>
+                </>}
+                <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px", minHeight: "70px"}}>
+                    <span className='column center' style={{backgroundColor: 'white', color: "black", flex: 3}}>{(file && file.name) ? `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
+                    {project.isWithinDeadline() &&
+                        <button className="alt-button" style={{flex: 1, padding: "15px"}} onClick={handleUploadClick}>Upload File</button>
+                    }
+                </div>
+            </div>
+            <div className='text' style={{height: "50px"}}>{errorText}</div>
+            {file instanceof SubmissionModel &&
+                <div className='row'>
+                    <button className='row center' style={{flex: 1, padding: "15px"}} onClick={handleDownloadClick}>
+                        <FontAwesomeIcon icon={faDownload} style={{marginRight: "10px"}} />
+                        <span>Download Submission</span>
+                    </button>
+                    <button className='row center remove-button' style={{flex: 1, padding: "15px"}} onClick={handleRemoveClick}>
+                        <FontAwesomeIcon icon={faTrash} style={{marginRight: "10px"}} />
+                        <span>Remove Submission</span>
+                    </button>
+                </div>
+            }
         </div>
-
-        <button className="button" style={{padding: "15px"}} onClick={handleUploadClick}>Upload Submission</button>
-    </div>    
+    </>
   )
 }

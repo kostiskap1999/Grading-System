@@ -1,6 +1,7 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
 @import './general.scss';
+@import './text.scss';
 @import './button.scss';
 
 $border-radius: 5px;
@@ -9,7 +10,13 @@ $border-radius: 5px;
 	@extend .column;
 	justify-content:"space-between";
 	flex-wrap: wrap;
-	padding: 0 50px;
+	overflow: hidden;
+	height: 100%;
+	padding-bottom: 80px;
+
+	& > div {
+		padding: 0 50px;
+	}
 
 	// *** STYLE FOR THE CONTAINERS ***
 	// Style for the section
@@ -77,12 +84,14 @@ $border-radius: 5px;
 
 
 	textarea {
+		color: black;
 		width: 100%;
 		box-sizing: border-box;
 		// height: 60px;
 		// min-height: 60px;
 		min-width: 300px;
 		max-width: 99%;
+		resize: vertical;
 	}
 
 	// Style for the checkbox
@@ -99,14 +108,23 @@ $border-radius: 5px;
 		margin-right: 5px;
 
 		&:checked {
-		background-color: $alt-color2;
-		border-color: $alt-color2;
+			background-color: $alt-color2;
+			border-color: $alt-color2;
 		}
 
 		&:hover {
-		border-color: darken($alt-color2, 10%);
+			border-color: darken($alt-color2, 10%);
 		}
 	}
+
+  input[type=submit] {
+    @extend .alt-button;
+		position: fixed;
+		border: 1px solid white;
+		bottom: 0;
+		width: calc(100% - 200px);
+		z-index: 1;
+  }
 
 	// Style for the dropdown
 	select {
@@ -153,7 +171,7 @@ $border-radius: 5px;
 
 		& th, td {
 			@extend .center;
-			border: 1px solid #ddd;
+			border: 1px solid black;
 			padding: 8px;
 		}
 
@@ -170,6 +188,22 @@ $border-radius: 5px;
 	// *** STYLE FOR THE TEXT*
 	text{
 		@extend .text
-	}	
+	}
 
+	.test-container {
+		background-color: white;
+		padding: 10px;
+		color: black;
+		border-radius: 10px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	
+		header, label, div, span {
+			background-color: inherit;
+		}
+
+		button {
+			@extend .alt-button
+		}
+	}
 }
+

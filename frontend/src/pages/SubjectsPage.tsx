@@ -1,23 +1,20 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
-
-import '../styles/general.scss';
-import '../styles/home.scss';
-import '../styles/button.scss';
 import { UserModel } from "../model/UserModel";
-import ReactDropdown from "react-dropdown";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { fetchTokenID, fetchTokenRole } from "../api/tokenApi";
+import { fetchTokenID } from "../api/tokenApi";
 import { deleteUserSubject, postUserSubject } from "../api/subjectsApi";
 import { SubjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChalkboardTeacher, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 export default function SubjectsPage() {
 
   const navigate = useNavigate()
-  const [params] = useSearchParams()
+  const url = new URL(window.location.href)
+  const params = url.searchParams
 
   const [user, setUser] = useState<UserModel>()
 
@@ -26,71 +23,59 @@ export default function SubjectsPage() {
   
   const [rerender, setRerender] = useState<number>(0)
 
-  const [userRole, setUserRole] = useState<number>(3)
-
-  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([
-    {value: "my", label: "My Subjects"},
-    {value: "all", label: "All Subjects"}])  // my = my subjects, all = all subjects, supervising = for profs and admins
-  const [filter, setFilter] = useState<string>("")
+  const [filterValues, setFilterValues] = useState<{joined: number, supervising: number}>({
+    joined: params.get('joined') ? parseInt(params.get('joined') as string) : 0,
+    supervising: params.get('supervising') ? parseInt(params.get('supervising') as string) : 0,
+    }) // -1 negative, 0 neutral, 1 positive
   const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
-      if(subjectsOBJ){
+      if(subjectsOBJ)
         setSubjects(subjectsOBJ)
 
+      const tokenID: number | null = await fetchTokenID()
+      if(tokenID){
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
+        userOBJ && setUser(userOBJ)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+      if(subjects){
         const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-        for(const subject of subjectsOBJ)
+        for(const subject of subjects)
           if(subject.id === parseInt(parsedID)){
             setSelectedSubject(subject)
             break;
           }
       }
-    }
-
-    fetchData()
-  }, [rerender])
+  }, [rerender, subjects])
 
   useEffect(() => {
-    const fetchData = async () => {
-      const tokenID: number | null = await fetchTokenID()
-
-      if(tokenID){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
-        userOBJ && setUser(userOBJ)
-      }
-
-      setFilter(filterOptions[0].value)
+    if(user){
+        if (filterValues['joined'] === 0)
+            setFilteredSubjects(subjects)
+        else if (filterValues['joined'] === 1)
+            setFilteredSubjects(user.getSubjects(filterValues['supervising']))
+        else if (filterValues['joined'] === -1)
+            setFilteredSubjects(subjects.filter(
+                subject => !user.getSubjects(filterValues['supervising']).some(
+                    userSubject => userSubject.id === subject.id
+                )
+            ))
+        else
+            console.log("how")
     }
-
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    const fetchRole = async () => {
-      const role: number | null = await fetchTokenRole()
-      if(role != null){
-        setUserRole(role)
-        if(role <= 1)
-          setFilterOptions([...filterOptions, { value: "supervising", label: "Supervising Projects" }])
-      } 
-    }
-    fetchRole()
-  }, [])
-
-  useEffect(() => {
-    if (filter === "my" && user)
-      setFilteredSubjects(user.subjects)
-    else if (filter === "all")
-      setFilteredSubjects(subjects)
-    else if (filter === "supervising")
-      setFilteredSubjects([])
-  }, [filter])
+        
+  }, [filterValues, user])
 
   const joinSubject = async () => {
     if(user && selectedSubject){
-      setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
       await postUserSubject(user.id, selectedSubject.id)
       window.location.reload()
     }
@@ -98,16 +83,34 @@ export default function SubjectsPage() {
 
   const leaveSubject = async () => {
     if(user && selectedSubject){
-      setFilter(prevFilter => (prevFilter === "my" ? "" : "my"))
       await deleteUserSubject(user.id, selectedSubject.id)
-      navigate('/subjects')
       window.location.reload()
+    }
+  }
+
+  const changeFilterValue = (prop: keyof typeof filterValues) => {
+    if (filterValues[prop] === 1) {
+      setFilterValues((prevFilterValues) => {
+        const updatedValues = { ...prevFilterValues }
+        updatedValues[prop] = -1
+        url.searchParams.set(prop, '-1')
+        window.history.replaceState(null, '', url.toString())
+        return updatedValues
+      })
+    } else {
+      setFilterValues((prevFilterValues) => {
+        const updatedValues = { ...prevFilterValues }
+        updatedValues[prop] = updatedValues[prop] + 1
+        url.searchParams.set(prop, (updatedValues[prop]).toString())
+        window.history.replaceState(null, '', url.toString())
+        return updatedValues
+      })
     }
   }
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="header-title text center column" style={{flex: 1}}>
+      <div className="top-header text center column" style={{flex: 1}}>
         <div>This is a list of all the subjects</div>
         <div className="row">
           <div>There are pending projects from subjects.</div>
@@ -115,47 +118,56 @@ export default function SubjectsPage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">
-            <ReactDropdown
-              controlClassName="row center"
-              menuClassName="dropdown-menu"        
-              options={filterOptions}
-              onChange={(option) => {setFilter(option.value);}}
-              value={"My Subjects"}
-              placeholder={filter}
-              arrowClosed={<KeyboardArrowDown/>}
-              arrowOpen={<KeyboardArrowUp/>}
-            />
+            <div className="text row center header-title">
+                <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
+                    {user && user.role <= 1 ?
+                    <button className="filter-button icon-button-small" title={"Filter supervised subjects"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
+                        <FontAwesomeIcon icon={faChalkboardTeacher} />
+                    </button>
+                    : <></>
+                    }
+                </div>
+                <div style={{flex: 1}}>Subjects List</div>
+                <div className="row" style={{flex: 1, justifyContent: 'flex-end'}}>
+                    <button className="filter-button icon-button-small" title={"Filter joined subjects"} style={filterValues['joined'] == -1 ? {color: "firebrick"} : filterValues['joined'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('joined')}>
+                        <FontAwesomeIcon icon={faUsers} />
+                    </button>
+                </div>
             </div>
             <div className="column" style={{overflow:'scroll'}}>
               {filteredSubjects.map((subject, index) => (
-                <button key={index} className="button"
-                  onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
+                <button key={index} className="list-button"
+                  onClick={() => {
+                    url.searchParams.set('id', subject.id.toString())
+                    window.history.replaceState(null, '', url.toString())
+                    setRerender(rerender+1)
+                }}
                 >
                   <PageButtonDescription component={subject} />
                 </button>
               ))}
             </div>
         </div>
-        <div className="column container" style={{flex: 1, padding:"10px", justifyContent:"space-between"}}>
-            {selectedSubject && selectedSubject.id === -1 ? <></> : <>
-            {selectedSubject && <SubjectEntry subject={selectedSubject} />}
-              {user && selectedSubject ?
-                user.hasSubject(selectedSubject.id) ?
-                  <button className="button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
-                :
-                  <button className="button" onClick={async () => {await joinSubject()}}>Join Subject</button>
-              : <></>
-              }
-              <div className="column" style={{overflow:'scroll'}}>
-                {selectedSubject && selectedSubject.projects.map((project, index) => (
-                  <button key={index} className="button"
-                    onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
-                  >
-                    <PageButtonDescription component={project} userRole={userRole} />
-                  </button>
-                ))}
-              </div>
+        <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
+            {selectedSubject && user && <>
+                <SubjectEntry subject={selectedSubject} userRole={user?.role}/>
+                {user && user.role > 1 && <>
+                  {user.hasSubject(selectedSubject.id) ? <>
+                      <button className="list-button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                      <div className="column" style={{overflow:'scroll'}}>
+                          {selectedSubject.projects.map((project, index) => (
+                          <button key={index} className="list-button"
+                              onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                          >
+                              <PageButtonDescription component={project} showGrade={user?.role > 1} />
+                          </button>
+                          ))}
+                      </div>
+                  </>:<>
+                      <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+                      <div></div>
+                  </>}
+                </>}
             </>}
         </div>
       </div>
