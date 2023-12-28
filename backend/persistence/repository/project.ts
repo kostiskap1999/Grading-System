@@ -38,6 +38,6 @@ export class ProjectRepository {
 
     const testRepository = new TestRepository(this.tm)
     if(project.tests.length > 0)
-      testRepository.postTests(project.tests, insertedID.id)
+      await testRepository.postTests(project.tests, insertedID.id)
   }
 }
