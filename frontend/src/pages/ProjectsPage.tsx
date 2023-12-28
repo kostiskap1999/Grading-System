@@ -1,7 +1,5 @@
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import ReactDropdown from "react-dropdown";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FileUpload from "../components/fileUpload";
 import { fetchAndSetupUser } from "../api/helpers/massSetups";
 import { ProjectModel } from "../model/ProjectModel";
@@ -14,7 +12,8 @@ import { faStar, faClock, faCheckCircle, faChalkboardTeacher } from '@fortawesom
 
 export default function ProjectsPage() {
   const navigate = useNavigate()
-  const [params] = useSearchParams()
+  const url = new URL(window.location.href)
+  const params = url.searchParams
 
   const [user, setUser] = useState<UserModel>()
 
@@ -22,11 +21,13 @@ export default function ProjectsPage() {
   
   const [rerender, setRerender] = useState<number>(0)
 
-  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "all", label: "All Projects"}])  // my = my projects, supervising = for profs and admins
-  const [filter, setFilter] = useState<string>("")
+  const [filterValues, setFilterValues] = useState<{submitted: number, graded: number, deadline: number, supervising: number}>({
+    submitted: params.get('submitted') ? parseInt(params.get('submitted') as string) : 0,
+    graded: params.get('graded') ? parseInt(params.get('graded') as string) : 0,
+    deadline: params.get('deadline') ? parseInt(params.get('deadline') as string) : 0,
+    supervising: params.get('supervising') ? parseInt(params.get('supervising') as string) : 0,
+    }) // -1 negative, 0 neutral, 1 positive
   const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([])
-
-  const [filterValues, setFilterValues] = useState<{submitted: number, graded: number, deadline: number, supervising: number}>({submitted: 0, graded: 0, deadline: 0, supervising: 0}) // -1 negative, 0 neutral, 1 positive
   
   useEffect(() => {
     const fetchData = async () => {
@@ -35,13 +36,7 @@ export default function ProjectsPage() {
       if(tokenID){
         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
-        if(userOBJ && userOBJ.role < 1)
-          setFilterOptions([ ...filterOptions, 
-            { value: "supervising", label: "Supervising Projects" }
-          ])
       }
-
-      setFilter(filterOptions[0].value)
     }
 
     fetchData()
@@ -59,31 +54,30 @@ export default function ProjectsPage() {
 }, [rerender, user])
 
   useEffect(() => {
-    if(user){
-      if (filter === "all")
+    if(user)
         setFilteredProjects(user.getProjects({filterSubmitted: filterValues['submitted'], filterDeadline: filterValues['deadline'], filterGrades: filterValues['graded'], filterSupervising: filterValues['supervising']}))
-      else if (filter === "supervising")
-        setFilteredProjects([])
-    }
-  }, [filter, filterValues])
+  }, [filterValues, user])
 
   const changeFilterValue = (prop: keyof typeof filterValues) => {
     if (filterValues[prop] === 1) {
       setFilterValues((prevFilterValues) => {
         const updatedValues = { ...prevFilterValues }
         updatedValues[prop] = -1
+        url.searchParams.set(prop, '-1')
+        window.history.replaceState(null, '', url.toString())
         return updatedValues
       })
     } else {
       setFilterValues((prevFilterValues) => {
         const updatedValues = { ...prevFilterValues }
         updatedValues[prop] = updatedValues[prop] + 1
+        url.searchParams.set(prop, (updatedValues[prop]).toString())
+        window.history.replaceState(null, '', url.toString())
         return updatedValues
       })
     }
   }
   
-
   return (
     <div className="page column">
       <div className="top-header text row">
@@ -103,28 +97,13 @@ export default function ProjectsPage() {
           <div className="text row center header-title">
               <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
                 {user && user.role <= 1 ?
-                  <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['deadline'] == -1 ? {color: "firebrick"} : filterValues['deadline'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
+                  <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
                     <FontAwesomeIcon icon={faChalkboardTeacher} />
                   </button>
                 : <></>
                 }
               </div>
-              {filterOptions.length > 1 ?
-                <ReactDropdown
-                  controlClassName="row center"
-                  menuClassName="dropdown-menu"        
-                  options={filterOptions}
-                  onChange={(option) => {setFilter(option.value);}}
-                  value={filterOptions[0].label}
-                  placeholder={filter}
-                  arrowClosed={<KeyboardArrowDown/>}
-                  arrowOpen={<KeyboardArrowUp/>}
-                  className="dropdown-menu-root"
-                  baseClassName="center column dropdown-menu "
-                />
-              :
-                <div style={{flex: 1}}>{filterOptions[0].label}</div>              
-              }
+                <div style={{flex: 1}}>Project List</div>
               <div className="row" style={{flex: 1, justifyContent: 'flex-end'}}>
                 <button className="filter-button icon-button-small" title={"Filter submitted projects"} style={filterValues['submitted'] == -1 ? {color: "firebrick"} : filterValues['submitted'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('submitted')}>
                   <FontAwesomeIcon icon={faCheckCircle} />
@@ -140,7 +119,11 @@ export default function ProjectsPage() {
           <div className="column" style={{overflow:'scroll'}}>
             {filteredProjects.map((project, index) => (
               <button key={index} className="list-button"
-                onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                onClick={() => {
+                    url.searchParams.set('id', project.id.toString())
+                    window.history.replaceState(null, '', url.toString())
+                    setRerender(rerender+1)
+                }}
               >
                 <PageButtonDescription component={project} />
               </button>

@@ -67,6 +67,22 @@ export class UserModel {
         return subjects
     }
 
+    getSubjects(filterSupervising?: number) {
+        const submittedSubjects: SubjectModel[] = []
+    
+        for (const subject of this.subjects){
+            const isSupervising =
+                !filterSupervising ||
+                (filterSupervising === -1 && (subject.supervisorID !== this.id)) ||
+                (filterSupervising === 1 && (subject.supervisorID === this.id))
+    
+            if (isSupervising)
+                submittedSubjects.push(subject)
+        }
+    
+        return submittedSubjects
+    }
+
     getProjects({filterSubmitted, filterDeadline, filterGrades, filterSupervising}: Partial<{filterSubmitted?: number, filterDeadline?: number, filterGrades?: number, filterSupervising?: number}> = {}) {
         const submittedProjects: ProjectModel[] = []
     

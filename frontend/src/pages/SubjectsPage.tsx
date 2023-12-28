@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 import { UserModel } from "../model/UserModel";
-import ReactDropdown from "react-dropdown";
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { fetchTokenID } from "../api/tokenApi";
 import { deleteUserSubject, postUserSubject } from "../api/subjectsApi";
 import { SubjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChalkboardTeacher, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 export default function SubjectsPage() {
 
   const navigate = useNavigate()
-  const [params] = useSearchParams()
+  const url = new URL(window.location.href)
+  const params = url.searchParams
 
   const [user, setUser] = useState<UserModel>()
 
@@ -22,10 +23,10 @@ export default function SubjectsPage() {
   
   const [rerender, setRerender] = useState<number>(0)
 
-  const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([
-    {value: "all", label: "All Subjects"},
-    {value: "my", label: "My Subjects"}])  // my = my subjects, all = all subjects, supervising = for profs and admins
-  const [filter, setFilter] = useState<string>("")
+  const [filterValues, setFilterValues] = useState<{joined: number, supervising: number}>({
+    joined: params.get('joined') ? parseInt(params.get('joined') as string) : 0,
+    supervising: params.get('supervising') ? parseInt(params.get('supervising') as string) : 0,
+    }) // -1 negative, 0 neutral, 1 positive
   const [filteredSubjects, setFilteredSubjects] = useState<SubjectModel[]>([])
 
   useEffect(() => {
@@ -38,10 +39,7 @@ export default function SubjectsPage() {
       if(tokenID){
         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
         userOBJ && setUser(userOBJ)
-        if(userOBJ && userOBJ.role <= 1)
-          setFilterOptions([...filterOptions, { value: "supervising", label: "Supervising Projects" }])
       }
-      setFilter(params.get('nav-filter') ?? filterOptions[0].value)
     }
 
     fetchData()
@@ -59,17 +57,25 @@ export default function SubjectsPage() {
   }, [rerender, subjects])
 
   useEffect(() => {
-      if (filter === "all")
-    setFilteredSubjects(subjects)
-    else if (filter === "my" && user)
-      setFilteredSubjects(user.subjects)
-    else if (filter === "supervising")
-      setFilteredSubjects([])
-  }, [filter])
+    if(user){
+        if (filterValues['joined'] === 0)
+            setFilteredSubjects(subjects)
+        else if (filterValues['joined'] === 1)
+            setFilteredSubjects(user.getSubjects(filterValues['supervising']))
+        else if (filterValues['joined'] === -1)
+            setFilteredSubjects(subjects.filter(
+                subject => !user.getSubjects(filterValues['supervising']).some(
+                    userSubject => userSubject.id === subject.id
+                )
+            ))
+        else
+            console.log("how")
+    }
+        
+  }, [filterValues, user])
 
   const joinSubject = async () => {
     if(user && selectedSubject){
-      setFilter(prevFilter => (prevFilter === "all" ? "" : "all"))
       await postUserSubject(user.id, selectedSubject.id)
       window.location.reload()
     }
@@ -77,10 +83,28 @@ export default function SubjectsPage() {
 
   const leaveSubject = async () => {
     if(user && selectedSubject){
-      setFilter(prevFilter => (prevFilter === "all" ? "" : "all"))
       await deleteUserSubject(user.id, selectedSubject.id)
-      navigate('/subjects')
       window.location.reload()
+    }
+  }
+
+  const changeFilterValue = (prop: keyof typeof filterValues) => {
+    if (filterValues[prop] === 1) {
+      setFilterValues((prevFilterValues) => {
+        const updatedValues = { ...prevFilterValues }
+        updatedValues[prop] = -1
+        url.searchParams.set(prop, '-1')
+        window.history.replaceState(null, '', url.toString())
+        return updatedValues
+      })
+    } else {
+      setFilterValues((prevFilterValues) => {
+        const updatedValues = { ...prevFilterValues }
+        updatedValues[prop] = updatedValues[prop] + 1
+        url.searchParams.set(prop, (updatedValues[prop]).toString())
+        window.history.replaceState(null, '', url.toString())
+        return updatedValues
+      })
     }
   }
 
@@ -94,23 +118,30 @@ export default function SubjectsPage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">
-            <ReactDropdown
-              controlClassName="row center"       
-              options={filterOptions}
-              onChange={(option) => {setFilter(option.value);}}
-              value={(filterOptions.find(option => option.value === params.get('nav-filter')) ?? filterOptions[0]).label}
-              placeholder={filter}
-              arrowClosed={<KeyboardArrowDown/>}
-              arrowOpen={<KeyboardArrowUp/>}
-              className="dropdown-menu-root"
-              baseClassName="center column dropdown-menu "
-            />
+            <div className="text row center header-title">
+                <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
+                    {user && user.role <= 1 ?
+                    <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
+                        <FontAwesomeIcon icon={faChalkboardTeacher} />
+                    </button>
+                    : <></>
+                    }
+                </div>
+                <div style={{flex: 1}}>Subjects List</div>
+                <div className="row" style={{flex: 1, justifyContent: 'flex-end'}}>
+                    <button className="filter-button icon-button-small" title={"Filter submitted projects"} style={filterValues['joined'] == -1 ? {color: "firebrick"} : filterValues['joined'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('joined')}>
+                        <FontAwesomeIcon icon={faUsers} />
+                    </button>
+                </div>
             </div>
             <div className="column" style={{overflow:'scroll'}}>
               {filteredSubjects.map((subject, index) => (
                 <button key={index} className="list-button"
-                  onClick={() => {navigate('/subjects?id=' + subject.id); setRerender(rerender+1)}}
+                  onClick={() => {
+                    url.searchParams.set('id', subject.id.toString())
+                    window.history.replaceState(null, '', url.toString())
+                    setRerender(rerender+1)
+                }}
                 >
                   <PageButtonDescription component={subject} />
                 </button>

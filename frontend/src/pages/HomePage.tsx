@@ -39,7 +39,7 @@ export default function HomePage() {
           <div className="text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user?.subjects && user.subjects.map((subject: SubjectModel, index: number) => (
-              <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
+              <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&joined=1')}>
                 <PageButtonDescription component={subject} />
               </button>
             ))}
