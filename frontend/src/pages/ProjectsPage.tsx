@@ -9,6 +9,9 @@ import { UserModel } from "../model/UserModel";
 import { fetchTokenID } from "../api/tokenApi";
 import { ProjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faClock } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProjectsPage() {
   const navigate = useNavigate()
@@ -23,6 +26,9 @@ export default function ProjectsPage() {
   const [filterOptions, setFilterOptions] = useState<{value: string, label: string}[]>([{value: "unsubmitted", label: "Unsubmitted Projects"}])  // my = my projects, supervising = for profs and admins
   const [filter, setFilter] = useState<string>("")
   const [filteredProjects, setFilteredProjects] = useState<ProjectModel[]>([])
+
+  const [filterGrades, setFilterGrades] = useState<number>(0) // -1 negative, 0 neutral, 1 positive
+  const [filterDeadline, setFilterDeadline] = useState<number>(0) // -1 negative, 0 neutral, 1 positive
   
   useEffect(() => {
     const fetchData = async () => {
@@ -62,20 +68,37 @@ export default function ProjectsPage() {
 }, [rerender, user])
 
   useEffect(() => {
-    if (filter === "unsubmitted" && user)
-      setFilteredProjects(user.getUnsubmittedProjects(new Date()))
-    else if (filter === "all" && user)
-      setFilteredProjects(user.getProjects())
-    else if (filter === "supervising")
-      setFilteredProjects([])
+    if(user){
+      if (filter === "unsubmitted")
+        setFilteredProjects(user.getProjects({filterSubmitted: -1, filterDeadline: filterDeadline, filterGrades: filterGrades}))
+      else if (filter === "submitted")
+        setFilteredProjects(user.getProjects({filterSubmitted: 1, filterDeadline: filterDeadline, filterGrades: filterGrades}))
+      else if (filter === "all")
+        setFilteredProjects(user.getProjects())
+      else if (filter === "supervising")
+        setFilteredProjects([])
+    }
+  }, [filter, filterDeadline, filterGrades])
 
-  }, [filter])
+  const changeFilterGrade = () => {
+    if(filterGrades == 1)
+      setFilterGrades(-1)
+    else
+      setFilterGrades(filterGrades+1)
+  }
+
+  const changeFilterDeadline = () => {
+    if(filterDeadline == 1)
+      setFilterDeadline(-1)
+    else
+      setFilterDeadline(filterDeadline+1)
+  }
 
   return (
     <div className="page column">
       <div className="top-header text row">
         {user && user.role <= 1 ? <>
-          <button style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-project')}>New Project</button>
+          <button className="button" style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}
         <div className="text center column" style={{flex: 4}}>
           <div>This is a list of all the projects. You can participate in all the projects whose subjects you follow.</div>
@@ -87,7 +110,7 @@ export default function ProjectsPage() {
       </div>
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
-          <div className="text center header-title">
+          <div className="text row center header-title">
               <ReactDropdown
                 controlClassName="row center"
                 menuClassName="dropdown-menu"        
@@ -100,6 +123,12 @@ export default function ProjectsPage() {
                 className="dropdown-menu-root"
                 baseClassName="center column dropdown-menu "
               />
+              <button className="filter-button icon-button-small" title={"Filter by grades"} style={filterGrades == -1 ? {color: "firebrick"} : filterGrades == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterGrade()}>
+                <FontAwesomeIcon icon={faStar} />
+              </button>
+              <button className="filter-button icon-button-small" title={"Filter by deadline"} style={filterDeadline == -1 ? {color: "firebrick"} : filterDeadline == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterDeadline()}>
+                <FontAwesomeIcon icon={faClock} />
+              </button>
           </div>
           <div className="column" style={{overflow:'scroll'}}>
             {filteredProjects.map((project, index) => (

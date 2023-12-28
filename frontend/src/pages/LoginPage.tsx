@@ -189,7 +189,7 @@ export default function LoginPage() {
             {(!isRegistering && wrongCredentials) && <span>Wrong Credentials. Try again.</span>}
             {(isRegistering && (password !== "" || confirmPassword !== "" || password !== confirmPassword)) && <span>Passwords do not match</span>}
           </div>
-          <input type="submit" disabled={isRegistering && confirmPassword !== "" && password !== "" && password !== confirmPassword} value={isRegistering ? "Register" : "Log In"}/>
+          <input type="submit" className='button' disabled={isRegistering && confirmPassword !== "" && password !== "" && password !== confirmPassword} value={isRegistering ? "Register" : "Log In"}/>
         </form>
         {isRegistering ?
           <span>Already have an account? <button className='register-login-switch' onClick={() => {setIsRegistering(false)}}>Log In</button></span>  

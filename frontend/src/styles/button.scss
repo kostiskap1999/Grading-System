@@ -1,7 +1,7 @@
 @import './variables/colors.scss';
 @import './variables/typography.scss';
 
-input[type=submit], button {
+.button {
 	background-color: white;
 	color: black;
 	border: 0;
@@ -26,7 +26,16 @@ input[type=submit], button {
 	}
 }
 
+.filter-button {
+	background-color: transparent;
+	border: none;
+	padding: 5px !important;
+
+}
+
 .list-button {
+	@extend .button;
+
 	min-height: 70px;
 
 	&:nth-child(even) {
@@ -35,6 +44,8 @@ input[type=submit], button {
 }
 
 .alt-button {
+	@extend .button;
+
 	background-color: $button-color;
 	color: white;
 
@@ -48,6 +59,8 @@ input[type=submit], button {
 }
 
 .remove-button {
+	@extend .button;
+
 	background-color: $alt-color;
 	color: white;
 
@@ -68,6 +81,8 @@ input[type=submit], button {
 }
 
 .file-upload {
+	@extend .button;
+
 	background-color: white;
     border: 1px solid #ccc;
     // display: inline-block;

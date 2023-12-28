@@ -212,7 +212,7 @@ export default function NewProjectPage() {
                     <input id={`main-function-${index}`} defaultValue={test.main} onChange={(event) => handleTestChange(event, index)} />
                   </label>
 
-                  <button className="icon-button-small" style={{ backgroundColor: "firebrick" }} type="button" onClick={() => deleteTest(index)}>
+                  <button className="remove-button icon-button-small" type="button" onClick={() => deleteTest(index)}>
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </header>
@@ -256,8 +256,8 @@ export default function NewProjectPage() {
                               <button
                                 type="button" // Add this line to prevent form submission
                                 id={`trash-${idx}`}
-                                className="icon-button-small"
-                                style={{ padding: "13px", backgroundColor: "firebrick" }}
+                                className="remove-button icon-button-small"
+                                style={{ padding: "13px" }}
                                 onClick={() => deleteInput(index, idx)}
                               >
                                 <FontAwesomeIcon icon={faTrash} />

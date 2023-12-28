@@ -121,22 +121,22 @@ export default function SubjectsPage() {
             {selectedSubject && user && <>
                 <SubjectEntry subject={selectedSubject} userRole={user?.role}/>
                 {user && user.role > 1 && <>
-                  {user.hasSubject(selectedSubject.id) ?
+                  {user.hasSubject(selectedSubject.id) ? <>
                       <button className="list-button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
-                  :
+                      <div className="column" style={{overflow:'scroll'}}>
+                          {selectedSubject.projects.map((project, index) => (
+                          <button key={index} className="list-button"
+                              onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                          >
+                              <PageButtonDescription component={project} showGrade={user?.role > 1} />
+                          </button>
+                          ))}
+                      </div>
+                  </>:<>
                       <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
-                  }
+                      <div></div>
+                  </>}
                 </>}
-                
-                <div className="column" style={{overflow:'scroll'}}>
-                    {selectedSubject.projects.map((project, index) => (
-                    <button key={index} className="list-button"
-                        onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
-                    >
-                        <PageButtonDescription component={project} showGrade={user?.role > 1} />
-                    </button>
-                    ))}
-                </div>
             </>}
         </div>
       </div>

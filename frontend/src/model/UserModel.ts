@@ -67,30 +67,33 @@ export class UserModel {
         return subjects
     }
 
-    getProjects(deadline?: Date){
-        var projects: ProjectModel[] = []
-        for(const subject of this.subjects)
-            for(const project of subject.projects)
-                if (!deadline || (project.deadline as Date).getTime() > deadline.getTime())
-                    projects.push(project)
-        
-        return projects
-    }
-
-    getUnsubmittedProjects(deadline?: Date) {
-        const unsubmittedProjects: ProjectModel[] = [];
+    getProjects({filterSubmitted, filterDeadline, filterGrades}: Partial<{filterSubmitted?: number, filterDeadline?: number, filterGrades?: number}> = {}) {
+        const submittedProjects: ProjectModel[] = [];
     
         for (const subject of this.subjects)
             for (const project of subject.projects) {
-                const userSubmission = project.submissions.find(submission => submission.submitee_id === this.id)
-                if (!userSubmission && (!deadline || (project.deadline as Date).getTime() > deadline.getTime()))
-                    unsubmittedProjects.push(project)
+                const isWithinDeadline =
+                    !filterDeadline ||
+                    (filterDeadline === -1 && (project.deadline as Date).getTime() < new Date().getTime()) ||
+                    (filterDeadline === 1 && (project.deadline as Date).getTime() > new Date().getTime())
+
+                const userSubmission = project.submissions.find(submission => submission.submitee_id === this.id);
+                const shouldConsiderSubmission =
+                    !filterSubmitted ||
+                    (filterSubmitted === -1 && !userSubmission) ||
+                    (filterSubmitted === 1 && userSubmission);
+                const isGraded =  // if userSubmission exists, then check if it is graded, otherwise always false
+                    !filterGrades ||
+                    (filterGrades === -1 && !(userSubmission?.grade ?? false)) ||
+                    (filterGrades === 1 && userSubmission?.grade)
+
+                if (shouldConsiderSubmission && isWithinDeadline && isGraded)
+                    submittedProjects.push(project);
             }
     
-        return unsubmittedProjects;
+        return submittedProjects;
     }
     
-
     getSubmissions(){
         var submissions: SubmissionModel[] = []
         for(const subject of this.subjects)
