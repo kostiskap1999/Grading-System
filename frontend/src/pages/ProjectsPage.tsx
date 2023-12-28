@@ -97,7 +97,7 @@ export default function ProjectsPage() {
           <div className="text row center header-title">
               <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
                 {user && user.role <= 1 ?
-                  <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
+                  <button className="filter-button icon-button-small" title={"Filter supervised projects"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
                     <FontAwesomeIcon icon={faChalkboardTeacher} />
                   </button>
                 : <></>

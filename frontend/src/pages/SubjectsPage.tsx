@@ -121,7 +121,7 @@ export default function SubjectsPage() {
             <div className="text row center header-title">
                 <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
                     {user && user.role <= 1 ?
-                    <button className="filter-button icon-button-small" title={"Filter by active deadline"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
+                    <button className="filter-button icon-button-small" title={"Filter supervised subjects"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
                         <FontAwesomeIcon icon={faChalkboardTeacher} />
                     </button>
                     : <></>
@@ -129,7 +129,7 @@ export default function SubjectsPage() {
                 </div>
                 <div style={{flex: 1}}>Subjects List</div>
                 <div className="row" style={{flex: 1, justifyContent: 'flex-end'}}>
-                    <button className="filter-button icon-button-small" title={"Filter submitted projects"} style={filterValues['joined'] == -1 ? {color: "firebrick"} : filterValues['joined'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('joined')}>
+                    <button className="filter-button icon-button-small" title={"Filter joined subjects"} style={filterValues['joined'] == -1 ? {color: "firebrick"} : filterValues['joined'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('joined')}>
                         <FontAwesomeIcon icon={faUsers} />
                     </button>
                 </div>
