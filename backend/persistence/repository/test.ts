@@ -41,7 +41,7 @@ export class TestRepository {
 
   async postTests(tests: any, projectId: number) {
     for (const test of tests) {
-        const testValues = [projectId, test.main]
+        const testValues = [projectId, test.mainFunction]
         const testResult: any = await this.tm.query('INSERT INTO tests (project_id, main_function) VALUES (?, ?) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID();', ...testValues)
         
         const lastInsertedId = testResult.insertId;

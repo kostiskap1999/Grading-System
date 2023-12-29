@@ -114,7 +114,7 @@ export default function NewProjectPage() {
           if (event.target.value === "")
             break
           const subject = JSON.parse(event.target.value)
-          console.log(subject)
+
           newProjectCopy.subjectID = parseInt(subject.id)
           if (!newProjectCopy.name || newProjectCopy.name === "")
             newProjectCopy.name = `${subject.name} Project ${subject.projects.length + 1}`

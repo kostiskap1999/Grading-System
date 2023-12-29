@@ -70,7 +70,7 @@ export default function FileUpload({ user, project }: FileUploadProps) {
         let submission = new SubmissionModel()
         submission.name = file.name
         submission.submiteeId = user.id
-        submission.submiteeId = project.id
+        submission.projectId = project.id
         submission.code = fileContents
         await postSubmission(submission)
       }

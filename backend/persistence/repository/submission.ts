@@ -25,6 +25,7 @@ export class SubmissionRepository {
   }
 
   async postSubmission(submission: any) {
+    console.log(submission)
     await this.tm.query(`INSERT INTO submissions (name, code, date, submitee_id, project_id) VALUES (?, ?, ?, ?, ?)`, submission.name, submission.code, this.formatDate(new Date()), submission.submiteeId, submission.projectId)
   }
 
