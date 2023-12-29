@@ -112,9 +112,11 @@ export async function deleteUserSubject(userID: number, subjectID: number) {
             return response.json();
     })
     .then((value) => {
+        console.log(value)
         return value
     })
     .catch((error) => {
+        console.log("a")
         errorHandling(error)
         return null
     });

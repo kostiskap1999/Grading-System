@@ -8,8 +8,8 @@ export class TestRepository {
   async findByProjectId(projectId: number) {
 
     const tests = (await this.tm.query(`SELECT i.group_id, i.id AS input_id, i.code AS input_code, 
-      i.is_main_param AS input_is_main_param, o.id AS output_id, o.code AS output_code,
-      t.main_function AS main
+      o.id AS output_id, o.code AS output_code,
+      t.id AS id, t.main_function AS main_function, t.project_id AS project_id, t.submission_id AS submission_id
       FROM inputs i
       LEFT JOIN outputs o ON i.group_id = o.group_id
       LEFT JOIN tests t ON i.group_id = t.id
@@ -24,7 +24,7 @@ export class TestRepository {
 
     for (let i=0; i<tests.length; i++) {
         if (tests[i].group_id !== currentTestId) {
-            currentTest = new Test(tests[i], [], new Output({id: tests[i].output_id, code: tests[i].output_code, testId: tests[i].group_id}))
+            currentTest = new Test(tests[i], [], new Output({id: tests[i].output_id, code: tests[i].output_code, group_id: tests[i].group_id}))
             allTests.push(currentTest)
             currentTestId = tests[i].group_id
         }
@@ -32,8 +32,7 @@ export class TestRepository {
         currentTest?.inputs?.push(new Input({
             id: tests[i].input_id,
             code: tests[i].input_code,
-            isMainParam: tests[i].input_is_main_param,
-            testId: tests[i].group_id
+            group_id: tests[i].group_id
         }))
     }
 

@@ -59,7 +59,7 @@ export default function ProfilePage() {
           <div className="text center header-title">My Submissions</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getSubmissions().map((submission: SubmissionModel, index: number) => (
-                <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + submission.project_id)}>
+                <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + submission.projectId)}>
                   <PageButtonDescription component={submission} showGrade={user.role > 1} />
                 </button>
             ))}

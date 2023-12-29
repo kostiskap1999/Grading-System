@@ -68,8 +68,9 @@ export default function FileUpload({ user, project }: FileUploadProps) {
         }
         const fileContents = await readFileContents(file as File)
         let submission = new SubmissionModel()
-        submission.submitee_id = user.id
-        submission.project_id = project.id
+        submission.name = file.name
+        submission.submiteeId = user.id
+        submission.submiteeId = project.id
         submission.code = fileContents
         await postSubmission(submission)
       }

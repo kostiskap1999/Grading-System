@@ -83,7 +83,9 @@ export default function SubjectsPage() {
 
   const leaveSubject = async () => {
     if(user && selectedSubject){
+      console.log("A")
       await deleteUserSubject(user.id, selectedSubject.id)
+      console.log("A")
       window.location.reload()
     }
   }

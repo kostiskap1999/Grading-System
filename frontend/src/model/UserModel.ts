@@ -99,7 +99,7 @@ export class UserModel {
                         (filterDeadline === -1 && (project.deadline as Date).getTime() < new Date().getTime()) ||
                         (filterDeadline === 1 && (project.deadline as Date).getTime() > new Date().getTime())
     
-                    const userSubmission = project.submissions.find(submission => submission.submitee_id === this.id);
+                    const userSubmission = project.submissions.find(submission => submission.submiteeId === this.id);
                     const shouldConsiderSubmission =
                         !filterSubmitted ||
                         (filterSubmitted === -1 && !userSubmission) ||
@@ -123,7 +123,7 @@ export class UserModel {
         for(const subject of this.subjects)
             for(const project of subject.projects)
                 for(const submission of project.submissions)
-                    if(submission.submitee_id == this.id)
+                    if(submission.submiteeId == this.id)
                         submissions.push(submission)
         
         return submissions

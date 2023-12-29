@@ -1,19 +1,19 @@
 export interface ITest {
     id: number;
-    main: string;
+    mainFunction: string;
     inputs: ITestInput[];
     output: ITestOutput;
 }
 
 export class TestModel {
     id: number;
-    main: string;
+    mainFunction: string;
     inputs: TestInputModel[];
     output: TestOutputModel;
 
     constructor(test: ITest = {} as ITest) {
         this.id = test.id
-        this.main = test.main
+        this.mainFunction = test.mainFunction
         this.inputs = []
         test.inputs && test.inputs.forEach(input => {
             this.inputs.push(new TestInputModel(input))

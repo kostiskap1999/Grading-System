@@ -43,10 +43,10 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
         let inputCode = test.inputs.map(input => typeof input.code === 'string' && !isNaN(Number(input.code)) ? input.code : `'${input.code}'`).join(', ');
 
         let finalCode = `${code}
-        return ${test.main}(${inputCode});
+        return ${test.mainFunction}(${inputCode});
         `
         let result = Function(finalCode)()
-        result = result.toString()
+        result = result ? result.toString() : null
 
         if (result == test.output.code){
           passedTests++

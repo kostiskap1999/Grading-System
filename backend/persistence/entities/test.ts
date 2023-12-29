@@ -19,13 +19,11 @@ export class Test {
 export class Input {
   id: number
   code: string
-  isMainParam: number
   testId: number
   
   constructor(input: any) {
     this.id = input.id
     this.code = input.code
-    this.isMainParam = input.is_main_param
     this.testId = input.group_id
   }
 }

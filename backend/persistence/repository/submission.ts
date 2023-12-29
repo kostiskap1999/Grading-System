@@ -10,8 +10,8 @@ export class SubmissionRepository {
     let year = date.getFullYear()
     let month = (date.getMonth() + 1).toString().padStart(2, '0')
     let day = date.getDate().toString().padStart(2, '0')
-    
-    return year + '-' + month + '-' + day
+    let res: string = year + '-' + month + '-' + day
+    return res
   }
 
   async findByProjectId(projectId: number) {
@@ -25,10 +25,10 @@ export class SubmissionRepository {
   }
 
   async postSubmission(submission: any) {
-    await this.tm.query(`INSERT INTO submissions (code, date, comment, submitee_id, project_id) VALUES (?, ?, ?, ?, ?)`, submission.code, this.formatDate(submission.date), submission.comment, submission.submitee_id, submission.project_id)
+    await this.tm.query(`INSERT INTO submissions (name, code, date, submitee_id, project_id) VALUES (?, ?, ?, ?, ?)`, submission.name, submission.code, this.formatDate(new Date()), submission.submiteeId, submission.projectId)
   }
 
   async patchSubmission(submission: any) {
-    await this.tm.query(`UPDATE submissions SET code = ?, date = ?, grade = ?, comment = ? WHERE id = ?`, submission.code, this.formatDate(submission.date), submission.grade, submission.comment, submission.id)
+    await this.tm.query(`UPDATE submissions SET name = ?, code = ?, date = ?, grade = ?, comment = ? WHERE id = ?`, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.comment, submission.id)
   }
 }

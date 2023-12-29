@@ -42,9 +42,9 @@ export class SubmissionManager {
     if (!submission)
       throw new BadRequestError("Incorrect submission")
     
-    const submissions = await this.repository.postSubmission(submission)
+    await this.repository.postSubmission(submission)
     
-    return submissions
+    return true
   }
 
   async patchSubmission(submission: any, token: string) {
@@ -53,8 +53,8 @@ export class SubmissionManager {
     if (!submission)
       throw new BadRequestError("Incorrect submission")
     
-    const submissions = await this.repository.patchSubmission(submission)
+    await this.repository.patchSubmission(submission)
     
-    return submissions
+    return true
   }
 }

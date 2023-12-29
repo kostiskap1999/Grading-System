@@ -112,7 +112,7 @@ router.route('/user-subjects/:userId').get(async (req, res) => {
 });
 
 // POST USER-SUBJECT ROUTER
-router.route('/user-subjects').get(async (req, res) => {
+router.route('/user-subjects').post(async (req, res) => {
   console.log('/user-subjects')
   await transact(res, tm => new SubjectManager(tm).postUserSubject(req.body, req.headers.token as string))
 });

@@ -138,7 +138,7 @@ export default function NewProjectPage() {
       const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
       switch (event.target.id) {
         case `main-function-${testIndex}`:
-          newProjectCopy.tests[testIndex].main = event.target.value
+          newProjectCopy.tests[testIndex].mainFunction = event.target.value
           break
         case `input-code-${inputIndex}`:
           newProjectCopy.tests[testIndex].inputs[inputIndex!].code = event.target.value
@@ -209,7 +209,7 @@ export default function NewProjectPage() {
                     <div>
                       <span>Test {index + 1} to run for function</span>
                     </div>
-                    <input id={`main-function-${index}`} defaultValue={test.main} onChange={(event) => handleTestChange(event, index)} />
+                    <input id={`main-function-${index}`} defaultValue={test.mainFunction} onChange={(event) => handleTestChange(event, index)} />
                   </label>
 
                   <button className="remove-button icon-button-small" type="button" onClick={() => deleteTest(index)}>
