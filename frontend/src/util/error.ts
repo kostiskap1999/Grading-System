@@ -3,8 +3,7 @@ import { logout } from './logout'
 export const errorHandling = (err: Error) => {
     if (err instanceof TypeError && err.message.includes('NetworkError')) {
         console.error('NetworkError: There was a problem with the network. Please check your connection.')
-        window.location.href = '/error?c=network'
-        // logout()
+        // window.location.href = '/error?c=network'
         return
     }
 

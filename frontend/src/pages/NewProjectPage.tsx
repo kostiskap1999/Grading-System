@@ -167,7 +167,7 @@ export default function NewProjectPage() {
   return (
     <div className="page column">
       <form className="new-form text" onSubmit={createProject}>
-        <div style={{ overflow: "scroll", padding: "0 200px" }}>
+        <div style={{ overflow: "scroll", padding: "0 50px" }}>
           <section>
             <label>
               <input style={{ fontSize: 30, border: 0, textAlign: "center" }} id="name" placeholder="New Project Name" value={newProject.name} required onChange={handleChange} />
@@ -193,12 +193,12 @@ export default function NewProjectPage() {
             <div>
               <label>
                 <span>Description</span>
-                <textarea id="description" rows={5} cols={100} required placeholder="Enter description here" onChange={handleChange} />
+                <textarea className="textarea" id="description" rows={5} cols={100} required placeholder="Enter description here" onChange={handleChange} />
               </label>
             </div>
           </section>
 
-          <section style={{ border: "none" }}>
+          <section className="row" style={{ border: "none", flexWrap: "wrap" }}>
             {newProject.tests && newProject.tests.map((test, index) => (
               <section className="test-container" key={test.id}>
                 <header>
@@ -223,8 +223,7 @@ export default function NewProjectPage() {
                       <thead>
                         <tr>
                           <th style={{ flex: 0.01 }}>#</th>
-                          <th style={{ flex: 0.01 }}>Is Param?</th>
-                          <th style={{ flex: 0.5 }}>Parameter value</th>
+                          <th style={{ flex: 0.5 }}>Value</th>
                           <th style={{ flex: 0.01 }}></th>
                         </tr>
                       </thead>
@@ -234,20 +233,11 @@ export default function NewProjectPage() {
                             <td style={{ flex: 0.01 }}>
                               <div>{idx + 1}.</div>
                             </td>
-                            <td style={{ flex: 0.01, padding: 0 }}>
-                              <label style={{ padding: 0, margin: 0 }}>
-                                <input
-                                  id={`input-is-main-param-${idx}`}
-                                  type="checkbox"
-                                  defaultChecked={input.isMainParam}
-                                  onChange={(event) => handleTestChange(event, index, idx)}
-                                />
-                              </label>
-                            </td>
                             <td style={{ flex: 0.5 }}>
                               <textarea
                                 id={`input-code-${idx}`}
-                                rows={1}
+                                rows={3}
+                                cols={5}
                                 defaultValue={input.code}
                                 onChange={(event) => handleTestChange(event, index, idx)}
                               />
@@ -276,7 +266,7 @@ export default function NewProjectPage() {
                     <table>
                       <thead>
                         <tr>
-                          <th>Code</th>
+                          <th>Value</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -285,7 +275,8 @@ export default function NewProjectPage() {
                             <textarea
                               id={`output-code-${index}`}
                               defaultValue={test.output.code}
-                              rows={1}
+                              rows={3}
+                              cols={5}
                               onChange={(event) => handleTestChange(event, index)}
                             />
                           </td>
@@ -296,9 +287,8 @@ export default function NewProjectPage() {
                 </div>
               </section>
             ))}
-
-            <button style={{ width: "100%" }} type="button" onClick={createTest}>Add Test</button>
           </section>
+          <button style={{ width: "100%" }} type="button" onClick={createTest}>Add Test</button>
           {projectCreated === undefined ?
             <div></div> :
             projectCreated === true ?

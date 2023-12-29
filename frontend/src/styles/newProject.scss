@@ -82,41 +82,6 @@ $border-radius: 5px;
 	// *** STYLE FOR THE FIELDS ***
 	// Style for the inputs
 
-
-	textarea {
-		color: black;
-		width: 100%;
-		box-sizing: border-box;
-		// height: 60px;
-		// min-height: 60px;
-		min-width: 300px;
-		max-width: 99%;
-		resize: vertical;
-	}
-
-	// Style for the checkbox
-	input[type=checkbox] {
-		appearance: none;
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		width: 16px;
-		height: 16px;
-		border: 2px solid $alt-color2;
-		border-radius: 3px;
-		outline: none;
-		cursor: pointer;
-		margin-right: 5px;
-
-		&:checked {
-			background-color: $alt-color2;
-			border-color: $alt-color2;
-		}
-
-		&:hover {
-			border-color: darken($alt-color2, 10%);
-		}
-	}
-
   input[type=submit] {
     @extend .alt-button;
 		position: fixed;
@@ -166,7 +131,12 @@ $border-radius: 5px;
 		margin-top: 20px;
 
 		textarea {
+			color: black;
+			width: 100%;
+			box-sizing: border-box;
 			resize: vertical;
+			// min-width: 100px;
+			// max-width: 100px;
 		}
 
 		& th, td {
@@ -193,17 +163,32 @@ $border-radius: 5px;
 	.test-container {
 		background-color: white;
 		padding: 10px;
+		margin: 20px;
 		color: black;
 		border-radius: 10px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		width: calc(100vw/2 - 240px);
 	
 		header, label, div, span {
 			background-color: inherit;
 		}
 
+		input {
+			color: black;
+		}
+
 		button {
 			@extend .alt-button
 		}
+	}
+
+	.textarea {
+		color: white;
+		width: 100%;
+		box-sizing: border-box;
+		min-width: 300px;
+		max-width: 99%;
+		resize: vertical;
 	}
 }
 
