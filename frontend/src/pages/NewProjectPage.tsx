@@ -8,8 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { fetchAndSetupSubjects } from "../api/helpers/massSetups"
+import { useNavigate } from 'react-router-dom'
 
 export default function NewProjectPage() {
+  const navigate = useNavigate()
 
   const [supervisingSubjects, setSupervisingSubjects] = useState<SubjectModel[]>([])
   const [newProject, setNewProject] = useState<ProjectModel>(new ProjectModel())
@@ -162,6 +164,11 @@ export default function NewProjectPage() {
     event.preventDefault()
     const created = await postProject(newProject)
     setProjectCreated(created)
+    if(created){
+        alert('Project created successfully')
+        navigate('/projects')
+    }
+        
   }
 
   return (
@@ -178,7 +185,7 @@ export default function NewProjectPage() {
             <div>
               <label>
                 <span>Deadline</span>
-                <input id="deadline" type="date" defaultValue={new Date().toISOString().split('T')[0]} required onChange={handleChange} />
+                <input id="deadline" type="date" required onChange={handleChange} />
               </label>
               <label>
                 <span>Subject</span>
@@ -201,48 +208,53 @@ export default function NewProjectPage() {
           <section className="row" style={{ border: "none", flexWrap: "wrap" }}>
             {newProject.tests && newProject.tests.map((test, index) => (
               <section className="test-container" key={test.id}>
-                <header>
-                  <button className="icon-button-small" type="button" onClick={() => copyTest(index)}>
+                <div className='center'>
+                  <button className="alt-button icon-button-small" type="button" onClick={() => copyTest(index)}>
                     <FontAwesomeIcon icon={faCopy} />
                   </button>
-                  <label style={{ flex: 2 }}>
-                    <div>
-                      <span>Test {index + 1} to run for function</span>
-                    </div>
-                    <input id={`main-function-${index}`} defaultValue={test.mainFunction} onChange={(event) => handleTestChange(event, index)} />
+                  <label className='row center' style={{ flex: 2 }}>
+                      <input
+                        style={{textAlign: "center"}}
+                        id={`main-function-${index}`}
+                        defaultValue={test.mainFunction}
+                        placeholder='Main Function Name'
+                        onChange={(event) => handleTestChange(event, index)}
+                        required
+                      />
                   </label>
 
-                  <button className="remove-button icon-button-small" type="button" onClick={() => deleteTest(index)}>
+                  <button className="alt-button remove-button icon-button-small" type="button" onClick={() => deleteTest(index)}>
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
-                </header>
+                </div>
                 <div style={{ marginTop: "30px" }}>
                   <div style={{ flex: 1 }}>
-                    <span>Inputs</span>
                     <table>
                       <thead>
                         <tr>
-                          <th style={{ flex: 0.01 }}>#</th>
-                          <th style={{ flex: 0.5 }}>Value</th>
-                          <th style={{ flex: 0.01 }}></th>
+                          <th style={{ width: "20px" }}>#</th>
+                          <th style={{ width: "250px" }}>Input</th>
+                          <th style={{ width: "30px" }}></th>
                         </tr>
                       </thead>
                       <tbody>
                         {test.inputs && test.inputs.map((input, idx) => (
                           <tr key={input.id}>
-                            <td style={{ flex: 0.01 }}>
-                              <div>{idx + 1}.</div>
+                            <td>
+                              <div>{idx + 1}</div>
                             </td>
-                            <td style={{ flex: 0.5 }}>
+                            <td>
                               <textarea
                                 id={`input-code-${idx}`}
                                 rows={3}
                                 cols={5}
+                                placeholder='Enter input value here'
                                 defaultValue={input.code}
                                 onChange={(event) => handleTestChange(event, index, idx)}
+                                required
                               />
                             </td>
-                            <td style={{ flex: 0.5 }}>
+                            <td>
                               <button
                                 type="button" // Add this line to prevent form submission
                                 id={`trash-${idx}`}
@@ -258,15 +270,14 @@ export default function NewProjectPage() {
                         ))}
                       </tbody>
                     </table>
-                    <button type="button" onClick={() => createInput(index)}>Add Input</button>
+                    <button type="button" className='alt-button' onClick={() => createInput(index)}>Add Input</button>
                   </div>
 
-                  <div style={{ flex: 0.5, marginLeft: "10px" }}>
-                    <span>Output</span>
+                  <div style={{ flex: 0.6, marginLeft: "10px" }}>
                     <table>
                       <thead>
                         <tr>
-                          <th>Value</th>
+                          <th>Output</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -277,7 +288,9 @@ export default function NewProjectPage() {
                               defaultValue={test.output.code}
                               rows={3}
                               cols={5}
+                              placeholder='Enter output value here'
                               onChange={(event) => handleTestChange(event, index)}
+                              required
                             />
                           </td>
                         </tr>
@@ -288,7 +301,7 @@ export default function NewProjectPage() {
               </section>
             ))}
           </section>
-          <button style={{ width: "100%" }} type="button" onClick={createTest}>Add Test</button>
+          <button style={{ width: "100%" }} type="button"  className='button' onClick={createTest}>Add Test</button>
           {projectCreated === undefined ?
             <div></div> :
             projectCreated === true ?

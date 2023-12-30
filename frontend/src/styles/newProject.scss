@@ -46,6 +46,7 @@ $border-radius: 5px;
 
 		& section {
 			margin-bottom: 70px;
+            overflow:scroll;
 			border: 0;
 		}
 
@@ -169,17 +170,19 @@ $border-radius: 5px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 		width: calc(100vw/2 - 240px);
 	
-		header, label, div, span {
-			background-color: inherit;
-		}
-
-		input {
+		input, textarea {
 			color: black;
+
+            &::placeholder {
+                color: rgb(47, 47, 47);
+            }
 		}
 
-		button {
-			@extend .alt-button
-		}
+        input {
+            width: 50%;
+        }
+
+        
 	}
 
 	.textarea {
