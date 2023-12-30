@@ -73,9 +73,10 @@ export class UserModel {
         for (const subject of this.subjects){
             const isSupervising =
                 !filterSupervising ||
-                (filterSupervising === -1 && (subject.supervisorID !== this.id)) ||
-                (filterSupervising === 1 && (subject.supervisorID === this.id))
+                (filterSupervising === -1 && (subject.supervisorId !== this.id)) ||
+                (filterSupervising === 1 && (subject.supervisorId === this.id))
     
+                console.log(isSupervising)
             if (isSupervising)
                 submittedSubjects.push(subject)
         }
@@ -89,8 +90,8 @@ export class UserModel {
         for (const subject of this.subjects){
             const isSupervising =
                 !filterSupervising ||
-                (filterSupervising === -1 && (subject.supervisorID !== this.id)) ||
-                (filterSupervising === 1 && (subject.supervisorID === this.id))
+                (filterSupervising === -1 && (subject.supervisorId !== this.id)) ||
+                (filterSupervising === 1 && (subject.supervisorId === this.id))
     
             if (isSupervising)
                 for (const project of subject.projects) {

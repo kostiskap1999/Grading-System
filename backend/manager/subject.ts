@@ -64,20 +64,20 @@ export class SubjectManager {
   async postUserSubject(body: any, token: string) {
     await dbtoken.checkToken(token)
 
-    if (!body.userID || !body.subjectID)
+    if (!body.userId || !body.subjectId)
       throw new BadRequestError("Incorrect user or subject id")
     
-    await this.repository.postUserSubject(body.userID, body.subjectID)
+    await this.repository.postUserSubject(body.userId, body.subjectId)
     return true
   }
 
   async deleteUserSubject(body: any, token: string) {
     await dbtoken.checkToken(token)
     
-    if (!body.userID || !body.subjectID)
+    if (!body.userId || !body.subjectId)
       throw new BadRequestError("Incorrect user or subject id")
     
-    await this.repository.deleteUserSubject(body.userID, body.subjectID)
+    await this.repository.deleteUserSubject(body.userId, body.subjectId)
     return true
   }
   

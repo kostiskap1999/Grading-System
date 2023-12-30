@@ -31,7 +31,7 @@ export default function NewProjectPage() {
         newProjectCopy.deadline = new Date().toISOString().split('T')[0]
         return newProjectCopy
       })
-      // const supSubjects: Subject[] = await fetchSupervisingSubjects(await fetchTokenID())
+      // const supSubjects: Subject[] = await fetchSupervisingSubjects(await fetchTokenId())
       const supSubjects: SubjectModel[] | null = await fetchAndSetupSubjects()
 
       supSubjects && setSupervisingSubjects(supSubjects)
@@ -117,7 +117,7 @@ export default function NewProjectPage() {
             break
           const subject = JSON.parse(event.target.value)
 
-          newProjectCopy.subjectID = parseInt(subject.id)
+          newProjectCopy.subjectId = parseInt(subject.id)
           if (!newProjectCopy.name || newProjectCopy.name === "")
             newProjectCopy.name = `${subject.name} Project ${subject.projects.length + 1}`
           break

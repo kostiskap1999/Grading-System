@@ -8,7 +8,7 @@ export interface ISubject {
     description: string;
     semester: number;
     projects: ProjectModel[];
-    supervisorID: number;
+    supervisorId: number;
     userGrade: number | null;
     averageGrade: number | null;
 }
@@ -19,7 +19,7 @@ export class SubjectModel {
     description: string;
     semester: number;
     projects: ProjectModel[];
-    supervisorID: number;
+    supervisorId: number;
     userGrade: number | null;
     averageGrade: number | null;
 
@@ -29,12 +29,12 @@ export class SubjectModel {
         this.description = subject.description
         this.semester = subject.semester
         this.projects = subject.projects ?? []
-        this.supervisorID = subject.supervisorID
+        this.supervisorId = subject.supervisorId
         this.userGrade = subject.userGrade
         this.averageGrade = subject.averageGrade
     }
 
-    async setup(userID?: number, userRole?: number){
+    async setup(userId?: number, userRole?: number){
         const projects: ProjectModel[] | null = await fetchSubjectProjects(this.id)
         let gradeSum = 0
         let subjectsGraded = 0
@@ -43,11 +43,11 @@ export class SubjectModel {
                 if(userRole != undefined && userRole <= 1)
                     await project.setup()
                 else{
-                    await project.setup(userID)
+                    await project.setup(userId)
                 }
 
-                if(userID){
-                    const submission = await fetchProjectUserSubmission(project.id, userID)
+                if(userId){
+                    const submission = await fetchProjectUserSubmission(project.id, userId)
                     if(submission && submission.grade != null){
                         gradeSum += submission.grade
                         subjectsGraded++

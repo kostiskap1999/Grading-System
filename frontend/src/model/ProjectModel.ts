@@ -20,7 +20,7 @@ export class ProjectModel {
     deadline: Date | string;
     submissions: SubmissionModel[];
     tests: TestModel[]
-    subjectID: number | null;
+    subjectId: number | null;
     averageGrade: number | null;
 
     constructor(project: IProject = {} as IProject) {
@@ -33,11 +33,11 @@ export class ProjectModel {
         this.averageGrade = project.averageGrade
 
         // only used in posting
-        this.subjectID = null
+        this.subjectId = null
     }
 
-    async setup(userID?: number){
-        if(!userID){ //userID is given only when setting up student
+    async setup(userId?: number){
+        if(!userId){ //userId is given only when setting up student
             this.tests = await fetchTests(this.id) ?? this.tests
             this.submissions = await fetchSubmissions(this.id) ?? this.submissions
             let gradeSum = 0
@@ -51,7 +51,7 @@ export class ProjectModel {
             this.averageGrade = gradeSum / submissionsGraded
 
         }else{
-            const submission = await fetchProjectUserSubmission(this.id, userID) 
+            const submission = await fetchProjectUserSubmission(this.id, userId) 
             if(submission){
                 this.submissions = []
                 this.submissions.push(submission)

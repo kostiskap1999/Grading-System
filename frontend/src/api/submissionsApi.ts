@@ -2,8 +2,8 @@ import { SubmissionModel } from "../model/SubmissionModel";
 import { GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, PROJECTUSERSUBMISSIONS, SUBMISSIONS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
-export async function fetchSubmissions(projectID: number) {
-    return await fetch(HOSTNAME + SUBMISSIONS + "/" + projectID, GETHEADERS())
+export async function fetchSubmissions(projectId: number) {
+    return await fetch(HOSTNAME + SUBMISSIONS + "/" + projectId, GETHEADERS())
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
@@ -23,8 +23,8 @@ export async function fetchSubmissions(projectID: number) {
     });
 }
 
-export async function fetchProjectUserSubmission(projectID: number, userID: number) {
-    return await fetch(HOSTNAME + SUBMISSIONS + "/" + projectID + "/" + userID, GETHEADERS())
+export async function fetchProjectUserSubmission(projectId: number, userId: number) {
+    return await fetch(HOSTNAME + SUBMISSIONS + "/" + projectId + "/" + userId, GETHEADERS())
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));

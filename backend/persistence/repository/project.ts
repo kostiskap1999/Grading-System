@@ -16,13 +16,13 @@ export class ProjectRepository {
   }
 
   async findByUser(userId: number) {
-    const subjectIDs = (await this.tm.query(`SELECT subject_id FROM user_subject WHERE user_id = ?`, userId) as any[])
+    const subjectIds = (await this.tm.query(`SELECT subject_id FROM user_subject WHERE user_id = ?`, userId) as any[])
       .map(subject => subject.subject_id)
 
-    if(!subjectIDs)
+    if(!subjectIds)
       return null
 
-    return (await this.tm.query(`SELECT * FROM projects WHERE ${subjectIDs.map(() => 'id = ?').join(' OR ')}`, subjectIDs) as any[])
+    return (await this.tm.query(`SELECT * FROM projects WHERE ${subjectIds.map(() => 'id = ?').join(' OR ')}`, subjectIds) as any[])
       .map(project => new Project(project))[0]
   }
 
@@ -32,11 +32,11 @@ export class ProjectRepository {
   }
 
   async postProject(project: any) {
-    await this.tm.query(`INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)`, project.name, project.description, project.deadline, project.subjectID)
+    await this.tm.query(`INSERT INTO projects (name, description, deadline, subject_id) VALUES (?, ?, ?, ?)`, project.name, project.description, project.deadline, project.subjectId)
     
-    const insertedID = (await this.tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_ID()`) as any[])[0]
+    const insertedId = (await this.tm.query(`SELECT id FROM projects WHERE id >= LAST_INSERT_Id()`) as any[])[0]
 
     if(project.tests.length > 0)
-      await this.testRepository.postTests(project.tests, insertedID.id)
+      await this.testRepository.postTests(project.tests, insertedId.id)
   }
 }

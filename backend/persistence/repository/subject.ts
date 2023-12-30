@@ -20,13 +20,13 @@ export class SubjectRepository {
   }
 
   async findByUser(userId: number) {
-    const subjectIDs = (await this.tm.query(`SELECT subject_id FROM user_subject WHERE user_id = ?`, userId) as any[])
+    const subjectIds = (await this.tm.query(`SELECT subject_id FROM user_subject WHERE user_id = ?`, userId) as any[])
       .map(subject => subject.subject_id)
 
-    if(!subjectIDs || subjectIDs.length === 0)
+    if(!subjectIds || subjectIds.length === 0)
       return null
 
-    return (await this.tm.query(`SELECT * FROM subjects WHERE ${subjectIDs.map(() => 'id = ?').join(' OR ')}`, ...subjectIDs) as any[])
+    return (await this.tm.query(`SELECT * FROM subjects WHERE ${subjectIds.map(() => 'id = ?').join(' OR ')}`, ...subjectIds) as any[])
       .map(subject => new Subject(subject))
   }
   

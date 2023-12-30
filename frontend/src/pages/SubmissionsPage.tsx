@@ -36,9 +36,9 @@ export default function SubmissionsPage() {
       
       if(submissionsOBJ){
         setSubmissions(submissionsOBJ)
-        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
         for(const submission of submissionsOBJ){
-          if(submission.id === parseInt(parsedID)){
+          if(submission.id === parseInt(parsedId)){
             setSelectedSubmission(submission)
             break;
           }

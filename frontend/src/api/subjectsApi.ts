@@ -44,8 +44,8 @@ export async function fetchSubject(id: number) {
     });
 }
 
-export async function fetchUserSubjects(userID: number) {
-    return await fetch(HOSTNAME + USERSUBJECTS + "/" + userID, GETHEADERS())
+export async function fetchUserSubjects(userId: number) {
+    return await fetch(HOSTNAME + USERSUBJECTS + "/" + userId, GETHEADERS())
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
@@ -65,8 +65,8 @@ export async function fetchUserSubjects(userID: number) {
     });
 }
 
-export async function fetchSupervisingSubjects(userID: number) {
-    await fetch(HOSTNAME + SUPERVISINGSUBJECTS + "/" + userID, GETHEADERS())
+export async function fetchSupervisingSubjects(userId: number) {
+    await fetch(HOSTNAME + SUPERVISINGSUBJECTS + "/" + userId, GETHEADERS())
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
@@ -86,8 +86,8 @@ export async function fetchSupervisingSubjects(userID: number) {
     });
 }
 
-export async function postUserSubject(userID: number, subjectID: number) {
-    await fetch(HOSTNAME + USERSUBJECTS, POSTHEADERS({userID, subjectID}))
+export async function postUserSubject(userId: number, subjectId: number) {
+    await fetch(HOSTNAME + USERSUBJECTS, POSTHEADERS({userId, subjectId}))
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
@@ -103,8 +103,8 @@ export async function postUserSubject(userID: number, subjectID: number) {
     });
 }
 
-export async function deleteUserSubject(userID: number, subjectID: number) {
-    await fetch(HOSTNAME + USERSUBJECTS, DELETEHEADERS({userID, subjectID}))
+export async function deleteUserSubject(userId: number, subjectId: number) {
+    await fetch(HOSTNAME + USERSUBJECTS, DELETEHEADERS({userId, subjectId}))
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));

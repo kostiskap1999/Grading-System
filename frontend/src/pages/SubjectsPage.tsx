@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 import { UserModel } from "../model/UserModel";
-import { fetchTokenID } from "../api/tokenApi";
+import { fetchTokenId } from "../api/tokenApi";
 import { deleteUserSubject, postUserSubject } from "../api/subjectsApi";
 import { SubjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
@@ -35,9 +35,9 @@ export default function SubjectsPage() {
       if(subjectsOBJ)
         setSubjects(subjectsOBJ)
 
-      const tokenID: number | null = await fetchTokenID()
-      if(tokenID){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
+      const tokenId: number | null = await fetchTokenId()
+      if(tokenId){
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
         userOBJ && setUser(userOBJ)
       }
     }
@@ -47,9 +47,9 @@ export default function SubjectsPage() {
 
   useEffect(() => {
       if(subjects){
-        const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
         for(const subject of subjects)
-          if(subject.id === parseInt(parsedID)){
+          if(subject.id === parseInt(parsedId)){
             setSelectedSubject(subject)
             break;
           }

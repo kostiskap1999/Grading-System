@@ -18,7 +18,7 @@ export async function checkToken() {
     });
 }
 
-export async function fetchTokenID() {
+export async function fetchTokenId() {
     return await fetch(HOSTNAME + TOKEN + "/id", GETHEADERS())
     .then(async response => {
         if(!response.ok)

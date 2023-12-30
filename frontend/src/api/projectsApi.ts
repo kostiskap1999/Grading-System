@@ -46,8 +46,8 @@ export async function fetchProject(id: number) {
     });
 }
 
-export async function fetchUserProjects(userID: number) {
-    return await fetch(HOSTNAME + USERPROJECTS + "/" + userID, GETHEADERS())
+export async function fetchUserProjects(userId: number) {
+    return await fetch(HOSTNAME + USERPROJECTS + "/" + userId, GETHEADERS())
     .then(response => {
         if(!response.ok)
             throw new Error(JSON.stringify(response.status))
@@ -69,8 +69,8 @@ export async function fetchUserProjects(userID: number) {
     });
 }
 
-export async function fetchSubjectProjects(subjectID: number) {
-    return await fetch(HOSTNAME + SUBJECTPROJECTS + "/" + subjectID, GETHEADERS())
+export async function fetchSubjectProjects(subjectId: number) {
+    return await fetch(HOSTNAME + SUBJECTPROJECTS + "/" + subjectId, GETHEADERS())
     .then(response => {
         if(!response.ok)
             throw new Error(JSON.stringify(response.status))

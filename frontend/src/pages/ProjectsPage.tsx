@@ -4,7 +4,7 @@ import FileUpload from "../components/fileUpload";
 import { fetchAndSetupUser } from "../api/helpers/massSetups";
 import { ProjectModel } from "../model/ProjectModel";
 import { UserModel } from "../model/UserModel";
-import { fetchTokenID } from "../api/tokenApi";
+import { fetchTokenId } from "../api/tokenApi";
 import { ProjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,10 +31,10 @@ export default function ProjectsPage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const tokenID: number | null = await fetchTokenID()
+      const tokenId: number | null = await fetchTokenId()
 
-      if(tokenID){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
+      if(tokenId){
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
         userOBJ && setUser(userOBJ)
       }
     }
@@ -44,9 +44,9 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     if(user){
-      const parsedID: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+      const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
       for(const project of user.getProjects())
-        if(project.id === parseInt(parsedID)){
+        if(project.id === parseInt(parsedId)){
           setSelectedProject(project)
           break;
         }

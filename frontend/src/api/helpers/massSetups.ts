@@ -37,8 +37,8 @@ export async function fetchAndSetupProjects() {
     return projects
 }
 
-export async function fetchAndSetupSubmissions(projectID: number) {
-    const submissions: SubmissionModel[] | null = await fetchSubmissions(projectID)
+export async function fetchAndSetupSubmissions(projectId: number) {
+    const submissions: SubmissionModel[] | null = await fetchSubmissions(projectId)
 
     if(submissions)
         for(const submission of submissions)

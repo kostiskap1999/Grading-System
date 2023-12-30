@@ -5,7 +5,7 @@ import { UserModel } from "../model/UserModel";
 
 import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel";
-import { fetchTokenID } from "../api/tokenApi";
+import { fetchTokenId } from "../api/tokenApi";
 import { SubmissionModel } from "../model/SubmissionModel";
 import { PageButtonDescription } from "../components/pageComponents";
 
@@ -16,10 +16,10 @@ export default function ProfilePage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const tokenID: number | null = await fetchTokenID()
+      const tokenId: number | null = await fetchTokenId()
 
-      if(tokenID){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenID)
+      if(tokenId){
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
         userOBJ && setUser(userOBJ)
       }
     }
