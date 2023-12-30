@@ -14,11 +14,16 @@ export class SubjectRepository {
     return new Subject((await this.tm.query(`SELECT * FROM subjects WHERE id = ?`, id) as any[])[0])
   }
 
+  async findBySupervisor(id: number) {
+    return (await this.tm.query(`SELECT * FROM subjects WHERE supervisor_id = ?`, id) as any[])
+        .map(subject => new Subject(subject))
+  }
+
   async findByUser(userId: number) {
     const subjectIDs = (await this.tm.query(`SELECT subject_id FROM user_subject WHERE user_id = ?`, userId) as any[])
       .map(subject => subject.subject_id)
 
-    if(!subjectIDs)
+    if(!subjectIDs || subjectIDs.length === 0)
       return null
 
     return (await this.tm.query(`SELECT * FROM subjects WHERE ${subjectIDs.map(() => 'id = ?').join(' OR ')}`, ...subjectIDs) as any[])

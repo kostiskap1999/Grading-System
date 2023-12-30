@@ -1,5 +1,7 @@
 import { BadRequestError, InternalServerError, NotFoundError } from '../errors/errorTypes'
+import { Subject } from '../persistence/entities/subject';
 import { SubjectRepository } from '../persistence/repository/subject'
+import { UserRepository } from '../persistence/repository/user';
 import * as dbtoken from './token'
 import { TransactionManager } from './transaction';
 
@@ -7,7 +9,7 @@ export class SubjectManager {
 
   repository: SubjectRepository
 
-  constructor(tm: TransactionManager) {
+  constructor(tm: TransactionManager, private userRepository = new UserRepository(tm)) {
     this.repository = new SubjectRepository(tm);
   }
 
@@ -42,7 +44,16 @@ export class SubjectManager {
     if (!userId)
       throw new BadRequestError("Incorrect user id")
     
-    const subjects = await this.repository.findByUser(userId)
+    const userRole = (await this.userRepository.findById(userId)).role
+
+    let subjects: Subject[] = []
+    const joinedSubjects = await this.repository.findByUser(userId)
+    subjects.push(...(joinedSubjects && Array.isArray(joinedSubjects) ? joinedSubjects : []))
+    if(userRole <= 1){
+        const supSubjects = await this.repository.findBySupervisor(userId)        
+        subjects.push(...(supSubjects && Array.isArray(supSubjects) ? supSubjects : []))
+    }
+    console.log(subjects)
   
     if(!subjects)
       throw new NotFoundError("Subjects not found")
