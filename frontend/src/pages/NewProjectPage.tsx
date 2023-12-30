@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { postProject } from "../api/projectsApi"
-import { fetchSubjects } from "../api/subjectsApi"
 import { ProjectModel } from "../model/ProjectModel"
 import { SubjectModel } from "../model/SubjectModel"
 import { TestModel, TestInputModel } from "../model/TestModel"
@@ -129,7 +128,6 @@ export default function NewProjectPage() {
           break
       }
 
-      console.log(newProjectCopy)
       return newProjectCopy
     })
   }

@@ -76,7 +76,6 @@ export class UserModel {
                 (filterSupervising === -1 && (subject.supervisorId !== this.id)) ||
                 (filterSupervising === 1 && (subject.supervisorId === this.id))
     
-                console.log(isSupervising)
             if (isSupervising)
                 submittedSubjects.push(subject)
         }

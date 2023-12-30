@@ -53,7 +53,6 @@ export class SubjectManager {
         const supSubjects = await this.repository.findBySupervisor(userId)        
         subjects.push(...(supSubjects && Array.isArray(supSubjects) ? supSubjects : []))
     }
-    console.log(subjects)
   
     if(!subjects)
       throw new NotFoundError("Subjects not found")
