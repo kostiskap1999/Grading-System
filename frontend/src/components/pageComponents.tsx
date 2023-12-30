@@ -1,19 +1,44 @@
+import { useState } from 'react';
 import { ProjectModel } from "../model/ProjectModel";
 import { SubjectModel } from "../model/SubjectModel";
 import { SubmissionModel } from "../model/SubmissionModel";
 import CodeSandbox from "./codeSandbox";
 
 export function ProjectEntry({ project, userRole }: { project: ProjectModel, userRole?: number }) {
+
+    const deadlineDate = new Date(project.deadline)
+    const localDeadline = new Date(deadlineDate.getTime() - deadlineDate.getTimezoneOffset() * 60000)
+    const [formattedDate, setFormattedDate] = useState(localDeadline.toISOString().split('T')[0])
+
+    const submitDeadlineChange = () => {
+        return
+    }
+
+    
     return (
         <div>
             <div className="center" style={{padding:"30px"}}>
-            <div className="header-text center">{project.name}</div>
-            <div className="center">Deadline: {project.deadline.toLocaleString('el-GR', { year: 'numeric', month: 'numeric', day: 'numeric' })}</div>
+                <div className="header-text center">{project.name}</div>
+                <div className='column'>
+                    <div className="center">Deadline</div>
+                    <div className='row center'>
+                        {userRole != null && userRole <= 1 && <div style={{marginRight: "165px"}}></div>}
+                        <input
+                            id="deadline"
+                            type="date"
+                            defaultValue={formattedDate}
+                            disabled={(userRole !== null && userRole !== undefined) ? userRole > 1 : true}
+                            onChange={(e) => setFormattedDate(e.target.value)}
+                        />
+                        {userRole != null && userRole <= 1 &&
+                            <button className='icon-button-small' style={{marginLeft: "50px", width: "115px"}} onClick={submitDeadlineChange}>Change Deadline</button>}
+                    </div>
+                </div>
             </div>
             {userRole != null && userRole <= 1 && <GradeLine component={project} grade={project.averageGrade} />}
             <div style={{margin: "20px"}}>
-            <div className="large-text center">Project Description</div>
-            <div className="center">{project.description}</div>
+                <div className="large-text center">Project Description</div>
+                <div className="center">{project.description}</div>
             </div>
         </div>
     );
