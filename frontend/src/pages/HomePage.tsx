@@ -28,7 +28,7 @@ export default function HomePage() {
 
   return (
     <div className="page column">
-      <div className="top-header text center column" style={{flex: 1}}>
+      <div className="top-header center column" style={{flex: 1}}>
         <div>{user && user.username}</div>
         <div className="row">
           <div>There are {user && user.getProjects({filterDeadline: 1}).length} pending projects from {user && user.subjects.length} subjects.</div>
@@ -36,7 +36,7 @@ export default function HomePage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">My Subjects</div>
+          <div className="center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user?.subjects && user.subjects.map((subject: SubjectModel, index: number) => (
               <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&joined=1')}>
@@ -46,7 +46,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">My Unsubmitted Projects</div>
+          <div className="center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
               <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>

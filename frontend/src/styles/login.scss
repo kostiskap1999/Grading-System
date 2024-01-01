@@ -2,14 +2,8 @@
 @import './variables/typography.scss';
 @import './general.scss';
 
-.sidebar-margin {
-	margin-left: 200px;
-}
-
 .login-header {
-	background-color: $background-color;
-	font-size: $text;
-	color: $text-color;
+	font-size: $medium-text;
 }
 
 .login-form {

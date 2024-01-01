@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import App from "./routing/app";
 
+import './styles/index.scss';
 import './styles/general.scss';
 import './styles/button.scss';
 import './styles/text.scss';

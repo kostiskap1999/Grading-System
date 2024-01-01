@@ -28,7 +28,7 @@ export default function ProfilePage() {
 
   return (
     <div className="page column">
-      <div className="top-header text center column" style={{flex: 1}}>
+      <div className="top-header medium-text center column" style={{flex: 1}}>
         <div>{user && user.firstName} {user && user.lastName}</div>
         <div className="row">
           <div>Your average grade is {user && user.averageGrade?.toFixed(2)}.</div>
@@ -36,7 +36,7 @@ export default function ProfilePage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">My Subjects</div>
+          <div className="medium-text center header-title">My Subjects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.subjects.map((subject: SubjectModel, index: number) => (
               <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
@@ -46,7 +46,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">My Unsubmitted Projects</div>
+          <div className="medium-text center header-title">My Unsubmitted Projects</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
                 <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
@@ -56,7 +56,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="column container" style={{flex: 1}}>
-          <div className="text center header-title">My Submissions</div>
+          <div className="medium-text center header-title">My Submissions</div>
           <div className="column" style={{overflow:'scroll'}}>
             {user && user.getSubmissions().map((submission: SubmissionModel, index: number) => (
                 <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + submission.projectId)}>

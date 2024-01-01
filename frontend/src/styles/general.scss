@@ -3,13 +3,14 @@
 @import './text.scss';
 
 $border-radius: 5px;
+$sidebar-width: 10vw;
+
 
 .page {
     @extend .small-text;
 
 	height: 100vh;
 	overflow: scroll;
-    background-color: $background-color;
 }
 
 .column {
@@ -41,7 +42,6 @@ $border-radius: 5px;
 
 .dropdown-menu {
 	position: relative;
-	background-color: $background-color;
 	width: inherit;
 	cursor: pointer;
 }
@@ -52,7 +52,6 @@ $border-radius: 5px;
 
 input, textarea {
 	font-size: 16px;
-	color: $text-color;
 	padding: 10px;
 	background-color: transparent;
 	border: 2px solid lighten($alt-color2, 20%);
@@ -76,4 +75,41 @@ input, textarea {
 	border-style: solid;
 	overflow-y: auto;
 	height: calc(100vh - 94px);
+}
+
+.sidebar {
+	width: $sidebar-width;
+    display: flex;
+    flex-shrink: 0;
+
+    > div {
+      @extend .column;
+
+      height: 100vh;
+      padding: 140px 0;
+      width: $sidebar-width;
+      box-sizing: border-box;
+      border-right: 0;
+      background-color: #233044;
+      color: #eeeeee;
+
+      > a {
+        @extend .row;
+        width: $sidebar-width;
+        height: 10vh !important;
+
+      }
+    }
+}
+
+.logout {
+    position: absolute !important;
+    bottom: 0 !important;
+    background-color: $alt-color !important;
+    width: $sidebar-width !important;
+    height: 10vh !important;
+}
+
+.sidebar-margin {
+	margin-left: $sidebar-width;
 }

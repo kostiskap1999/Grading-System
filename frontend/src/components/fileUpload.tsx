@@ -121,7 +121,7 @@ export default function FileUpload({ user, project }: FileUploadProps) {
   return (
     <>
         {!project.isWithinDeadline() &&
-            <div className="list-button small-text">You can not upload a {file && ' new'} submission because the deadline has been exceeded{file && ' but you can download your submission'}.</div>
+            <div className="list-button">You can not upload a {file && ' new'} submission because the deadline has been exceeded{file && ' but you can download your submission'}.</div>
         }
         <div className='column center'>
             <div className='row center' style={{width: "90%", margin: "20px"}}>
@@ -141,7 +141,7 @@ export default function FileUpload({ user, project }: FileUploadProps) {
                     }
                 </div>
             </div>
-            <div className='text' style={{height: "50px"}}>{errorText}</div>
+            <div className="medium-text" style={{height: "50px"}}>{errorText}</div>
             {file instanceof SubmissionModel &&
                 <div className='row'>
                     <button className='row center' style={{flex: 1, padding: "15px"}} onClick={handleDownloadClick}>

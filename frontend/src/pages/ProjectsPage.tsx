@@ -80,11 +80,11 @@ export default function ProjectsPage() {
   
   return (
     <div className="page column">
-      <div className="top-header text row">
+      <div className="top-header medium-text row">
         {user && user.role <= 1 ? <>
           <button className="button" style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}
-        <div className="text center column" style={{flex: 4}}>
+        <div className="medium-text center column" style={{flex: 4}}>
           <div>This is a list of all the projects. You can participate in all the projects whose subjects you follow.</div>
           <div className="row">
             <div>There are pending projects from subjects.</div>
@@ -94,7 +94,7 @@ export default function ProjectsPage() {
       </div>
       <div className="row"  style={{flex: 6}}>
         <div className="column container" style={{flex: 0.8}}>
-          <div className="text row center header-title">
+          <div className="medium-text row center header-title">
               <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
                 {user && user.role <= 1 ?
                   <button className="filter-button icon-button-small" title={"Filter supervised projects"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>
@@ -140,7 +140,7 @@ export default function ProjectsPage() {
                     {user.hasProject(selectedProject.id) ?
                       <FileUpload user={user} project={selectedProject} />
                     :
-                      <div className="list-button text">You can not upload a submission because you have not joined this subject.</div>
+                      <div className="list-button medium-text">You can not upload a submission because you have not joined this subject.</div>
                     }
                   </>:
                     <button className="list-button" onClick={() => {navigate('/submissions?project=' + selectedProject.id, {state: {project: selectedProject}})}} style={{margin: "20px"}}>See Submissions</button>

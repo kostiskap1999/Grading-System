@@ -110,7 +110,7 @@ export default function SubjectsPage() {
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="top-header text center column" style={{flex: 1}}>
+      <div className="top-header medium-text center column" style={{flex: 1}}>
         <div>This is a list of all the subjects</div>
         <div className="row">
           <div>There are pending projects from subjects.</div>
@@ -118,7 +118,7 @@ export default function SubjectsPage() {
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>
-            <div className="text row center header-title">
+            <div className="medium-text row center header-title">
                 <div className="row" style={{flex: 1, justifyContent: 'flex-start'}}>
                     {user && user.role <= 1 ?
                     <button className="filter-button icon-button-small" title={"Filter supervised subjects"} style={filterValues['supervising'] == -1 ? {color: "firebrick"} : filterValues['supervising'] == 1 ? {color: "green"} : {color: "black"}} type="button" onClick={() => changeFilterValue('supervising')}>

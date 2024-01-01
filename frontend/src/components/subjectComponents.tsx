@@ -5,9 +5,9 @@ export function SubjectEntry({ subject }: { subject: SubjectModel }) {
     <div>
     <div className="center">
       <div className="header-text">{subject.name}</div>
-      <div className="small-text">Semester: {subject.semester}</div>
+      <div>Semester: {subject.semester}</div>
     </div>
-    <div className="small-text">{subject.description}</div>
+    <div>{subject.description}</div>
   </div>
   );
 }

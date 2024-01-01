@@ -171,7 +171,7 @@ export default function NewProjectPage() {
 
   return (
     <div className="page column">
-      <form className="new-form text" onSubmit={createProject}>
+      <form className="new-form medium-text" onSubmit={createProject}>
         <div style={{ overflow: "scroll", padding: "0 50px" }}>
           <section>
             <label>
