@@ -47,6 +47,7 @@ app.use((err: Error, req: Request, res: Response, next: unknown) => {
   errorHandling(err as Error, res)
 })
 
+
 // *******************
 // ****** USER ******
 // *******************
@@ -107,9 +108,31 @@ router.route('/subjects').get(async (req, res) => {
 
 // GET SUBJECT ROUTER
 router.route('/subjects/:id').get(async (req, res) => {
-  console.log('/subjects/:id')
-  await transact(res, tm => new SubjectManager(tm).getSubject(parseInt(req.params.id), req.headers.token as string))
+    console.log('/subjects/:id')
+    await transact(res, tm => new SubjectManager(tm).getSubject(parseInt(req.params.id), req.headers.token as string))
+  });
+
+// GET SUBJECTS ROUTER
+router.route('/subjects').post(async (req, res) => {
+    console.log('/subjects')
+    await transact(res, tm => new SubjectManager(tm).postSubject(req.body, req.headers.token as string))
 });
+
+// GET SUBJECTS ROUTER
+router.route('/subjects').patch(async (req, res) => {
+    console.log('/subjects')
+    await transact(res, tm => new SubjectManager(tm).patchSubject(req.body, req.headers.token as string))
+});
+
+// DELETE SUBJECTS ROUTER
+router.route('/subjects/:id').delete(async (req, res) => {
+    console.log('/subjects')
+    await transact(res, tm => new SubjectManager(tm).deleteSubject(req.params.id, req.headers.token as string))
+});
+
+// *******************
+// ****** USER-SUBJECTS ******
+// *******************
 
 // GET USER-SUBJECT ROUTER
 router.route('/user-subjects/:userId').get(async (req, res) => {
@@ -129,6 +152,7 @@ router.route('/user-subjects').delete(async (req, res) => {
   await transact(res, tm => new SubjectManager(tm).deleteUserSubject(req.body, req.headers.token as string))
 });
 
+
 // *******************
 // ****** PROJECTS ******
 // *******************
@@ -145,6 +169,24 @@ router.route('/projects/:id').get(async (req, res) => {
   await transact(res, tm => new ProjectManager(tm).getProject(parseInt(req.params.id), req.headers.token as string))
 });
 
+// POST PROJECTS ROUTER
+router.route('/projects').post(async (req, res) => {
+    console.log('/projects')
+    await transact(res, tm => new ProjectManager(tm).postProject(req.body, req.headers.token as string))
+});
+
+// PATCH PROJECTS ROUTER
+router.route('/projects').patch(async (req, res) => {
+    console.log('/projects')
+    await transact(res, tm => new ProjectManager(tm).patchProject(req.body, req.headers.token as string))
+});
+
+// DELETE PROJECTS ROUTER
+router.route('/projects/:id').delete(async (req, res) => {
+    console.log('/projects')
+    await transact(res, tm => new ProjectManager(tm).deleteProject(req.params.id, req.headers.token as string))
+});
+
 // GET SUBJECT-PROJECTS ROUTER
 router.route('/subject-projects/:subjectId').get(async (req, res) => {
   console.log('/subject-projects/:subjectId')
@@ -157,11 +199,6 @@ router.route('/user-projects/:userId').get(async (req, res) => {
   await transact(res, tm => new ProjectManager(tm).getUserProjects(parseInt(req.params.userId), req.headers.token as string))
 });
 
-// POST PROJECTS ROUTER
-router.route('/projects').post(async (req, res) => {
-  console.log('/projects')
-  await transact(res, tm => new ProjectManager(tm).postProject(req.body, req.headers.token as string))
-});
 
 // *******************
 // ****** SUBMISSIONS ******
@@ -190,6 +227,7 @@ router.route('/submissions').patch(async (req, res) => {
   console.log('/submissions')
   await transact(res, tm => new SubmissionManager(tm).patchSubmission(req.body, req.headers.token as string))
 });
+
 
 // *******************
 // ****** TESTS ******

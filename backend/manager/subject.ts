@@ -38,6 +38,39 @@ export class SubjectManager {
     return subject
   }
 
+  async postSubject(subject: any, token: string) {
+    await dbtoken.checkToken(token)
+
+    if (!subject)
+      throw new BadRequestError("Incorrect user or subject id")
+    
+    await this.repository.postSubject(subject)
+    return true
+  }
+
+  async patchSubject(subject: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!subject)
+      throw new BadRequestError("Incorrect subject id")
+    
+    await this.repository.patchSubject(subject)
+    return true
+  }
+
+  async deleteSubject(id: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!id)
+      throw new BadRequestError("Incorrect subject id")
+    
+    await this.repository.deleteSubject(id)
+    return true
+  }
+
+
+  /* *** USER-SUBJECTS JOINT TABLE *** */
+
   async getUserSubjects(userId: number, token: string) {
     await dbtoken.checkToken(token)
     
@@ -78,6 +111,5 @@ export class SubjectManager {
     
     await this.repository.deleteUserSubject(body.userId, body.subjectId)
     return true
-  }
-  
+  }  
 }

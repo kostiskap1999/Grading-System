@@ -39,4 +39,19 @@ export class ProjectRepository {
     if(project.tests.length > 0)
       await this.testRepository.postTests(project.tests, insertedId.id)
   }
+
+  async patchProject(project: any) {
+    await this.tm.query(`UPDATE projects 
+    SET 
+      name = COALESCE(NULLIF(?, 'undefined'), name),
+      description = COALESCE(NULLIF(?, 'undefined'), description),
+      deadline = COALESCE(NULLIF(?, 'undefined'), deadline),
+      subject_id = COALESCE(NULLIF(?, 'undefined'), subject_id)
+    WHERE id = ?;
+    `, project.name, project.description, project.deadline, project.subjectId, project.id)
+  }
+
+  async deleteProject(projectId: number) {
+    await this.tm.query(`DELETE FROM projects WHERE id = ?`, projectId)
+  }
 }

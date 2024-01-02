@@ -74,4 +74,26 @@ export class ProjectManager {
     
     return true
   }
+
+  async patchProject(project: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!project)
+      throw new BadRequestError("Incorrect project")
+
+    await this.repository.patchProject(project)
+    
+    return true
+  }
+
+  async deleteProject(project: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!project)
+      throw new BadRequestError("Incorrect project")
+
+    await this.repository.deleteProject(project)
+    
+    return true
+  }
 }

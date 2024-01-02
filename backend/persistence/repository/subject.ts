@@ -29,7 +29,19 @@ export class SubjectRepository {
     return (await this.tm.query(`SELECT * FROM subjects WHERE ${subjectIds.map(() => 'id = ?').join(' OR ')}`, ...subjectIds) as any[])
       .map(subject => new Subject(subject))
   }
-  
+
+  async postSubject(subject: any) {
+    await this.tm.query(`INSERT INTO subjects (name, description, semester, supervisor_id) VALUES (?, ?, ?, ?)`, subject.name, subject.description, subject.semester, subject.supervisorId)
+  }
+
+  async patchSubject(subject: any) {
+    await this.tm.query(`UPDATE subjects SET name = COALESCE(?, name), description = COALESCE(?, description), semester = COALESCE(?, semester), supervisor_id = COALESCE(?, supervisor_id) WHERE id = ?`, subject.name, subject.description, subject.semester, subject.supervisorId, subject.id)
+  }
+
+  async deleteSubject(id: number) {
+    await this.tm.query(`DELETE FROM subjects WHERE id = ?`, id)
+  }
+
   async postUserSubject(userId: number, subjectId: number) {
     await this.tm.query(`INSERT INTO user_subject (user_id, subject_id) VALUES (?, ?)`, userId, subjectId)
   }

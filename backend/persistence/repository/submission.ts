@@ -1,6 +1,5 @@
 import { TransactionManager } from "../../manager/transaction";
 import { Submission } from "../entities/submission";
-import { TestRepository } from './test'
 
 export class SubmissionRepository {
   
@@ -29,6 +28,13 @@ export class SubmissionRepository {
   }
 
   async patchSubmission(submission: any) {
-    await this.tm.query(`UPDATE submissions SET name = ?, code = ?, date = ?, grade = ?, comment = ? WHERE id = ?`, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.comment, submission.id)
+    await this.tm.query(`UPDATE submissions 
+    SET 
+      name = COALESCE(NULLIF(?, 'undefined'), name),
+      code = COALESCE(NULLIF(?, 'undefined'), code),
+      date = COALESCE(NULLIF(?, 'undefined'), date),
+      grade = COALESCE(NULLIF(?, 'undefined'), grade),
+      comment = COALESCE(NULLIF(?, 'undefined'), comment)
+    WHERE id = ?`, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.comment, submission.id)
   }
 }
