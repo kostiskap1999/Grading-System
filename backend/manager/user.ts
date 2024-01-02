@@ -20,7 +20,22 @@ export class UserManager {
     if(!user)
       throw new NotFoundError("User not found")
   
+      
     const token = await dbtoken.createToken({userId: user.id, role: user.role})
+
+    return {user, token}
+  }
+
+  async register(user: any) {
+    if (!user || !user.username || !user.password || !user.firstName || !user.lastName)
+      throw new BadRequestError("Incorrect register credentials")
+    
+    const newUser = await this.repository.register(user)
+    
+    if(!newUser)
+        throw new NotFoundError("Something went wrong with registering user")
+    
+    const token = await dbtoken.createToken({userId: newUser.id, role: newUser.role})
     
     return {user, token}
   }

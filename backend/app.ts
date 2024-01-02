@@ -57,6 +57,12 @@ router.route('/login').post(async (req, res) => {
   await transact(res, tm => new UserManager(tm).login(req.body))
 })
 
+// REGISTER ROUTER
+router.route('/register').post(async (req, res) => {
+    console.log('/register')
+    await transact(res, tm => new UserManager(tm).register(req.body))
+  })
+
 // GET USER ROUTER
 router.route('/users/:userId').get(async (req, res) => {
   console.log('/users/:userId')
