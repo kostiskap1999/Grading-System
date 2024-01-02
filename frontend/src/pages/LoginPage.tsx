@@ -130,7 +130,7 @@ export default function LoginPage() {
               <label>
                 <span>First Name</span>
                 <input
-                  id="first-name"
+                  id="firstName"
                   type="text"
                   defaultValue={credentials.firstName}
                   required
@@ -140,7 +140,7 @@ export default function LoginPage() {
               <label>
                 <span>Last Name</span>
                 <input
-                  id="last-name"
+                  id="lastName"
                   type="text"
                   defaultValue={credentials.lastName}
                   required
