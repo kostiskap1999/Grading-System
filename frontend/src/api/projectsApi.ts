@@ -1,5 +1,5 @@
 import { ProjectModel } from "../model/ProjectModel";
-import { GETHEADERS, HOSTNAME, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
+import { DELETEHEADERS, GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 import '../util/yymmdd';
@@ -25,7 +25,7 @@ export async function fetchProjects() {
     .catch((error) => {
         errorHandling(error)
         return null
-    });
+    })
 }
 
 export async function fetchProject(id: number) {
@@ -43,7 +43,7 @@ export async function fetchProject(id: number) {
     .catch((error) => {
         errorHandling(error)
         return null
-    });
+    })
 }
 
 export async function fetchUserProjects(userId: number) {
@@ -66,7 +66,7 @@ export async function fetchUserProjects(userId: number) {
     .catch((error) => {
         errorHandling(error)
         return null
-    });
+    })
 }
 
 export async function fetchSubjectProjects(subjectId: number) {
@@ -89,18 +89,50 @@ export async function fetchSubjectProjects(subjectId: number) {
     .catch((error) => {
         errorHandling(error)
         return null
-    });
+    })
 }
 
 export async function postProject(project: ProjectModel) {
-    const response: boolean | void = await fetch(HOSTNAME + PROJECTS, POSTHEADERS(project))
+    return await fetch(HOSTNAME + PROJECTS, POSTHEADERS(project))
     .then(response => {
         if(!response.ok) throw new Error(JSON.stringify(response.status));
         else return response.ok;
     })
     .catch((error) => {
         errorHandling(error)
-    });
+    })
+}
 
-    return response
+export async function patchProject(project: ProjectModel) {
+    return await fetch(HOSTNAME + PROJECTS, PATCHHEADERS(project))
+    .then(async response => {
+        if(!response.ok)
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
+        else
+            return response.json();
+    })
+    .then((value) => {
+        return value
+    })
+    .catch((error) => {
+        errorHandling(error)
+        return null
+    })
+}
+
+export async function deleteProject(id: number) {
+    return await fetch(HOSTNAME + PROJECTS + "/" + id, DELETEHEADERS())
+    .then(async response => {
+        if(!response.ok)
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
+        else
+            return response.json();
+    })
+    .then((value) => {
+        return value
+    })
+    .catch((error) => {
+        errorHandling(error)
+        return null
+    })
 }

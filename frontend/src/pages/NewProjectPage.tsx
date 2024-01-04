@@ -17,20 +17,13 @@ export default function NewProjectPage() {
   const [projectCreated, setProjectCreated] = useState<boolean | void>(undefined)
 
   useEffect(() => {
-    const fetchSupervisingSubjects = async () => {
-
-    }
-    fetchSupervisingSubjects()
-  }, [])
-
-  useEffect(() => {
     const fetchData = async () => {
       setNewProject((prevProject: ProjectModel) => {
         const newProjectCopy: ProjectModel = { ...prevProject, setup: prevProject.setup, isWithinDeadline: prevProject.isWithinDeadline }
         newProjectCopy.deadline = new Date().toISOString().split('T')[0]
         return newProjectCopy
       })
-      // const supSubjects: Subject[] = await fetchSupervisingSubjects(await fetchTokenId())
+
       const supSubjects: SubjectModel[] | null = await fetchAndSetupSubjects()
 
       supSubjects && setSupervisingSubjects(supSubjects)
@@ -254,7 +247,7 @@ export default function NewProjectPage() {
                             </td>
                             <td>
                               <button
-                                type="button" // Add this line to prevent form submission
+                                type="button"
                                 id={`trash-${idx}`}
                                 className="remove-button icon-button-small"
                                 style={{ padding: "13px" }}
@@ -262,7 +255,6 @@ export default function NewProjectPage() {
                               >
                                 <FontAwesomeIcon icon={faTrash} />
                               </button>
-
                             </td>
                           </tr>
                         ))}
