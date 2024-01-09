@@ -3,12 +3,14 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "bcrypt": "^5.1.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-modal": "^3.16.1",
     "reactjs-popup": "^2.0.6"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/react-modal": "^3.16.3"
   }
 }

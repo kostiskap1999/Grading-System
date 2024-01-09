@@ -2,6 +2,9 @@ import { BadRequestError, NotFoundError } from '../errors/errorTypes'
 import { UserRepository } from '../persistence/repository/user'
 import * as dbtoken from './token'
 import { TransactionManager } from './transaction'
+import * as bcrypt from 'bcrypt'
+import { config } from 'dotenv'
+config()
 
 export class UserManager {
 
@@ -30,7 +33,10 @@ export class UserManager {
     if (!user || !user.username || !user.password || !user.firstName || !user.lastName)
       throw new BadRequestError("Incorrect register credentials")
     
-    const newUser = await this.repository.register(user)
+    const saltRounds = parseInt(process.env.SALT_ROUNDS!)
+    const hashedPassword = await bcrypt.hash(user.password, saltRounds)
+
+    const newUser = await this.repository.register(user, hashedPassword)
     
     if(!newUser)
         throw new NotFoundError("Something went wrong with registering user")

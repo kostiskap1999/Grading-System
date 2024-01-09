@@ -1,5 +1,6 @@
 import { TransactionManager } from "../../manager/transaction";
 import { Credentials, User } from "../entities/user";
+import * as bcrypt from 'bcrypt'
 
 export class UserRepository {
 
@@ -10,18 +11,21 @@ export class UserRepository {
   }
 
   async findUserByCredentials(username: string, password: string) {
-    const credentials = (await this.tm.query(`SELECT * FROM credentials WHERE username = ? AND password = ?`, username, password) as any[])
+    const credentials = (await this.tm.query(`SELECT * FROM credentials WHERE username = ?`, username) as any[])
       .map(creds => new Credentials(creds))[0]
 
     if (!credentials)
       return null
-    
+
+    if(!(await bcrypt.compare(password, credentials.password)))
+        return null
+
     return (await this.tm.query(`SELECT * FROM users WHERE credentials_id = ?`, credentials.id) as any[])
       .map(user => new User(user))[0]
   }
 
-  async register(user: any) {
-    await this.tm.query(`INSERT INTO credentials (username, password) VALUES (?, ?)`, user.username, user.password)
+  async register(user: any, password: string) {
+    await this.tm.query(`INSERT INTO credentials (username, password) VALUES (?, ?)`, user.username, password)
 
     const insertedId = (await this.tm.query(`SELECT id FROM credentials WHERE id >= LAST_INSERT_Id()`) as any[])[0].id
     
