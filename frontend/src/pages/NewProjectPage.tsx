@@ -176,7 +176,7 @@ export default function NewProjectPage() {
             <div>
               <label>
                 <span>Deadline</span>
-                <input id="deadline" disabled type="date" required onChange={handleChange} />
+                <input id="deadline" type="date" required onChange={handleChange} />
               </label>
               <label>
                 <span>Subject</span>
