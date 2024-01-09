@@ -1,3 +1,4 @@
+import { fetchAndSetupSubmissions } from '../api/helpers/massSetups';
 import { fetchProjectUserSubmission, fetchSubmissions } from "../api/submissionsApi";
 import { fetchTests } from "../api/testsApi";
 import { SubmissionModel } from "./SubmissionModel";
@@ -36,10 +37,17 @@ export class ProjectModel {
         this.subjectId = null
     }
 
-    async setup(userId?: number){
+    async setup({userId, setupDepth = 2}: {userId?: number, setupDepth?: number} = {}){
         if(!userId){ //userId is given only when setting up student
-            this.tests = await fetchTests(this.id) ?? this.tests
-            this.submissions = await fetchSubmissions(this.id) ?? this.submissions
+            if(setupDepth === 3) // 2 = projects, 3 = only submissions, 4 = only tests, 5 submissions & tests
+                this.submissions = await fetchAndSetupSubmissions(this.id) ?? this.submissions
+            else if(setupDepth === 4)
+                this.tests = await fetchTests(this.id) ?? this.tests
+            else if(setupDepth === 5){
+                this.submissions = await fetchAndSetupSubmissions(this.id) ?? this.submissions
+                this.tests = await fetchTests(this.id) ?? this.tests
+            }
+            
             let gradeSum = 0
             let submissionsGraded = 0
             this.submissions.forEach(submission => {

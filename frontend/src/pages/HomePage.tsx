@@ -18,7 +18,7 @@ export default function HomePage() {
       const tokenId: number | null = await fetchTokenId()
 
       if(tokenId){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId, 1)
         userOBJ && setUser(userOBJ)
       }      
     }

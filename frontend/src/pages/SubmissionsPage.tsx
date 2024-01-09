@@ -26,28 +26,28 @@ export default function SubmissionsPage() {
         const selProject: ProjectModel | null = await fetchProject(parseInt(params.get('project')?.toString()!))
         
         if(selProject){
-          selProject.setup()
+          await selProject.setup({setupDepth: 5})
           setSelectedProject(selProject)
+          setSubmissions(selProject.submissions)
         }
-
-      }
-      
-      const submissionsOBJ: SubmissionModel[] | null = await fetchAndSetupSubmissions(parseInt(params.get('project')?.toString()!))
-      
-      if(submissionsOBJ){
-        setSubmissions(submissionsOBJ)
-        const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-        for(const submission of submissionsOBJ){
-          if(submission.id === parseInt(parsedId)){
-            setSelectedSubmission(submission)
-            break;
-          }
-        } 
       }
     }
 
     fetchData()
-  }, [rerender])
+  }, [])
+
+
+  useEffect(() => {
+    if(selectedProject){
+        const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        for(const submission of selectedProject.submissions){
+            if(submission.id === parseInt(parsedId)){
+                setSelectedSubmission(submission)
+                break
+            }
+        }
+    }
+  })
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>

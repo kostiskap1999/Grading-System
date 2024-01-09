@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel"
-import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
+import { fetchAndSetupUser } from "../api/helpers/massSetups"
 import { UserModel } from "../model/UserModel";
 import { fetchTokenId } from "../api/tokenApi";
-import { deleteUserSubject, postUserSubject } from "../api/subjectsApi";
+import { deleteUserSubject, fetchSubjects, postUserSubject } from "../api/subjectsApi";
 import { SubjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -31,7 +31,7 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
+      const subjectsOBJ: SubjectModel[] | null = await fetchSubjects()
       if(subjectsOBJ)
         setSubjects(subjectsOBJ)
 
@@ -159,7 +159,7 @@ export default function SubjectsPage() {
                           <button key={index} className="list-button"
                               onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
                           >
-                              <PageButtonDescription component={project} showGrade={user?.role > 1} />
+                              <PageButtonDescription component={project} showGrade={user?.role >= 1} />
                           </button>
                           ))}
                       </div>

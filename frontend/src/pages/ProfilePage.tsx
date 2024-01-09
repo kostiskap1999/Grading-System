@@ -19,7 +19,7 @@ export default function ProfilePage() {
       const tokenId: number | null = await fetchTokenId()
 
       if(tokenId){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId, 2)
         userOBJ && setUser(userOBJ)
       }
     }

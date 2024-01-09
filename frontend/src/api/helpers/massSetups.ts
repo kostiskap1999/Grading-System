@@ -8,31 +8,31 @@ import { fetchSubjects } from "../subjectsApi";
 import { fetchSubmissions } from "../submissionsApi";
 import { fetchUser } from "../usersApi";
 
-export async function fetchAndSetupUser(id: number) {
+export async function fetchAndSetupUser(id: number, setupDepth?: number) {
     const user: UserModel | null = await fetchUser(id)
     
     if(user)
-        await user.setup()
+        await user.setup(setupDepth)
     
     return user
 }
 
-export async function fetchAndSetupSubjects() {
+export async function fetchAndSetupSubjects(setupDepth?: number) {
     const subjects: SubjectModel[] | null = await fetchSubjects()
 
     if(subjects)
         for(const subject of subjects)
-            await subject.setup()
+            await subject.setup({setupDepth: setupDepth})
 
     return subjects
 }
 
-export async function fetchAndSetupProjects() {
+export async function fetchAndSetupProjects(setupDepth?: number) {
     const projects: ProjectModel[] | null = await fetchProjects()
 
     if(projects)
         for(const project of projects)
-            await project.setup()
+            await project.setup({setupDepth: setupDepth})
 
     return projects
 }
