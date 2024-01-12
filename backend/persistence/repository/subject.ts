@@ -35,7 +35,18 @@ export class SubjectRepository {
   }
 
   async patchSubject(subject: any) {
-    await this.tm.query(`UPDATE subjects SET name = COALESCE(?, name), description = COALESCE(?, description), semester = COALESCE(?, semester), supervisor_id = COALESCE(?, supervisor_id) WHERE id = ?`, subject.name, subject.description, subject.semester, subject.supervisorId, subject.id)
+    const setClauses = [
+        subject.name !== undefined ? 'name = ?' : null,
+        subject.description !== undefined ? 'description = ?' : null,
+        subject.semester !== undefined ? 'semester = ?' : null,
+        subject.supervisorId !== undefined ? 'supervisor_id = ?' : null
+    ].filter(clause => clause !== null).join(', ')
+
+    await this.tm.query(`
+    UPDATE subjects 
+    SET ${setClauses}
+    WHERE id = ?
+    `, subject.name, subject.description, subject.semester, subject.supervisorId, subject.id)
   }
 
   async deleteSubject(id: number) {

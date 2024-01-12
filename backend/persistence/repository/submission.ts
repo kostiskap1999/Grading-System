@@ -28,13 +28,19 @@ export class SubmissionRepository {
   }
 
   async patchSubmission(submission: any) {
-    await this.tm.query(`UPDATE submissions 
-    SET 
-      name = COALESCE(NULLIF(?, 'undefined'), name),
-      code = COALESCE(NULLIF(?, 'undefined'), code),
-      date = COALESCE(NULLIF(?, 'undefined'), date),
-      grade = COALESCE(NULLIF(?, 'undefined'), grade),
-      comment = COALESCE(NULLIF(?, 'undefined'), comment)
-    WHERE id = ?`, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.comment, submission.id)
+    const setClauses = [
+        submission.name !== undefined ? 'name = ?' : null,
+        submission.code !== undefined ? 'code = ?' : null,
+        submission.date !== undefined ? 'date = ?' : null,
+        submission.grade !== undefined ? 'grade = ?' : null,
+        submission.comment !== undefined ? 'comment = ?' : null
+    ].filter(clause => clause !== null).join(', ')
+
+    await this.tm.query(`
+        UPDATE submissions 
+        SET 
+            ${setClauses}
+        WHERE id = ?
+    `, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.comment, submission.id)
   }
 }
