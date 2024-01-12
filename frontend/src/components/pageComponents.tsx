@@ -3,7 +3,7 @@ import { ProjectModel } from "../model/ProjectModel";
 import { SubjectModel } from "../model/SubjectModel";
 import { SubmissionModel } from "../model/SubmissionModel";
 import CodeSandbox from "./codeSandbox";
-import { patchProject } from '../api/projectsApi';
+import { deleteProject, patchProject } from '../api/projectsApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { deleteSubject } from '../api/subjectsApi';
@@ -36,11 +36,34 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
         else
             setSubmitText("Failed to change deadline")
     }
+
+    const navigate = useNavigate();
+
+    const delProject = async () => {
+        const userConfirmed = window.confirm("Are you sure you want to delete this project? This action can't be taken back.");
+
+        if (userConfirmed) {
+            await deleteProject(project.id)
+            navigate('/projects')
+            window.location.reload()
+        }
+    }
     
     return (
         <div>
             <div className="center" style={{padding:"30px"}}>
-                <div className="header-text center">{project.name}</div>
+                <div className="row center" style={{width: "100%", justifyContent: "space-between"}}>
+                    <div style={{marginRight: "10px"}}></div>
+                    <div className="header-text center">{project.name}</div>
+                    <button
+                        type="button"
+                        className="remove-button icon-button-small"
+                        onClick={() => {delProject()}}
+                        style={{ padding: "13px", margin: "5px 10px 0 0"}}
+                    >
+                        <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                </div>
                 <div className='column'>
                     <div className="center">Deadline</div>
                     <div className='row center'>
