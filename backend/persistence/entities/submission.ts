@@ -4,7 +4,6 @@ export class Submission {
   code: string
   date: Date
   grade: number
-  comment: string
   submiteeId: number
   projectId: number
   
@@ -14,7 +13,6 @@ export class Submission {
     this.code = submission.code
     this.date = submission.date
     this.grade = submission.grade
-    this.comment = submission.comment
     this.submiteeId = submission.submitee_id
     this.projectId = submission.project_id
   }

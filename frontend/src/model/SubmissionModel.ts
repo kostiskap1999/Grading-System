@@ -8,7 +8,6 @@ export interface ISubmission {
     code: string;
     date: Date;
     grade: number | null;
-    comment: string;
     submiteeId: number
     projectId: number
 }
@@ -21,7 +20,6 @@ export class SubmissionModel {
     code: string;
     date: Date;
     grade: number | null;
-    comment: string;
     
     submiteeId: number; //only used for setup
     projectId: number; //only used for posting
@@ -33,7 +31,6 @@ export class SubmissionModel {
         this.code = submission.code
         this.date = submission.date
         this.grade = submission.grade
-        this.comment = submission.comment
         this.submiteeId = submission.submiteeId
         this.projectId = submission.projectId
     }

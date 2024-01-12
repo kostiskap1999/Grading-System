@@ -32,8 +32,7 @@ export class SubmissionRepository {
         submission.name !== undefined ? 'name = ?' : null,
         submission.code !== undefined ? 'code = ?' : null,
         submission.date !== undefined ? 'date = ?' : null,
-        submission.grade !== undefined ? 'grade = ?' : null,
-        submission.comment !== undefined ? 'comment = ?' : null
+        submission.grade !== undefined ? 'grade = ?' : null
     ].filter(clause => clause !== null).join(', ')
 
     await this.tm.query(`
@@ -41,6 +40,6 @@ export class SubmissionRepository {
         SET 
             ${setClauses}
         WHERE id = ?
-    `, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.comment, submission.id)
+    `, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.id)
   }
 }
