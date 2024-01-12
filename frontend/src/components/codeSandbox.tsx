@@ -46,7 +46,9 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
         return ${test.mainFunction}(${inputCode});
         `
         let result = Function(finalCode)()
-        result = result ? result.toString() : null
+        // result = result ? result.toString() : null
+        result = result.toString()
+        
 
         if (result == test.output.code){
           passedTests++
@@ -57,8 +59,8 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
         }
       });
     }
-    catch{
-      setLog(`There was something wrong with the code parsing. Execution aborted.<br>`)
+    catch (error: any) {
+      setLog(`Could not run code. <span style="color: red;">${error}</span><br>`);
     }
 
     let gradeVar = Math.round(passedTests/project.tests.length*10 * 2) / 2

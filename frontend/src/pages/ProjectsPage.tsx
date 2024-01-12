@@ -48,6 +48,7 @@ export default function ProjectsPage() {
       for(const project of user.getProjects())
         if(project.id === parseInt(parsedId)){
           setSelectedProject(project)
+          console.log(selectedProject instanceof ProjectModel)
           break;
         }
     }
