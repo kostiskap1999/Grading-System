@@ -28,11 +28,8 @@ export default function HomePage() {
 
   return (
     <div className="page column">
-      <div className="top-header center column" style={{flex: 1}}>
-        <div>{user && user.username}</div>
-        <div className="row">
-          <div>There are {user && user.getProjects({filterDeadline: 1}).length} pending projects from {user && user.subjects.length} subjects.</div>
-        </div>
+      <div className="top-header medium-text center column" style={{flex: 1}}>
+        <div>{user && `Hello ${user.firstName} ${user.lastName}`}</div>
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>

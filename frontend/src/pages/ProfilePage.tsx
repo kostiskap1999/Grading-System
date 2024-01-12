@@ -29,41 +29,67 @@ export default function ProfilePage() {
   return (
     <div className="page column">
       <div className="top-header medium-text center column" style={{flex: 1}}>
-        <div>{user && user.firstName} {user && user.lastName}</div>
-        <div className="row">
-          <div>Your average grade is {user && user.averageGrade?.toFixed(2)}.</div>
-        </div>
+        <div></div>
+        <div className="row">{user && `Welcome to your profile ${user.firstName} ${user.lastName}`}</div>
       </div>
-      <div className="row" style={{flex: 6}}>
-        <div className="column container" style={{flex: 1}}>
-          <div className="medium-text center header-title">My Subjects</div>
-          <div className="column" style={{overflow:'scroll'}}>
-            {user && user.subjects.map((subject: SubjectModel, index: number) => (
-              <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
-                <PageButtonDescription component={subject} showGrade={user.role > 1} />
-              </button>
-            ))}
-          </div>
+      <div className="row" style={{flex: 1}}>
+        <div style={{flex: 1}}>
+            <div style={{margin: "50px"}}>
+                <div className="large-text">User Profile</div>
+                <div className='profile-data'>
+                    <div>Username</div>
+                    <div>{user?.username}</div>
+                </div>
+                <div className='profile-data'>
+                    <div>Full Name</div>
+                    <div>{user?.firstName} {user?.lastName}</div>
+                </div>
+                <div className='profile-data'>
+                    <div>Role</div>
+                    <div>{user?.role == 3 ? "Guest" : user?.role == 2 ? "Student" : user?.role == 1 ? "Professor" : user?.role == 0 && "Admin"}</div>
+                </div>
+            </div>
+            <div style={{margin: "50px"}}>
+                <div className="large-text">Stats</div>
+                <div className='profile-data'>
+                    <div>Joined Subjects</div>
+                    <div>{user?.subjects.length}</div>
+                </div>
+                <div className='profile-data'>
+                    <div>Total Projects</div>
+                    <div>{user?.getProjects().length}</div>
+                </div>
+                <div className='profile-data'>
+                    <div>My Submissions</div>
+                    <div>{user?.getSubmissions().length}</div>
+                </div>
+                <div className='profile-data'>
+                    <div>Average Grade</div>
+                    <div>{user?.averageGrade ? user?.averageGrade?.toFixed(2) : "No data"}</div>
+                </div>
+            </div>
         </div>
-        <div className="column container" style={{flex: 1}}>
-          <div className="medium-text center header-title">My Unsubmitted Projects</div>
-          <div className="column" style={{overflow:'scroll'}}>
-            {user && user.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
-                <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
-                  <PageButtonDescription component={project} />
+        <div className="row" style={{flex: 1.5}}>
+            <div className="column container" style={{flex: 1}}>
+            <div className="medium-text center header-title">My Subjects</div>
+            <div className="column" style={{overflow:'scroll'}}>
+                {user && user.subjects.map((subject: SubjectModel, index: number) => (
+                <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
+                    <PageButtonDescription component={subject} showGrade={user.role > 1} />
                 </button>
-            ))}
-          </div>
-        </div>
-        <div className="column container" style={{flex: 1}}>
-          <div className="medium-text center header-title">My Submissions</div>
-          <div className="column" style={{overflow:'scroll'}}>
-            {user && user.getSubmissions().map((submission: SubmissionModel, index: number) => (
-                <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + submission.projectId)}>
-                  <PageButtonDescription component={submission} showGrade={user.role > 1} />
-                </button>
-            ))}
-          </div>
+                ))}
+            </div>
+            </div>
+            <div className="column container" style={{flex: 1}}>
+            <div className="medium-text center header-title">My Unsubmitted Projects</div>
+            <div className="column" style={{overflow:'scroll'}}>
+                {user && user.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
+                    <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
+                    <PageButtonDescription component={project} />
+                    </button>
+                ))}
+            </div>
+            </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,11 @@
+@import './variables/colors.scss';
+@import './variables/typography.scss';
+@import './general.scss';
+
+.profile-data {
+	margin: 20px 5px;
+
+    > div:nth-child(2) {
+        @extend .medium-text
+    }
+}

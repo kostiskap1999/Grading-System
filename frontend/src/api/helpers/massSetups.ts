@@ -10,7 +10,7 @@ import { fetchUser } from "../usersApi";
 
 export async function fetchAndSetupUser(id: number, setupDepth?: number) {
     const user: UserModel | null = await fetchUser(id)
-    
+
     if(user)
         await user.setup(setupDepth)
     

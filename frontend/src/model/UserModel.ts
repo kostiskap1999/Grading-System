@@ -6,8 +6,8 @@ import { SubmissionModel } from "./SubmissionModel";
 export interface IUser {
     id: number,
     username: string,
-    first_name: string,
-    last_name: string,
+    firstName: string,
+    lastName: string,
     role: number; // 0=admin, 1=professor, 2=student
     subjects: SubjectModel[];
     averageGrade: number | null;
@@ -25,8 +25,8 @@ export class UserModel {
     constructor(user: IUser = {} as IUser) {
         this.id = user.id
         this.username = user.username
-        this.firstName = user.first_name
-        this.lastName = user.last_name
+        this.firstName = user.firstName
+        this.lastName = user.lastName
         this.role = user.role
         this.subjects = user.subjects ?? []
         this.averageGrade = user.averageGrade

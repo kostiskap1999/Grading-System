@@ -8,6 +8,7 @@ import './styles/button.scss';
 import './styles/text.scss';
 
 import './styles/login.scss';
+import './styles/profile.scss';
 import './styles/newProject.scss';
 
 import './styles/gradeBox.scss';
