@@ -110,11 +110,12 @@ export default function SubjectsPage() {
 
   return (
     <div className="page column" style={{overflow: 'hidden'}}>
-      <div className="top-header medium-text center column" style={{flex: 1}}>
-        <div>This is a list of all the subjects</div>
-        <div className="row">
-          <div>There are pending projects from subjects.</div>
-        </div>
+      <div className="top-header medium-text center row" style={{flex: 1}}>
+        {user && user.role <= 1 ? <>
+          <button className="button" style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-subject')}>New Subject</button>
+        </> : <div style={{flex: 1}}></div>}
+        <div className="medium-text center column" style={{flex: 4}}>This is a list of all the subjects</div>
+        <div style={{flex: 1}}></div>
       </div>
       <div className="row" style={{flex: 6}}>
         <div className="column container" style={{flex: 1}}>

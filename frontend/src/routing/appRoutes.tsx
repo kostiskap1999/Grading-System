@@ -10,6 +10,7 @@ import ProjectsPage from "../pages/ProjectsPage";
 import SubjectsPage from "../pages/SubjectsPage";
 import SubmissionsPage from "../pages/SubmissionsPage";
 import ProfilePage from "../pages/ProfilePage";
+import NewSubjectPage from '../pages/NewSubjectPage';
 
 const appRoutes: RouteType[] = [
   {
@@ -58,6 +59,11 @@ const appRoutes: RouteType[] = [
     protected: 2,
     element: <NewProjectPage/>,
     path: "/new-project"
+  },
+  {
+    protected: 2,
+    element: <NewSubjectPage/>,
+    path: "/new-subject"
   },
   {
     protected: 2,

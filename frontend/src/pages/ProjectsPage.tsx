@@ -85,12 +85,7 @@ export default function ProjectsPage() {
         {user && user.role <= 1 ? <>
           <button className="button" style={{flex: 1, padding: 5, borderRadius: 2}} onClick={() => navigate('/new-project')}>New Project</button>
         </> : <div style={{flex: 1}}></div>}
-        <div className="medium-text center column" style={{flex: 4}}>
-          <div>This is a list of all the projects. You can participate in all the projects whose subjects you follow.</div>
-          <div className="row">
-            <div>There are pending projects from subjects.</div>
-          </div>
-        </div>
+        <div className="medium-text center column" style={{flex: 4}}>This is a list of all the projects. You can participate in all the projects whose subjects you follow.</div>
         <div style={{flex: 1}}></div>
       </div>
       <div className="row"  style={{flex: 6}}>
