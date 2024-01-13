@@ -8,6 +8,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { fetchAndSetupSubjects } from "../api/helpers/massSetups"
 import { useNavigate } from 'react-router-dom'
+import { isFirstCharacterBracket, isValidJSONOrArray } from '../util/JSONOrArrayValidation'
 
 export default function NewProjectPage() {
   const navigate = useNavigate()
@@ -15,6 +16,8 @@ export default function NewProjectPage() {
   const [supervisingSubjects, setSupervisingSubjects] = useState<SubjectModel[]>([])
   const [newProject, setNewProject] = useState<ProjectModel>(new ProjectModel())
   const [projectCreated, setProjectCreated] = useState<boolean | void>(undefined)
+
+  const [rerender, setRerender] = useState<number>(0)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,12 +138,26 @@ export default function NewProjectPage() {
           break
         case `input-code-${inputIndex}`:
           newProjectCopy.tests[testIndex].inputs[inputIndex!].code = event.target.value
+          if(isFirstCharacterBracket(event.target.value)){
+            newProjectCopy.tests[testIndex].inputs[inputIndex!].isValidJSONorArray = isValidJSONOrArray(event.target.value)
+            setRerender(rerender+1)
+          }else{
+            newProjectCopy.tests[testIndex].inputs[inputIndex!].isValidJSONorArray = true
+            setRerender(rerender+1)
+          }
           break
         case `input-is-main-param-${inputIndex}`:
           newProjectCopy.tests[testIndex].inputs[inputIndex!].isMainParam = (event.target as HTMLInputElement).checked
           break
         case `output-code-${testIndex}`:
           newProjectCopy.tests[testIndex].output.code = event.target.value
+          if(isFirstCharacterBracket(event.target.value)){
+            newProjectCopy.tests[testIndex].output.isValidJSONorArray = isValidJSONOrArray(event.target.value)
+            setRerender(rerender+1)
+          }else{
+            newProjectCopy.tests[testIndex].output.isValidJSONorArray = true
+            setRerender(rerender+1)
+          }
           break
         default:
           console.log("error")
@@ -153,6 +170,23 @@ export default function NewProjectPage() {
 
   const createProject = async (event: React.FormEvent) => {
     event.preventDefault()
+    let invalid = false
+    newProject.tests.forEach(test => {
+        if(test.output.isValidJSONorArray === false){
+            alert("Invalid inputs/outputs detected! Fix all inputs/outputs before submitting.")
+            invalid = true
+            return   
+        }
+        test.inputs.forEach(input => {
+            if(input.isValidJSONorArray === false){
+                alert("Invalid inputs/outputs detected! Fix all inputs/outputs before submitting.")
+                invalid = true
+                return
+            }
+        });
+    });
+    if(invalid)
+        return
     const created = await postProject(newProject)
     setProjectCreated(created)
     if(created){
@@ -244,6 +278,7 @@ export default function NewProjectPage() {
                                 onChange={(event) => handleTestChange(event, index, idx)}
                                 required
                               />
+                              {input.isValidJSONorArray === false && <span>Invalid JSON or Array</span>}
                             </td>
                             <td>
                               <button
@@ -282,6 +317,7 @@ export default function NewProjectPage() {
                               onChange={(event) => handleTestChange(event, index)}
                               required
                             />
+                            {test.output.isValidJSONorArray === false && <span>Invalid JSON or Array</span>}
                           </td>
                         </tr>
                       </tbody>

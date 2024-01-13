@@ -26,6 +26,8 @@ export interface ITestInput {
     id: number;
     code: string;
     isMainParam: boolean;
+    
+    isValidJSONorArray?: boolean; // used only in new projects
 }
 
 
@@ -33,6 +35,7 @@ export class TestInputModel {
     id: number;
     code: string;
     isMainParam: boolean;
+    isValidJSONorArray?: boolean; // used only in new projects
 
     constructor(input: ITestInput = {} as ITestInput) {
         this.id = input.id
@@ -44,11 +47,14 @@ export class TestInputModel {
 export interface ITestOutput {
     id: number;
     code: string;
+
+    isValidJSONorArray?: boolean; // used only in new projects
 }
 
 export class TestOutputModel {
     id: number;
     code: string;
+    isValidJSONorArray?: boolean; // used only in new projects
 
     constructor(output: ITestOutput = {} as ITestOutput) {
         this.id = output.id

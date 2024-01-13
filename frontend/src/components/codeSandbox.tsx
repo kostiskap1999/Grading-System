@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ProjectModel } from '../model/ProjectModel';
 import { SubmissionModel } from '../model/SubmissionModel';
 import { patchSubmission } from '../api/submissionsApi';
+import { isFirstCharacterBracket } from '../util/JSONOrArrayValidation';
 
 export default function CodeSandbox({ project, submission }: { project: ProjectModel, submission: SubmissionModel }) {
   const [code, setCode] = useState<string>('')
@@ -33,35 +34,44 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
   const runCode = async (grading: boolean) => {
     let passedTests = 0
 
-    try{
       setIsSubmittingGrade(grading)
       setLog(``);
       submission.grade = null
       
       project.tests.forEach((test, index) => {
-        setLog((prevLog) => `${prevLog}Running test ${index + 1}<br>`)
-        let inputCode = test.inputs.map(input => typeof input.code === 'string' && !isNaN(Number(input.code)) ? input.code : `'${input.code}'`).join(', ');
+        setLog((prevLog) => `${prevLog}Running test ${index + 1} with input <span style="color: darkblue;">(${inputCode})</span><br>`)
+        let inputCode = test.inputs.map(input => {
+            if (isFirstCharacterBracket(input.code) || (typeof input.code === 'string' && !isNaN(Number(input.code))))
+                return input.code
+            else
+                return `'${input.code}'`
+          }).join(', ')
+
+          console.log(inputCode)
 
         let finalCode = `${code}
         return ${test.mainFunction}(${inputCode});
         `
-        let result = Function(finalCode)()
-        // result = result ? result.toString() : null
-        result = result.toString()
-        
 
-        if (result == test.output.code){
-          passedTests++
-          setLog((prevLog) => `${prevLog}<span style="color: green;">Test ${index + 1} completed.</span> Got <span style="color: darkblue;">(${inputCode})</span> as input(s) and <span style="color: darkblue;">${test.output.code}</span> as output<br>`);
+        try{
+            let result = Function(finalCode)()
+            // result = result ? result.toString() : null
+            result = result.toString()
+            
+
+            if (result == test.output.code){
+            passedTests++
+            setLog((prevLog) => `${prevLog}<span style="color: green;">Test ${index + 1} completed.</span> Got <span style="color: darkblue;">${test.output.code}</span> as output<br><br>`);
+            }
+            else{
+            setLog((prevLog) => `${prevLog}<span style="color: darkred;">Test ${index + 1} failed.</span> Expected <span style="color: darkblue;">${test.output.code}</span> as output. Got <span style="color: darkblue;">${result}</span> as output.<br><br>`);
+            }
         }
-        else{
-          setLog((prevLog) => `${prevLog}<span style="color: darkred;">Test ${index + 1} failed.</span> Got <span style="color: darkblue;">(${inputCode})</span> as input(s) and expected <span style="color: darkblue;">${test.output.code}</span> as output. Got output <span style="color: darkblue;">${result}</span><br>`);
+        catch (error: any) {
+            setLog((prevLog) => `${prevLog}Could not run code. <span style="color: red;">${error}</span><br><br>`);
         }
       });
-    }
-    catch (error: any) {
-      setLog(`Could not run code. <span style="color: red;">${error}</span><br>`);
-    }
+
 
     let gradeVar = Math.round(passedTests/project.tests.length*10 * 2) / 2
     setGrade(gradeVar)
