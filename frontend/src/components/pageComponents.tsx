@@ -16,7 +16,6 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
     const [submitText, setSubmitText] = useState<string>("")
     
     useEffect(() => {
-        console.log(newDate)
         const deadlineDate = new Date(project.deadline)
         const localDeadline = new Date(deadlineDate.getTime() - deadlineDate.getTimezoneOffset() * 60000)
         setProjectDate(localDeadline.toISOString().split('T')[0])
@@ -85,7 +84,7 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
             {userRole != null && userRole <= 1 && <GradeLine component={project} grade={project.averageGrade} />}
             <div style={{margin: "20px"}}>
                 <div className="large-text center">Project Description</div>
-                <div className="center">{project.description}</div>
+                <div style={{ whiteSpace: 'pre-line' }}>{project.description}</div>
             </div>
         </div>
     );
@@ -123,7 +122,7 @@ export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, use
                 <div className="center">Semester: {subject.semester}</div>
                 {userRole != null && userRole <= 1 && <GradeLine component={subject} grade={subject.averageGrade} /> }
             </div>
-            <div className="center">{subject.description}</div>
+            <div style={{ whiteSpace: 'pre-line', margin: "20px" }}>{subject.description}</div>
         </div>
     );
 }
