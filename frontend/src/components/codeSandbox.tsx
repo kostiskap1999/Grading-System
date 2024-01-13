@@ -8,11 +8,12 @@ import { isFirstCharacterBracket } from '../util/JSONOrArrayValidation';
 
 export default function CodeSandbox({ project, submission }: { project: ProjectModel, submission: SubmissionModel }) {
   const [code, setCode] = useState<string>('')
-  const [log, setLog] = useState<string>('No tests running<br>')
+  const [log, setLog] = useState<string>('No tests running')
   const [grade, setGrade] = useState<number | null>(null)
   const [isSubmittingGrade, setIsSubmittingGrade] = useState<boolean | null>(null)
   
   useEffect(() => {
+    setLog('No tests running')
     setCode(submission.code)
   }, [submission.code])
 
@@ -44,7 +45,11 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
             if (isFirstCharacterBracket(input.code) || (typeof input.code === 'string' && !isNaN(Number(input.code))))
                 return input.code
             else
-                return `'${input.code}'`
+                if(input.code[0] === "'" || input.code[0] === '"')
+                    return input.code
+                else
+                    return `'${input.code}'`
+                
           }).join(', ')
 
           console.log(inputCode)
@@ -55,20 +60,28 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
 
         try{
             let result = Function(finalCode)()
-            // result = result ? result.toString() : null
-            result = result.toString()
-            
 
-            if (result == test.output.code){
-            passedTests++
-            setLog((prevLog) => `${prevLog}<span style="color: green;">Test ${index + 1} completed.</span> Got <span style="color: darkblue;">${test.output.code}</span> as output<br><br>`);
-            }
-            else{
-            setLog((prevLog) => `${prevLog}<span style="color: darkred;">Test ${index + 1} failed.</span> Expected <span style="color: darkblue;">${test.output.code}</span> as output. Got <span style="color: darkblue;">${result}</span> as output.<br><br>`);
+            if(result !== undefined){
+                // result = result ? result.toString() : null
+                result = result.toString()
+
+                if (result == test.output.code){
+                passedTests++
+                setLog((prevLog) => `${prevLog}<span style="color: green;">Test ${index + 1} completed.</span> Got <span style="color: darkblue;">${test.output.code}</span> as output<br><br>`);
+                }
+                else{
+                setLog((prevLog) => `${prevLog}<span style="color: darkred;">Test ${index + 1} failed.</span> Expected <span style="color: darkblue;">${test.output.code}</span> as output. Got <span style="color: darkblue;">${result}</span> as output.<br><br>`);
+                }
+            }else{
+                setLog((prevLog) => `${prevLog}Test ${index + 1} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
             }
         }
         catch (error: any) {
-            setLog((prevLog) => `${prevLog}Could not run code. <span style="color: red;">${error}</span><br><br>`);
+            console.log(error)
+            if(error.message === 'result is undefined')
+                setLog((prevLog) => `${prevLog}Test ${index + 1} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
+            else
+                setLog((prevLog) => `${prevLog}Could not run code. <span style="color: red;">${error}</span><br><br>`);
         }
       });
 
