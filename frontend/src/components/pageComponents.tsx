@@ -82,7 +82,7 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
                     <div>{submitText}</div>
                 </div>
             </div>
-            {userRole != null && userRole <= 1 && <GradeLine component={project} grade={project.averageGrade} />}
+            {/* {userRole != null && userRole <= 1 && <GradeLine component={project} grade={project.averageGrade} />} */}
             <div style={{margin: "20px"}}>
                 <div className="large-text center">Project Description</div>
                 <div style={{ whiteSpace: 'pre-line' }}>{project.description}</div>
@@ -121,7 +121,7 @@ export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, use
                     </button>
                 </div>
                 <div className="center">Semester: {subject.semester}</div>
-                {userRole != null && userRole <= 1 && <GradeLine component={subject} grade={subject.averageGrade} /> }
+                {/* {userRole != null && userRole <= 1 && <GradeLine component={subject} grade={subject.averageGrade} /> } */}
             </div>
             <div style={{ whiteSpace: 'pre-line', margin: "20px" }}>{subject.description}</div>
         </div>
@@ -140,7 +140,6 @@ export function SubmissionEntry({ project, submission }: { project: ProjectModel
             </div>
             <div style={{margin: "20px"}}>
                 <div className="large-text center">Submission Code</div>
-                <GradeLine component={submission} grade={submission.grade} />
                 <CodeSandbox project={project} submission={submission} />
             </div>
       </div>

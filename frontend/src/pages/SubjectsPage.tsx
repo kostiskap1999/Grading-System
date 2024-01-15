@@ -68,23 +68,6 @@ export default function SubjectsPage() {
     setupSubject()
   }, [rerender, subjects])
 
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const subjectsOBJ: SubjectModel[] | null = await fetchSubjects()
-//       if(subjectsOBJ)
-//         setSubjects(subjectsOBJ)
-
-//       const tokenId: number | null = await fetchTokenId()
-//       if(tokenId){
-//         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
-//         userOBJ && setUser(userOBJ)
-//       }
-//     }
-
-//     fetchData()
-//   }, [showProjects, showUsers])
-
   useEffect(() => {
     if(user){
         if (filterValues['joined'] === 0)
@@ -188,15 +171,15 @@ export default function SubjectsPage() {
                                 {user.role <=1 && user.id === selectedSubject.supervisorId ?
                                     <button className="list-button" style={{margin: "30px auto"}} disabled>You can't leave a subject you supervise</button>
                                 :
-                                    <button className="list-button" style={{margin: "auto"}} onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                                    <button className="list-button" style={{margin: "30px auto"}} onClick={async () => {await leaveSubject()}}>Leave Subject</button>
                                 }
                                 <div className='row'>
                                     <button className="list-button" style={{margin: "0 20px", flex: 1}} onClick={() => {setShowProjects(!showProjects); setShowUsers(false)}}>Show Projects</button>
-                                    <button className="list-button" style={{margin: "0 20px", flex: 1}} onClick={() => {setShowUsers(!showUsers); setShowProjects(false)}}>Show Users</button>
+                                    {user && user.role <= 1 && <button className="list-button" style={{margin: "0 20px", flex: 1}} onClick={() => {setShowUsers(!showUsers); setShowProjects(false)}}>Show Users</button>}
                                 </div>
                                 <div style={{flex: 1}}></div>
                             </div>
-                            <div className="column container" style={{overflow:'scroll', flex: 1}}>
+                            <div className="column container" style={{overflow:'scroll', flex: 1, display: (showProjects || showUsers) ? "flex" : "none"}}>
                                     <div className="medium-text center" style={{margin: "20px"}}>{showProjects ? "Projects" : showUsers ? "Users" : ""}</div>
                                     {showProjects ?
                                         selectedSubject.projects.map((project, index) => (
@@ -206,20 +189,20 @@ export default function SubjectsPage() {
                                                 <PageButtonDescription component={project} showGrade={user?.role >= 1} />
                                             </button>
                                         ))
-                                    :
+                                    : showUsers ?
                                         participants.map((participant, index) => (
                                             <button key={index} className="list-button"
                                                 onClick={() => {navigate('/profile?id=' + participant.id); setRerender(rerender+1)}}
                                             >
-                                                <PageButtonDescription component={participant} showGrade={user?.role >= 1} />
+                                                <PageButtonDescription component={participant} />
                                             </button>
                                         ))
-                                    }
+                                    : <></>}
                             </div>
                         </div>
                         <div style={{flex: 1}}></div>
                   </>:<>
-                      <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
+                      <button className="list-button" style={{margin: "30px auto"}} onClick={async () => {await joinSubject()}}>Join Subject</button>
                       <div></div>
                   </>}
                 </>}

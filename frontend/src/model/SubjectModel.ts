@@ -46,13 +46,13 @@ export class SubjectModel {
                     else
                         await project.setup({userId: userId, setupDepth: setupDepth})
 
-                // if(userId){
-                //     const submission = await fetchProjectUserSubmission(project.id, userId)
-                //     if(submission && submission.grade != null){
-                //         gradeSum += submission.grade
-                //         subjectsGraded++
-                //     }
-                // }
+                if(userId){
+                    const submission = await fetchProjectUserSubmission(project.id, userId)
+                    if(submission && submission.grade != null){
+                        gradeSum += submission.grade
+                        subjectsGraded++
+                    }
+                }
 
 
             }

@@ -81,7 +81,7 @@ export default function ProfilePage() {
                         <div>{profile?.getProjects().length}</div>
                     </div>
                     <div className='profile-data'>
-                        <div>My Submissions</div>
+                        <div>My Submitted Projects</div>
                         <div>{profile?.getSubmissions().length}</div>
                     </div>
                     <div className='profile-data'>
