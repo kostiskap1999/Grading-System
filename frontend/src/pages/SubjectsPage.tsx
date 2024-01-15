@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel"
-import { fetchAndSetupUser } from "../api/helpers/massSetups"
+import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 import { UserModel } from "../model/UserModel";
 import { fetchTokenId } from "../api/tokenApi";
 import { deleteUserSubject, fetchSubjects, postUserSubject } from "../api/subjectsApi";
@@ -31,7 +31,7 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const subjectsOBJ: SubjectModel[] | null = await fetchSubjects()
+      const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
       if(subjectsOBJ)
         setSubjects(subjectsOBJ)
 
@@ -152,10 +152,15 @@ export default function SubjectsPage() {
         <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
             {selectedSubject && user && <>
                 <SubjectEntry subject={selectedSubject} userRole={user?.role}/>
-                {user && user.role > 1 && <>
+                {user && <>
                   {user.hasSubject(selectedSubject.id) ? <>
-                      <button className="list-button" onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                      {user.role <=1 && user.id === selectedSubject.supervisorId ?
+                        <button className="list-button" style={{margin: "auto"}} disabled>You can't leave a subject you supervise</button>
+                      :
+                        <button className="list-button" style={{margin: "auto"}} onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                      }
                       <div className="column" style={{overflow:'scroll'}}>
+                          <div className="medium-text center" style={{margin: "20px"}}>Projects</div>
                           {selectedSubject.projects.map((project, index) => (
                           <button key={index} className="list-button"
                               onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}

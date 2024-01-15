@@ -154,9 +154,9 @@ export function PageButtonDescription({ component, showGrade }: { component: Sub
   
     return (
     <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
-      <span>{}</span>
+      <span style={{margin: "0 20px"}}>{}</span>
       <span>{component.name}</span>
-      {showGrade ? <GradeLine grade={grade} /> : <span></span>}
+      {showGrade ? <GradeLine grade={grade} /> : <span style={{margin: "0 20px"}}></span>}
   </div>
   );
 }

@@ -6,7 +6,6 @@ import { UserModel } from "../model/UserModel";
 import { useNavigate } from "react-router-dom";
 import { SubjectModel } from "../model/SubjectModel";
 import { fetchTokenId } from "../api/tokenApi";
-import { SubmissionModel } from "../model/SubmissionModel";
 import { PageButtonDescription } from "../components/pageComponents";
 
 export default function ProfilePage() {
@@ -33,40 +32,53 @@ export default function ProfilePage() {
         <div className="row">{user && `Welcome to your profile ${user.firstName} ${user.lastName}`}</div>
       </div>
       <div className="row" style={{flex: 1}}>
-        <div style={{flex: 1}}>
-            <div style={{margin: "50px"}}>
-                <div className="large-text">User Profile</div>
-                <div className='profile-data'>
-                    <div>Username</div>
-                    <div>{user?.username}</div>
+        <div style={{flex: (user && user?.role>1) ? 1 : 3 }}>
+          <div className="row">
+              <div className="column">
+                <div style={{margin: "20px 50px"}}>
+                    <div className="large-text">User Profile</div>
+                    <div className='profile-data'>
+                        <div>Username</div>
+                        <div>{user?.username}</div>
+                    </div>
+                    <div className='profile-data'>
+                        <div>Full Name</div>
+                        <div>{user?.firstName} {user?.lastName}</div>
+                    </div>
+                    <div className='profile-data'>
+                        <div>Role</div>
+                        <div>{user?.role == 3 ? "Guest" : user?.role == 2 ? "Student" : user?.role == 1 ? "Professor" : user?.role == 0 && "Admin"}</div>
+                    </div>
                 </div>
-                <div className='profile-data'>
-                    <div>Full Name</div>
-                    <div>{user?.firstName} {user?.lastName}</div>
+                <div style={{margin: "20px 50px"}}>
+                    <div className="large-text">Stats</div>
+                    <div className='profile-data'>
+                        <div>Joined Subjects</div>
+                        <div>{user?.subjects.length}</div>
+                    </div>
+                    <div className='profile-data'>
+                        <div>Total Projects</div>
+                        <div>{user?.getProjects().length}</div>
+                    </div>
+                    <div className='profile-data'>
+                        <div>My Submissions</div>
+                        <div>{user?.getSubmissions().length}</div>
+                    </div>
+                    <div className='profile-data'>
+                        <div>Average Grade</div>
+                        <div>{user?.averageGrade ? user?.averageGrade?.toFixed(2) : "No data"}</div>
+                    </div>
                 </div>
-                <div className='profile-data'>
-                    <div>Role</div>
-                    <div>{user?.role == 3 ? "Guest" : user?.role == 2 ? "Student" : user?.role == 1 ? "Professor" : user?.role == 0 && "Admin"}</div>
+              </div>
+              <div className="column">
+                <div style={{margin: "20px 50px"}}>
+                    <div className="large-text">Professor Stats</div>
+                    <div className='profile-data'>
+                        <div>Supervising Subjects</div>
+                        <div>{user?.getSubjects(1).length}</div>
+                    </div>
                 </div>
-            </div>
-            <div style={{margin: "50px"}}>
-                <div className="large-text">Stats</div>
-                <div className='profile-data'>
-                    <div>Joined Subjects</div>
-                    <div>{user?.subjects.length}</div>
-                </div>
-                <div className='profile-data'>
-                    <div>Total Projects</div>
-                    <div>{user?.getProjects().length}</div>
-                </div>
-                <div className='profile-data'>
-                    <div>My Submissions</div>
-                    <div>{user?.getSubmissions().length}</div>
-                </div>
-                <div className='profile-data'>
-                    <div>Average Grade</div>
-                    <div>{user?.averageGrade ? user?.averageGrade?.toFixed(2) : "No data"}</div>
-                </div>
+              </div>
             </div>
         </div>
         <div className="row" style={{flex: 1.5}}>
@@ -80,16 +92,18 @@ export default function ProfilePage() {
                 ))}
             </div>
             </div>
+            {user && user.role > 1 && <>
             <div className="column container" style={{flex: 1}}>
-            <div className="medium-text center header-title">My Unsubmitted Projects</div>
-            <div className="column" style={{overflow:'scroll'}}>
-                {user && user.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
-                    <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
-                    <PageButtonDescription component={project} />
-                    </button>
-                ))}
+                <div className="medium-text center header-title">My Unsubmitted Projects</div>
+                <div className="column" style={{overflow:'scroll'}}>
+                    {user && user.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
+                        <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
+                        <PageButtonDescription component={project} />
+                        </button>
+                    ))}
+                </div>
             </div>
-            </div>
+            </>}
         </div>
       </div>
     </div>
