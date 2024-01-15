@@ -111,5 +111,19 @@ export class SubjectManager {
     
     await this.repository.deleteUserSubject(body.userId, body.subjectId)
     return true
-  }  
+  }
+
+  async getSubjectUsers(subjectId: number, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!subjectId)
+      throw new BadRequestError("Incorrect subject id")
+    
+    const users = await this.repository.findBySubject(subjectId)
+  
+    if(!users)
+      throw new NotFoundError("Users not found")
+    
+    return users
+  }
 }

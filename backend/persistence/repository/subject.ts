@@ -1,5 +1,6 @@
 import { TransactionManager } from "../../manager/transaction";
 import { Subject } from "../entities/subject";
+import { User } from '../entities/user';
 
 export class SubjectRepository {
 
@@ -28,6 +29,17 @@ export class SubjectRepository {
 
     return (await this.tm.query(`SELECT * FROM subjects WHERE ${subjectIds.map(() => 'id = ?').join(' OR ')}`, ...subjectIds) as any[])
       .map(subject => new Subject(subject))
+  }
+
+  async findBySubject(subjectId: number) {
+    const userIds = (await this.tm.query(`SELECT user_id FROM user_subject WHERE subject_id = ?`, subjectId) as any[])
+      .map(user => user.user_id)
+
+    if(!userIds || userIds.length === 0)
+      return null
+
+    return (await this.tm.query(`SELECT * FROM users WHERE ${userIds.map(() => 'id = ?').join(' OR ')}`, ...userIds) as any[])
+      .map(user => new User(user))
   }
 
   async postSubject(subject: any) {

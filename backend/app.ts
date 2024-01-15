@@ -124,21 +124,25 @@ router.route('/subjects/:id').delete(async (req, res) => {
 // ****** USER-SUBJECTS ******
 // *******************
 
-// GET USER-SUBJECT ROUTER
+// GET USER-SUBJECTS ROUTER
 router.route('/user-subjects/:userId').get(async (req, res) => {
   await transact(res, tm => new SubjectManager(tm).getUserSubjects(parseInt(req.params.userId), req.headers.token as string))
 });
 
-// POST USER-SUBJECT ROUTER
+// POST USER-SUBJECTS ROUTER
 router.route('/user-subjects').post(async (req, res) => {
   await transact(res, tm => new SubjectManager(tm).postUserSubject(req.body, req.headers.token as string))
 });
 
-// DELETE USER-SUBJECT ROUTER
+// DELETE USER-SUBJECTS ROUTER
 router.route('/user-subjects').delete(async (req, res) => {
   await transact(res, tm => new SubjectManager(tm).deleteUserSubject(req.body, req.headers.token as string))
 });
 
+// GET SUBJECT-USERS ROUTER
+router.route('/subject-users/:subjectId').get(async (req, res) => {
+    await transact(res, tm => new SubjectManager(tm).getSubjectUsers(parseInt(req.params.subjectId), req.headers.token as string))
+});
 
 // *******************
 // ****** PROJECTS ******
