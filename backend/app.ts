@@ -135,8 +135,8 @@ router.route('/user-subjects').post(async (req, res) => {
 });
 
 // DELETE USER-SUBJECTS ROUTER
-router.route('/user-subjects').delete(async (req, res) => {
-  await transact(res, tm => new SubjectManager(tm).deleteUserSubject(req.body, req.headers.token as string))
+router.route('/user-subjects/:userId/:subjectId').delete(async (req, res) => {
+  await transact(res, tm => new SubjectManager(tm).deleteUserSubject(parseInt(req.params.userId), parseInt(req.params.subjectId), req.headers.token as string))
 });
 
 // GET SUBJECT-USERS ROUTER

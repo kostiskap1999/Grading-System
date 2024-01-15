@@ -103,13 +103,13 @@ export class SubjectManager {
     return true
   }
 
-  async deleteUserSubject(body: any, token: string) {
+  async deleteUserSubject(userId: number, subjectId: number, token: string) {
     await dbtoken.checkToken(token)
-    
-    if (!body.userId || !body.subjectId)
+
+    if (!userId || !subjectId)
       throw new BadRequestError("Incorrect user or subject id")
     
-    await this.repository.deleteUserSubject(body.userId, body.subjectId)
+    await this.repository.deleteUserSubject(userId, subjectId)
     return true
   }
 
