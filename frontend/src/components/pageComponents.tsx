@@ -155,7 +155,7 @@ export function PageButtonDescription({ component, showGrade }: { component: Sub
     return (
     <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
       <span style={{margin: "0 20px"}}>{}</span>
-      <span>{component.name}</span>
+      <span>{component instanceof SubmissionModel ? component?.student?.firstName + " " + component?.student?.lastName : component.name}</span>
       {showGrade ? <GradeLine grade={grade} /> : <span style={{margin: "0 20px"}}></span>}
   </div>
   );

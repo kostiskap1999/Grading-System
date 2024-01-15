@@ -32,7 +32,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       if(user){
-        const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+        const parsedId: string = (params.get('id') === null) ? user.id.toString() : params.get('id')!.toString()
         if(parseInt(parsedId) === user.id){
           setProfile(user)
         }
