@@ -128,10 +128,14 @@ export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, use
 }
 
 export function SubmissionEntry({ project, submission }: { project: ProjectModel, submission: SubmissionModel }) {
+    const navigate = useNavigate();
+
     return (
         <div>
             <div className="center" style={{padding:"30px"}}>
-                <div className="header-text">{submission.student?.firstName + " " + submission.student?.lastName}</div>
+                <button className="transparent-button header-text" onClick={() => {navigate('/profile?id=' + submission.student?.id)}}>
+                    {`${submission.student?.firstName} ${submission.student?.lastName}`}
+                </button>
             </div>
             <div style={{margin: "20px"}}>
                 <div className="large-text center">Submission Code</div>
@@ -155,7 +159,7 @@ export function PageButtonDescription({ component, showGrade }: { component: Sub
     return (
     <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
       <span style={{margin: "0 20px"}}>{}</span>
-      <span>{component instanceof SubmissionModel ? component?.student?.firstName + " " + component?.student?.lastName : component.name}</span>
+      <span>{component instanceof SubmissionModel ? `${component?.student?.firstName} ${component?.student?.lastName}` : component.name}</span>
       {showGrade ? <GradeLine grade={grade} /> : <span style={{margin: "0 20px"}}></span>}
   </div>
   );

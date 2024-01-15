@@ -58,6 +58,24 @@
 	}
 }
 
+.transparent-button {
+	@extend .button;
+
+	min-height: 70px;
+    background-color: transparent;
+    color: white;
+
+    &:hover {
+        background-color: transparent
+    }
+
+    &:active {
+        background-color: transparent;
+        color: black
+    }
+
+}
+
 .remove-button {
 	@extend .button;
 
