@@ -12,6 +12,7 @@ export const USERS: string = '/users'
 
 export const SUBJECTS: string = '/subjects'
 export const USERSUBJECTS: string = '/user-subjects'
+export const SUBJECTUSERS: string = '/subject-users'
 export const SUPERVISINGSUBJECTS: string = '/supervising-subjects'
 
 export const PROJECTS: string = '/projects'

@@ -4,11 +4,11 @@ import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 import { UserModel } from "../model/UserModel";
 import { fetchTokenId } from "../api/tokenApi";
-import { deleteUserSubject, fetchSubjects, postUserSubject } from "../api/subjectsApi";
+import { deleteUserSubject, fetchSubjectUsers, fetchSubjects, postUserSubject } from "../api/subjectsApi";
 import { SubjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChalkboardTeacher, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardTeacher, faL, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 export default function SubjectsPage() {
 
@@ -20,6 +20,10 @@ export default function SubjectsPage() {
 
   const [subjects, setSubjects] = useState<SubjectModel[]>([])
   const [selectedSubject, setSelectedSubject] = useState<SubjectModel>()
+  const [participants, setParticipants] = useState<UserModel[]>([])
+
+  const [showProjects, setShowProjects] = useState<boolean>(false)
+  const [showUsers, setShowUsers] = useState<boolean>(false)
   
   const [rerender, setRerender] = useState<number>(0)
 
@@ -31,7 +35,7 @@ export default function SubjectsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const subjectsOBJ: SubjectModel[] | null = await fetchAndSetupSubjects()
+      const subjectsOBJ: SubjectModel[] | null = await fetchSubjects()
       if(subjectsOBJ)
         setSubjects(subjectsOBJ)
 
@@ -46,15 +50,40 @@ export default function SubjectsPage() {
   }, [])
 
   useEffect(() => {
-      if(subjects){
-        const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
-        for(const subject of subjects)
-          if(subject.id === parseInt(parsedId)){
-            setSelectedSubject(subject)
-            break;
+    const setupSubject = async () => {
+        if(subjects){
+            const parsedId: string = (params.get('id') === null) ? "" : params.get('id')!.toString()
+            for(const subject of subjects)
+              if(subject.id === parseInt(parsedId)){
+                await subject.setup()
+                setSelectedSubject(subject)
+                setShowProjects(false)
+                const users = await fetchSubjectUsers(subject.id)
+                setParticipants(users ? users : [])
+                setShowUsers(false)
+                break;
+              }
           }
-      }
+    }
+    setupSubject()
   }, [rerender, subjects])
+
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       const subjectsOBJ: SubjectModel[] | null = await fetchSubjects()
+//       if(subjectsOBJ)
+//         setSubjects(subjectsOBJ)
+
+//       const tokenId: number | null = await fetchTokenId()
+//       if(tokenId){
+//         const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
+//         userOBJ && setUser(userOBJ)
+//       }
+//     }
+
+//     fetchData()
+//   }, [showProjects, showUsers])
 
   useEffect(() => {
     if(user){
@@ -149,26 +178,46 @@ export default function SubjectsPage() {
               ))}
             </div>
         </div>
-        <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
+        <div className="column container" style={{flex: 2.5, justifyContent:"space-between"}}>
             {selectedSubject && user && <>
                 <SubjectEntry subject={selectedSubject} userRole={user?.role}/>
                 {user && <>
                   {user.hasSubject(selectedSubject.id) ? <>
-                      {user.role <=1 && user.id === selectedSubject.supervisorId ?
-                        <button className="list-button" style={{margin: "auto"}} disabled>You can't leave a subject you supervise</button>
-                      :
-                        <button className="list-button" style={{margin: "auto"}} onClick={async () => {await leaveSubject()}}>Leave Subject</button>
-                      }
-                      <div className="column" style={{overflow:'scroll'}}>
-                          <div className="medium-text center" style={{margin: "20px"}}>Projects</div>
-                          {selectedSubject.projects.map((project, index) => (
-                          <button key={index} className="list-button"
-                              onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
-                          >
-                              <PageButtonDescription component={project} showGrade={user?.role >= 1} />
-                          </button>
-                          ))}
-                      </div>
+                        <div className='row'>
+                            <div className='column' style={{flex: 2}}>
+                                {user.role <=1 && user.id === selectedSubject.supervisorId ?
+                                    <button className="list-button" style={{margin: "30px auto"}} disabled>You can't leave a subject you supervise</button>
+                                :
+                                    <button className="list-button" style={{margin: "auto"}} onClick={async () => {await leaveSubject()}}>Leave Subject</button>
+                                }
+                                <div className='row'>
+                                    <button className="list-button" style={{margin: "0 20px", flex: 1}} onClick={() => {setShowProjects(!showProjects); setShowUsers(false)}}>Show Projects</button>
+                                    <button className="list-button" style={{margin: "0 20px", flex: 1}} onClick={() => {setShowUsers(!showUsers); setShowProjects(false)}}>Show Users</button>
+                                </div>
+                                <div style={{flex: 1}}></div>
+                            </div>
+                            <div className="column container" style={{overflow:'scroll', flex: 1}}>
+                                    <div className="medium-text center" style={{margin: "20px"}}>{showProjects ? "Projects" : showUsers ? "Users" : ""}</div>
+                                    {showProjects ?
+                                        selectedSubject.projects.map((project, index) => (
+                                            <button key={index} className="list-button"
+                                                onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
+                                            >
+                                                <PageButtonDescription component={project} showGrade={user?.role >= 1} />
+                                            </button>
+                                        ))
+                                    :
+                                        participants.map((participant, index) => (
+                                            <button key={index} className="list-button"
+                                                onClick={() => {navigate('/profile?id=' + participant.id); setRerender(rerender+1)}}
+                                            >
+                                                <PageButtonDescription component={participant} showGrade={user?.role >= 1} />
+                                            </button>
+                                        ))
+                                    }
+                            </div>
+                        </div>
+                        <div style={{flex: 1}}></div>
                   </>:<>
                       <button className="list-button" onClick={async () => {await joinSubject()}}>Join Subject</button>
                       <div></div>

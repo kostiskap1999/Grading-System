@@ -1,5 +1,6 @@
 import { SubjectModel } from "../model/SubjectModel";
-import { DELETEHEADERS, GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, SUBJECTS, SUPERVISINGSUBJECTS, USERSUBJECTS } from "../parameters/database";
+import { UserModel } from '../model/UserModel';
+import { DELETEHEADERS, GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, SUBJECTS, SUBJECTUSERS, SUPERVISINGSUBJECTS, USERSUBJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchSubjects() {
@@ -143,6 +144,27 @@ export async function deleteUserSubject(userId: number, subjectId: number) {
     })
     .then((value) => {
         return value
+    })
+    .catch((error) => {
+        errorHandling(error)
+        return null
+    })
+}
+
+export async function fetchSubjectUsers(subjectId: number) {
+    return await fetch(HOSTNAME + SUBJECTUSERS + "/" + subjectId, GETHEADERS())
+    .then(async response => {
+        if(!response.ok)
+            throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));
+        else
+            return response.json();
+    })
+    .then((subjectUsers: any[]) => {
+        const returnedUsers: UserModel[] = []
+        for(const user of subjectUsers)
+            returnedUsers.push(new UserModel(user))
+    
+        return returnedUsers
     })
     .catch((error) => {
         errorHandling(error)

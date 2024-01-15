@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { deleteSubject } from '../api/subjectsApi';
 import { useNavigate } from 'react-router-dom';
+import { UserModel } from '../model/UserModel';
 
 export function ProjectEntry({ project, userRole }: { project: ProjectModel, userRole?: number }) {
 
@@ -147,7 +148,7 @@ export function SubmissionEntry({ project, submission }: { project: ProjectModel
 }
 
 
-export function PageButtonDescription({ component, showGrade }: { component: SubjectModel | ProjectModel | SubmissionModel, showGrade?: boolean }) {
+export function PageButtonDescription({ component, showGrade }: { component: UserModel | SubjectModel | ProjectModel | SubmissionModel, showGrade?: boolean }) {
     let grade = null;
     if(component instanceof SubjectModel)
         grade = component.userGrade
@@ -159,7 +160,10 @@ export function PageButtonDescription({ component, showGrade }: { component: Sub
     return (
     <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
       <span style={{margin: "0 20px"}}>{}</span>
-      <span>{component instanceof SubmissionModel ? `${component?.student?.firstName} ${component?.student?.lastName}` : component.name}</span>
+      <span>{component instanceof SubmissionModel ?
+        `${component?.student?.firstName} ${component?.student?.lastName}` :
+        component instanceof UserModel ? `${component.firstName} ${component.lastName}` :
+        component.name}</span>
       {showGrade ? <GradeLine grade={grade} /> : <span style={{margin: "0 20px"}}></span>}
   </div>
   );
