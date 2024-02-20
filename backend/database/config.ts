@@ -1,9 +1,11 @@
 import { createConnection } from 'mysql';
+import { config } from 'dotenv';
+config();
 
 export default createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "Root123!",
-  port: 3306,
-  database: "grading_system"
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  port: process.env.PORT ? parseInt(process.env.PORT) : undefined,
+  database: process.env.DATABASE
 });
