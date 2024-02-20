@@ -5,6 +5,5 @@ export default createConnection({
   user: "root",
   password: "Root123!",
   port: 3306,
-  database: "grading_system",
-  insecureAuth: true
+  database: "grading_system"
 });

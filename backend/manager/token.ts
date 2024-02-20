@@ -1,4 +1,3 @@
-import { Request } from 'express'
 import { sign, verify } from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();

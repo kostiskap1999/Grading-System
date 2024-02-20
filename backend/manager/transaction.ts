@@ -1,6 +1,4 @@
-import { promisify } from "util"
 import db from "../database/config"
-import * as signal from "../util/signal"
 
 export class TransactionManager {
 

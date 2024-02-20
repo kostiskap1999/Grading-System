@@ -4,7 +4,6 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import { errorHandling } from './errors/errorHandling';
 import { UserManager } from './manager/user';
-import * as Signal from './util/signal';
 import util from 'util'
 import db from './database/config'
 import { checkToken } from './manager/token';
