@@ -31,18 +31,20 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if(user && user.role < 1){
-        const parsedId: string = (params.get('id') === null) ? user.id.toString() : params.get('id')!.toString()
-        if(parseInt(parsedId) === user.id){
-          setProfile(user)
+      if(user){
+        if(user.role < 1){
+            const parsedId: string = (params.get('id') === null) ? user.id.toString() : params.get('id')!.toString()
+            if(parseInt(parsedId) === user.id){
+              setProfile(user)
+            }
+            else{
+              const prof: UserModel | null = await fetchAndSetupUser(parseInt(parsedId), 2)
+              prof && setProfile(prof)
+            }
+        }else{
+            navigate('/profile')
+            setProfile(user)
         }
-        else{
-          const prof: UserModel | null = await fetchAndSetupUser(parseInt(parsedId), 2)
-          prof && setProfile(prof)
-        }
-      }else{
-        navigate('/profile')
-        setProfile(user)
       }
     }
     fetchProfile()
@@ -117,7 +119,7 @@ export default function ProfilePage() {
                     ))}
                 </div>
             </div>
-            {user && user.role > 1 && <>
+            {user && <>
             <div className="column container" style={{flex: 1}}>
                 <div className="medium-text center header-title">My Graded Projects</div>
                 <div className="column" style={{overflow:'scroll'}}>
