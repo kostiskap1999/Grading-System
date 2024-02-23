@@ -55,14 +55,17 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
                 <div className="row center" style={{width: "100%", justifyContent: "space-between"}}>
                     <div style={{marginRight: "10px"}}></div>
                     <div className="header-text center">{project.name}</div>
-                    <button
-                        type="button"
-                        className="remove-button icon-button-small"
-                        onClick={() => {delProject()}}
-                        style={{ padding: "13px", margin: "5px 10px 0 0"}}
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    {userRole && userRole <= 1 ?
+                        <button
+                            type="button"
+                            className="remove-button icon-button-small"
+                            onClick={() => {delProject()}}
+                            style={{ padding: "13px", margin: "5px 10px 0 0"}}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    : <span style={{ padding: "13px", margin: "5px 10px 0 0"}}></span>
+                    }
                 </div>
                 <div className='column'>
                     <div className="center">Deadline</div>
@@ -111,14 +114,17 @@ export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, use
                 <div className="row center" style={{width: "100%", justifyContent: "space-between"}}>
                     <div style={{marginRight: "10px"}}></div>
                     <div className="header-text center">{subject.name}</div>
-                    <button
-                        type="button"
-                        className="remove-button icon-button-small"
-                        onClick={() => {delSubject()}}
-                        style={{ padding: "13px", margin: "5px 10px 0 0"}}
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    {userRole && userRole <= 1 ?
+                        <button
+                            type="button"
+                            className="remove-button icon-button-small"
+                            onClick={() => {delSubject()}}
+                            style={{ padding: "13px", margin: "5px 10px 0 0"}}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    : <span style={{ padding: "13px", margin: "5px 10px 0 0"}}></span>
+                }
                 </div>
                 <div className="center">Semester: {subject.semester}</div>
                 {/* {userRole != null && userRole <= 1 && <GradeLine component={subject} grade={subject.averageGrade} /> } */}
@@ -155,7 +161,7 @@ export function PageButtonDescription({ component, displayName, showGrade }: { c
         grade = component.averageGrade
     else if(component instanceof SubmissionModel)
         grade = component.grade
-  
+
     return (
     <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
       <span style={{margin: "0 20px"}}>{}</span>

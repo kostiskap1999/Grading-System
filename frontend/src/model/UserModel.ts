@@ -84,10 +84,14 @@ export class UserModel {
         return submittedSubjects
     }
 
-    getProjects({filterSubmitted, filterDeadline, filterGrades, filterSupervising}: Partial<{filterSubmitted?: number, filterDeadline?: number, filterGrades?: number, filterSupervising?: number}> = {}) {
+    getProjects({filterSubject, filterSubmitted, filterDeadline, filterGrades, filterSupervising}: Partial<{filterSubject?: number, filterSubmitted?: number, filterDeadline?: number, filterGrades?: number, filterSupervising?: number}> = {}) {
         const submittedProjects: ProjectModel[] = []
     
         for (const subject of this.subjects){
+            const shouldConsiderSubject = 
+                !filterSubject ||
+                (subject.id === filterSubject)
+
             const isSupervising =
                 !filterSupervising ||
                 (filterSupervising === -1 && (subject.supervisorId !== this.id)) ||
@@ -105,12 +109,13 @@ export class UserModel {
                         !filterSubmitted ||
                         (filterSubmitted === -1 && !userSubmission) ||
                         (filterSubmitted === 1 && userSubmission)
+
                     const isGraded =  // if userSubmission exists, then check if it is graded, otherwise always false
                         !filterGrades ||
-                        (filterGrades === -1 && !(userSubmission?.grade ?? false)) ||
-                        (filterGrades === 1 && userSubmission?.grade)
+                        (filterGrades === -1 && !((userSubmission?.grade !== undefined && userSubmission?.grade !== null) ?? false)) ||
+                        (filterGrades === 1 && (userSubmission?.grade !== undefined && userSubmission?.grade !== null))
     
-                    if (shouldConsiderSubmission && isWithinDeadline && isGraded)
+                    if (shouldConsiderSubmission && isWithinDeadline && isGraded && shouldConsiderSubject)
                         submittedProjects.push(project)
                 }
         }

@@ -41,7 +41,7 @@ export default function SubjectsPage() {
 
       const tokenId: number | null = await fetchTokenId()
       if(tokenId){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId, 2)
         userOBJ && setUser(userOBJ)
       }
     }
@@ -182,11 +182,12 @@ export default function SubjectsPage() {
                             <div className="column container" style={{overflow:'scroll', flex: 1, display: (showProjects || showUsers) ? "flex" : "none"}}>
                                     <div className="medium-text center" style={{margin: "20px"}}>{showProjects ? "Projects" : showUsers ? "Users" : ""}</div>
                                     {showProjects ?
-                                        selectedSubject.projects.map((project, index) => (
+                                        user.getProjects({filterSubject: selectedSubject.id}).map((project, index) => (
                                             <button key={index} className="list-button"
                                                 onClick={() => {navigate('/projects?id=' + project.id); setRerender(rerender+1)}}
                                             >
-                                                <PageButtonDescription component={project} showGrade={user?.role >= 1} />
+                                                <PageButtonDescription component={project.getUserSubmission(user.id)!} displayName={project.name} showGrade={user.role >= 1} />
+                                                {/* <PageButtonDescription component={project} showGrade={user?.role >= 1} /> */}
                                             </button>
                                         ))
                                     : showUsers ?

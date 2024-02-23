@@ -34,7 +34,7 @@ export default function ProjectsPage() {
       const tokenId: number | null = await fetchTokenId()
 
       if(tokenId){
-        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId, 1)
+        const userOBJ: UserModel | null = await fetchAndSetupUser(tokenId, 2)
         userOBJ && setUser(userOBJ)
       }
     }
