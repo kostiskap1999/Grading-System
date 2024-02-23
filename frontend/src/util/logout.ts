@@ -6,7 +6,7 @@ import store from '../store/store';
 
 export const logout = () => {
     store.dispatch({ type: LOGOUT_USER });
-
     const cookies = new Cookies();
     cookies.remove('token');
+    window.location.reload()
   };

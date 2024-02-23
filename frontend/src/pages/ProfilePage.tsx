@@ -119,13 +119,13 @@ export default function ProfilePage() {
                     ))}
                 </div>
             </div>
-            {user && <>
+            {profile && <>
             <div className="column container" style={{flex: 1}}>
                 <div className="medium-text center header-title">My Graded Projects</div>
                 <div className="column" style={{overflow:'scroll'}}>
                     {profile && profile.getProjects({filterGrades: 1}).map((project: ProjectModel, index: number) => (
                         <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
-                        <PageButtonDescription component={project.getUserSubmission(user.id)!} displayName={project.name} showGrade={profile.role > 1} />
+                        <PageButtonDescription component={project.getUserSubmission(profile.id)!} displayName={project.name} showGrade={profile.role > 1} />
                         </button>
                     ))}
                 </div>
