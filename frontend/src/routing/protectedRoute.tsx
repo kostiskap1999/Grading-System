@@ -9,19 +9,17 @@ interface IProtectedRouteProps{
 }
 
 const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, protectionLevel }) => {
-  const [userRole, setUserRole] = useState<number | null>(null)
   const [auth, setAuth] = useState<boolean>(useSelector((store: any) => store.authenticated))
   const [loaded, setLoaded] = useState<boolean>(false)
   useEffect(() => {
     const fetchData = async () => {
       const role = await fetchTokenRole()
-      if(!role)
-        return <Navigate to="/" replace />
-      setUserRole(role);
-      
-      if (((role >= 2 && protectionLevel > 1) || (role === 1 && protectionLevel > 2)))
+      if(role == null || role == undefined)
         setAuth(false)
-
+      else
+        if (((role >= 2 && protectionLevel > 1) || (role === 1 && protectionLevel > 2)))
+            setAuth(false)
+        
       setLoaded(true)
     }
     fetchData()

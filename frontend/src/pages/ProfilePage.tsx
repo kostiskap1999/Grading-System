@@ -31,7 +31,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if(user){
+      if(user && user.role < 1){
         const parsedId: string = (params.get('id') === null) ? user.id.toString() : params.get('id')!.toString()
         if(parseInt(parsedId) === user.id){
           setProfile(user)
@@ -40,6 +40,9 @@ export default function ProfilePage() {
           const prof: UserModel | null = await fetchAndSetupUser(parseInt(parsedId), 2)
           prof && setProfile(prof)
         }
+      }else{
+        navigate('/profile')
+        setProfile(user)
       }
     }
     fetchProfile()
