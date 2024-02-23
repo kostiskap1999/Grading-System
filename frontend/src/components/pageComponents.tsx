@@ -147,7 +147,7 @@ export function SubmissionEntry({ project, submission }: { project: ProjectModel
 }
 
 
-export function PageButtonDescription({ component, showGrade }: { component: UserModel | SubjectModel | ProjectModel | SubmissionModel, showGrade?: boolean }) {
+export function PageButtonDescription({ component, displayName, showGrade }: { component: UserModel | SubjectModel | ProjectModel | SubmissionModel, displayName?: string, showGrade?: boolean }) {
     let grade = null;
     if(component instanceof SubjectModel)
         grade = component.userGrade
@@ -159,10 +159,10 @@ export function PageButtonDescription({ component, showGrade }: { component: Use
     return (
     <div style={{backgroundColor:"transparent", justifyContent:"space-between"}} className="row center">
       <span style={{margin: "0 20px"}}>{}</span>
-      <span>{component instanceof SubmissionModel ?
-        `${component?.student?.firstName} ${component?.student?.lastName}` :
-        component instanceof UserModel ? `${component.firstName} ${component.lastName}` :
-        component.name}</span>
+      <span>{displayName ? displayName :
+         component instanceof SubmissionModel ? `${component?.student?.firstName} ${component?.student?.lastName}` :
+         component instanceof UserModel ? `${component.firstName} ${component.lastName}` :
+         component.name}</span>
       {showGrade ? <GradeLine grade={grade} /> : <span style={{margin: "0 20px"}}></span>}
   </div>
   );

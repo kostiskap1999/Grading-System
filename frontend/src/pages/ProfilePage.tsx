@@ -108,22 +108,22 @@ export default function ProfilePage() {
         </div>
         <div className="row" style={{flex: 1.5}}>
             <div className="column container" style={{flex: 1}}>
-            <div className="medium-text center header-title">My Subjects</div>
-            <div className="column" style={{overflow:'scroll'}}>
-                {profile && profile.subjects.map((subject: SubjectModel, index: number) => (
-                <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
-                    <PageButtonDescription component={subject} showGrade={profile.role > 1} />
-                </button>
-                ))}
-            </div>
+                <div className="medium-text center header-title">My Subjects</div>
+                <div className="column" style={{overflow:'scroll'}}>
+                    {profile && profile.subjects.map((subject: SubjectModel, index: number) => (
+                    <button key={index} className="list-button" onClick={() => navigate('/subjects?id=' + subject.id + '&nav-filter=my')}>
+                        <PageButtonDescription component={subject} showGrade={profile.role > 1} />
+                    </button>
+                    ))}
+                </div>
             </div>
             {user && user.role > 1 && <>
             <div className="column container" style={{flex: 1}}>
-                <div className="medium-text center header-title">My Unsubmitted Projects</div>
+                <div className="medium-text center header-title">My Graded Projects</div>
                 <div className="column" style={{overflow:'scroll'}}>
-                    {profile && profile.getProjects({filterDeadline: 1}).map((project: ProjectModel, index: number) => (
+                    {profile && profile.getProjects({filterGrades: 1}).map((project: ProjectModel, index: number) => (
                         <button key={index} className="list-button" onClick={() => navigate('/projects?id=' + project.id)}>
-                        <PageButtonDescription component={project} />
+                        <PageButtonDescription component={project.getUserSubmission(user.id)!} displayName={project.name} showGrade={profile.role > 1} />
                         </button>
                     ))}
                 </div>

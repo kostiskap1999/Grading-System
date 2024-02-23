@@ -74,4 +74,8 @@ export class ProjectModel {
             return this.deadline >= new Date();
     }
     
+        
+    getUserSubmission(userId: number){
+        return this.submissions.find(submission => submission.submiteeId === userId)
+    }
 }

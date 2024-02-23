@@ -100,7 +100,7 @@ export class UserModel {
                         (filterDeadline === -1 && (project.deadline as Date).getTime() < new Date().getTime()) ||
                         (filterDeadline === 1 && (project.deadline as Date).getTime() > new Date().getTime())
     
-                    const userSubmission = project.submissions.find(submission => submission.submiteeId === this.id);
+                    const userSubmission = project.submissions.find(submission => submission.submiteeId === this.id)
                     const shouldConsiderSubmission =
                         !filterSubmitted ||
                         (filterSubmitted === -1 && !userSubmission) ||
@@ -117,7 +117,6 @@ export class UserModel {
     
         return submittedProjects
     }
-    
     
     getSubmissions(){
         var submissions: SubmissionModel[] = []
