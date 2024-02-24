@@ -26,12 +26,10 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = ({ children, protectionLe
   }, [])
 
   if(loaded){
-    if (!auth){
+    if (!auth)
         return <Navigate to="/" replace />
-      }else
-        
-    
-      return children
+    else
+        return children
   }
 }
 

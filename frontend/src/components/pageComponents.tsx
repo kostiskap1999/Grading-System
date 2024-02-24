@@ -10,7 +10,7 @@ import { deleteSubject } from '../api/subjectsApi';
 import { useNavigate } from 'react-router-dom';
 import { UserModel } from '../model/UserModel';
 
-export function ProjectEntry({ project, userRole }: { project: ProjectModel, userRole?: number }) {
+export function ProjectEntry({ delProject, project, userRole }: { delProject?: Function, project: ProjectModel, userRole?: number }) {
 
     const [newDate, setNewDate] = useState<string>()
     const [projectDate, setProjectDate] = useState<string>()
@@ -36,26 +36,14 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
         else
             setSubmitText("Failed to change deadline")
     }
-
-    const navigate = useNavigate();
-
-    const delProject = async () => {
-        const userConfirmed = window.confirm("Are you sure you want to delete this project? This action can't be taken back.");
-
-        if (userConfirmed) {
-            await deleteProject(project.id)
-            navigate('/projects')
-            window.location.reload()
-        }
-    }
-    
+        
     return (
         <div>
             <div className="center" style={{padding:"30px"}}>
                 <div className="row center" style={{width: "100%", justifyContent: "space-between"}}>
                     <div style={{marginRight: "10px"}}></div>
                     <div className="header-text center">{project.name}</div>
-                    {userRole && userRole <= 1 ?
+                    {userRole !== null && userRole !== undefined && userRole <= 1 && delProject !== undefined ?
                         <button
                             type="button"
                             className="remove-button icon-button-small"
@@ -94,19 +82,7 @@ export function ProjectEntry({ project, userRole }: { project: ProjectModel, use
     );
 }
 
-export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, userRole?: number }) {
-    
-    const navigate = useNavigate();
-
-    const delSubject = async () => {
-        const userConfirmed = window.confirm("Are you sure you want to delete this subject? This action can't be taken back.");
-
-        if (userConfirmed) {
-            await deleteSubject(subject.id)
-            navigate('/subjects')
-            window.location.reload()
-        }
-    }
+export function SubjectEntry({ delSubject, subject, userRole }: { delSubject: Function, subject: SubjectModel, userRole?: number }) {
 
     return (
         <div>
@@ -114,7 +90,7 @@ export function SubjectEntry({ subject, userRole }: { subject: SubjectModel, use
                 <div className="row center" style={{width: "100%", justifyContent: "space-between"}}>
                     <div style={{marginRight: "10px"}}></div>
                     <div className="header-text center">{subject.name}</div>
-                    {userRole && userRole <= 1 ?
+                    {userRole !== null && userRole !== undefined && userRole <= 1 ?
                         <button
                             type="button"
                             className="remove-button icon-button-small"

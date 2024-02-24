@@ -4,7 +4,7 @@ import { SubjectModel } from "../model/SubjectModel"
 import { fetchAndSetupSubjects, fetchAndSetupUser } from "../api/helpers/massSetups"
 import { UserModel } from "../model/UserModel";
 import { fetchTokenId } from "../api/tokenApi";
-import { deleteUserSubject, fetchSubjectUsers, fetchSubjects, postUserSubject } from "../api/subjectsApi";
+import { deleteSubject, deleteUserSubject, fetchSubjectUsers, fetchSubjects, postUserSubject } from "../api/subjectsApi";
 import { SubjectEntry } from "../components/pageComponents";
 import { PageButtonDescription } from "../components/pageComponents";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -84,19 +84,35 @@ export default function SubjectsPage() {
             console.log("how")
     }
         
-  }, [filterValues, user])
+  }, [filterValues, user, rerender])
 
   const joinSubject = async () => {
     if(user && selectedSubject){
-      await postUserSubject(user.id, selectedSubject.id)
-      window.location.reload()
+      await user.addSubject(selectedSubject)
+      setRerender(rerender+1)
     }
   }
 
   const leaveSubject = async () => {
     if(user && selectedSubject){
-      await deleteUserSubject(user.id, selectedSubject.id)
-      window.location.reload()
+      await user.removeSubject(selectedSubject.id)
+      setRerender(rerender+1)
+    }
+  }
+
+  const delSubject = async () => {
+    if(selectedSubject){
+        const userConfirmed = window.confirm("Are you sure you want to delete this subject? This action can't be taken back.");
+
+        if (userConfirmed) {
+            const index = subjects.findIndex(subject => subject.id === selectedSubject.id)
+            if (index !== -1)
+                subjects.splice(index, 1)
+            setRerender(rerender+1)
+            await deleteSubject(selectedSubject.id)
+            navigate("/subjects")
+            setSelectedSubject(undefined)
+        }
     }
   }
 
@@ -163,7 +179,7 @@ export default function SubjectsPage() {
         </div>
         <div className="column container" style={{flex: 2.5, justifyContent:"space-between"}}>
             {selectedSubject && user && <>
-                <SubjectEntry subject={selectedSubject} userRole={user?.role}/>
+                <SubjectEntry delSubject={delSubject} subject={selectedSubject} userRole={user?.role}/>
                 {user && <>
                   {user.hasSubject(selectedSubject.id) ? <>
                         <div className='row'>

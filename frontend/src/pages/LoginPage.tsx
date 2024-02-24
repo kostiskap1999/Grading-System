@@ -33,9 +33,8 @@ export default function LoginPage() {
       else{
         setWrongCredentials(false)
         dispatch({ type: LOGIN_USER })
-      }
-
-        
+        window.location.reload()
+      } 
     }
   }
 

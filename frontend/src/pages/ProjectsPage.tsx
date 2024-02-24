@@ -56,7 +56,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     if(user)
         setFilteredProjects(user.getProjects({filterSubmitted: filterValues['submitted'], filterDeadline: filterValues['deadline'], filterGrades: filterValues['graded'], filterSupervising: filterValues['supervising']}))
-  }, [filterValues, user])
+  }, [filterValues, user, rerender])
 
   const changeFilterValue = (prop: keyof typeof filterValues) => {
     if (filterValues[prop] === 1) {
@@ -75,6 +75,19 @@ export default function ProjectsPage() {
         window.history.replaceState(null, '', url.toString())
         return updatedValues
       })
+    }
+  }
+
+  const delProject = async () => {
+    if(user && selectedProject){
+        const userConfirmed = window.confirm("Are you sure you want to delete this project? This action can't be taken back.");
+
+        if (userConfirmed) {
+            user.removeProject(selectedProject.id)
+            navigate('/projects')
+            setRerender(rerender+1)
+            setSelectedProject(undefined)
+        }
     }
   }
   
@@ -128,7 +141,7 @@ export default function ProjectsPage() {
         
         <div className="column container" style={{flex: 1, justifyContent:"space-between"}}>
             {selectedProject && selectedProject.id === -1 ? <></> : <>
-              {selectedProject && <ProjectEntry project={selectedProject && selectedProject} userRole={user?.role} />}
+              {selectedProject && <ProjectEntry delProject={delProject} project={selectedProject && selectedProject} userRole={user?.role} />}
               <div className="center">
                 {selectedProject && <>
                   {user && user.role > 1 ? <>

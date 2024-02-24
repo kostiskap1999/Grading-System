@@ -1,4 +1,5 @@
-import { fetchUserSubjects } from "../api/subjectsApi";
+import { deleteProject } from '../api/projectsApi';
+import { deleteUserSubject, fetchUserSubjects, postUserSubject } from "../api/subjectsApi";
 import { ProjectModel } from "./ProjectModel";
 import { SubjectModel } from "./SubjectModel";
 import { SubmissionModel } from "./SubmissionModel";
@@ -132,5 +133,26 @@ export class UserModel {
                         submissions.push(submission)
         
         return submissions
+    }
+
+    async addSubject(subject: SubjectModel) {
+        this.subjects.push(subject)
+        await postUserSubject(this.id, subject.id)
+    }
+
+    async removeSubject(id: number) {
+        const index = this.subjects.findIndex(subject => subject.id === id)
+        if (index !== -1)
+            this.subjects.splice(index, 1)
+        await deleteUserSubject(this.id, id)
+    }
+
+    async removeProject(id: number) {
+        this.subjects.forEach(subject => {
+            const index = subject.projects.findIndex(project => project.id === id)        
+            if (index !== -1)
+                subject.projects.splice(index, 1)
+        })
+        await deleteProject(id)
     }
 }
