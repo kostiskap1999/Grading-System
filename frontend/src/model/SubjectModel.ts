@@ -13,7 +13,7 @@ export interface ISubject {
     averageGrade: number | null;
 }
 
-export class SubjectModel {
+export class SubjectModel implements ISubject {
     id: number;
     name: string;
     description: string;

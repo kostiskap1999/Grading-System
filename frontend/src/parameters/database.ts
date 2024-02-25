@@ -56,9 +56,9 @@ export const POSTHEADERS = (data: object) => (
       }
 )
 
-export const PATCHHEADERS = (data: object) => (
+export const PUTHEADERS = (data: object) => (
     {
-        method: "PATCH",
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json',
             'token': cookies.get('token')

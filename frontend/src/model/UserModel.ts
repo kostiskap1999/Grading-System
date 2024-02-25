@@ -14,7 +14,7 @@ export interface IUser {
     averageGrade: number | null;
 }
 
-export class UserModel {
+export class UserModel implements IUser {
     id: number; // unique id
     username: string; // unique username
     firstName: string;

@@ -1,6 +1,6 @@
 import { SubjectModel } from "../model/SubjectModel";
 import { UserModel } from '../model/UserModel';
-import { DELETEHEADERS, GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, SUBJECTS, SUBJECTUSERS, SUPERVISINGSUBJECTS, USERSUBJECTS } from "../parameters/database";
+import { DELETEHEADERS, GETHEADERS, HOSTNAME, PUTHEADERS, POSTHEADERS, SUBJECTS, SUBJECTUSERS, SUPERVISINGSUBJECTS, USERSUBJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchSubjects() {
@@ -63,7 +63,7 @@ export async function postSubject(subject: SubjectModel) {
 }
 
 export async function patchSubject(subject: SubjectModel) {
-    return await fetch(HOSTNAME + SUBJECTS, PATCHHEADERS(subject))
+    return await fetch(HOSTNAME + SUBJECTS, PUTHEADERS(subject))
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));

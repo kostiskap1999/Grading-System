@@ -5,7 +5,7 @@ export interface ITest {
     output: ITestOutput;
 }
 
-export class TestModel {
+export class TestModel implements ITest {
     id: number;
     mainFunction: string;
     inputs: TestInputModel[];
@@ -31,7 +31,7 @@ export interface ITestInput {
 }
 
 
-export class TestInputModel {
+export class TestInputModel implements ITestInput {
     id: number;
     code: string;
     isMainParam: boolean;
@@ -51,7 +51,7 @@ export interface ITestOutput {
     isValidJSONorArray?: boolean; // used only in new projects
 }
 
-export class TestOutputModel {
+export class TestOutputModel implements ITestOutput {
     id: number;
     code: string;
     isValidJSONorArray?: boolean; // used only in new projects

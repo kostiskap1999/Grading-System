@@ -13,7 +13,7 @@ export interface ISubmission {
 }
 
 
-export class SubmissionModel {
+export class SubmissionModel implements ISubmission {
     id: number;
     name: string;
     student?: UserModel;

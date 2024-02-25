@@ -1,5 +1,5 @@
 import { SubmissionModel } from "../model/SubmissionModel";
-import { GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, PROJECTUSERSUBMISSIONS, SUBMISSIONS } from "../parameters/database";
+import { GETHEADERS, HOSTNAME, PUTHEADERS, POSTHEADERS, PROJECTUSERSUBMISSIONS, SUBMISSIONS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 export async function fetchSubmissions(projectId: number) {
@@ -59,7 +59,7 @@ export async function postSubmission(submission: SubmissionModel) {
 }
 
 export async function patchSubmission(submission: SubmissionModel) {
-    const response: boolean | void = await fetch(HOSTNAME + SUBMISSIONS, PATCHHEADERS(submission))
+    const response: boolean | void = await fetch(HOSTNAME + SUBMISSIONS, PUTHEADERS(submission))
     .then(response => {
         if(!response.ok)
             throw new Error(JSON.stringify(response.status));

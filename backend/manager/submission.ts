@@ -47,7 +47,7 @@ export class SubmissionManager {
     return true
   }
 
-  async patchSubmission(submission: any, token: string) {
+  async putSubmission(submission: any, token: string) {
     await dbtoken.checkToken(token)
     
     if (!submission)

@@ -14,7 +14,7 @@ export interface IProject {
     averageGrade: number | null;
 }
 
-export class ProjectModel {
+export class ProjectModel implements IProject {
     id: number;
     name: string;
     description: string;

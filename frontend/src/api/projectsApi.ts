@@ -1,5 +1,5 @@
 import { ProjectModel } from "../model/ProjectModel";
-import { DELETEHEADERS, GETHEADERS, HOSTNAME, PATCHHEADERS, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
+import { DELETEHEADERS, GETHEADERS, HOSTNAME, PUTHEADERS, POSTHEADERS, PROJECTS, SUBJECTPROJECTS, USERPROJECTS } from "../parameters/database";
 import { errorHandling } from "../util/error";
 
 import '../util/yymmdd';
@@ -104,7 +104,7 @@ export async function postProject(project: ProjectModel) {
 }
 
 export async function patchProject(project: ProjectModel) {
-    return await fetch(HOSTNAME + PROJECTS, PATCHHEADERS(project))
+    return await fetch(HOSTNAME + PROJECTS, PUTHEADERS(project))
     .then(async response => {
         if(!response.ok)
             throw new Error(JSON.stringify({ status: response.status, message: (await response.json()).error }));

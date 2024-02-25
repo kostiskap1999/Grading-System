@@ -48,7 +48,7 @@ export class SubjectManager {
     return true
   }
 
-  async patchSubject(subject: any, token: string) {
+  async putSubject(subject: any, token: string) {
     await dbtoken.checkToken(token)
     
     if (!subject)

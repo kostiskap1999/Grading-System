@@ -110,8 +110,8 @@ router.route('/subjects').post(async (req, res) => {
 });
 
 // GET SUBJECTS ROUTER
-router.route('/subjects').patch(async (req, res) => {
-    await transact(res, tm => new SubjectManager(tm).patchSubject(req.body, req.headers.token as string))
+router.route('/subjects').put(async (req, res) => {
+    await transact(res, tm => new SubjectManager(tm).putSubject(req.body, req.headers.token as string))
 });
 
 // DELETE SUBJECTS ROUTER
@@ -163,8 +163,8 @@ router.route('/projects').post(async (req, res) => {
 });
 
 // PATCH PROJECTS ROUTER
-router.route('/projects').patch(async (req, res) => {
-    await transact(res, tm => new ProjectManager(tm).patchProject(req.body, req.headers.token as string))
+router.route('/projects').put(async (req, res) => {
+    await transact(res, tm => new ProjectManager(tm).putProject(req.body, req.headers.token as string))
 });
 
 // DELETE PROJECTS ROUTER
@@ -203,8 +203,8 @@ router.route('/submissions').post(async (req, res) => {
 });
 
 // PATCH SUBMISSIONS ROUTER
-router.route('/submissions').patch(async (req, res) => {
-  await transact(res, tm => new SubmissionManager(tm).patchSubmission(req.body, req.headers.token as string))
+router.route('/submissions').put(async (req, res) => {
+  await transact(res, tm => new SubmissionManager(tm).putSubmission(req.body, req.headers.token as string))
 });
 
 

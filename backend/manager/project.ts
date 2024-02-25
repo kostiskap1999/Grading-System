@@ -75,7 +75,7 @@ export class ProjectManager {
     return true
   }
 
-  async patchProject(project: any, token: string) {
+  async putProject(project: any, token: string) {
     await dbtoken.checkToken(token)
     
     if (!project)
