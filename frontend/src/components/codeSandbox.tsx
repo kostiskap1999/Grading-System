@@ -40,7 +40,7 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
       // submission.grade = null
       
       project.tests.forEach((test, index) => {
-        setLog((prevLog) => `${prevLog}Running test ${index + 1} with input <span style="color: darkblue;">(${inputCode})</span><br>`)
+        setLog((prevLog) => `${prevLog}Running test on ${test.mainFunction} with input <span style="color: lightblue;">(${inputCode})</span><br>`)
         let inputCode = test.inputs.map(input => {
             if (isFirstCharacterBracket(input.code) || (typeof input.code === 'string' && !isNaN(Number(input.code))))
                 return input.code
@@ -67,19 +67,19 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
 
                 if (result == test.output.code){
                 passedTests++
-                setLog((prevLog) => `${prevLog}<span style="color: green;">Test ${index + 1} completed.</span> Got <span style="color: darkblue;">${test.output.code}</span> as output<br><br>`);
+                setLog((prevLog) => `${prevLog}<span style="color: lightgreen;">Test on ${test.mainFunction} completed.</span> Got <span style="color: lightblue;">${test.output.code}</span> as output<br><br>`);
                 }
                 else{
-                setLog((prevLog) => `${prevLog}<span style="color: darkred;">Test ${index + 1} failed.</span> Expected <span style="color: darkblue;">${test.output.code}</span> as output. Got <span style="color: darkblue;">${result}</span> as output.<br><br>`);
+                setLog((prevLog) => `${prevLog}<span style="color: #ff9999;">Test on ${test.mainFunction} failed.</span> Expected <span style="color: lightblue;">${test.output.code}</span> as output. Got <span style="color: lightblue;">${result}</span> as output.<br><br>`);
                 }
             }else{
-                setLog((prevLog) => `${prevLog}Test ${index + 1} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
+                setLog((prevLog) => `${prevLog}Test on ${test.mainFunction} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
             }
         }
         catch (error: any) {
             console.log(error)
             if(error.message === 'result is undefined')
-                setLog((prevLog) => `${prevLog}Test ${index + 1} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
+                setLog((prevLog) => `${prevLog}Test on ${test.mainFunction} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
             else
                 setLog((prevLog) => `${prevLog}Could not run code. <span style="color: red;">${error}</span><br><br>`);
         }
