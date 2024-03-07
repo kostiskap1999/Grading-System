@@ -88,8 +88,8 @@ export default function LoginPage() {
         <form action="#" className='center column login-form' onSubmit={(event) => handleSubmit(event)}>
           
           {isRegistering ?
-            <div className='row'>
-              <label>
+            <div style={{width: "100%"}} className='row'>
+              <label style={{width: "100%"}}>
                 <span>Username</span>
                 <input
                   id="username"
@@ -99,7 +99,7 @@ export default function LoginPage() {
                   onChange={(event) => handleChange(event)}
                 />
               </label>
-              <label>
+              {/* <label>
                   <span>Email</span>
                   <input
                     id="email"
@@ -108,7 +108,7 @@ export default function LoginPage() {
                     required
                     onChange={(event) => handleChange(event)}
                   />
-                </label>
+                </label> */}
             </div>
           :
             <label>
