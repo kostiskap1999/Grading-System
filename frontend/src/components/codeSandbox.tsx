@@ -37,7 +37,7 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
 
       setIsSubmittingGrade(grading)
       setLog(``);
-      submission.grade = null
+      // submission.grade = null
       
       project.tests.forEach((test, index) => {
         setLog((prevLog) => `${prevLog}Running test ${index + 1} with input <span style="color: darkblue;">(${inputCode})</span><br>`)
@@ -102,7 +102,7 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
         <div className="row" style={{justifyContent: "space-between"}}>
           <button className="list-button" onClick={async () => await runCode(false)}>Run tests</button>
           <button className="list-button" onClick={async () => await runCode(true)}>Run tests and grade</button>
-          <button className="list-button" onClick={() => {}}>Remove grade</button>
+          {/* <button className="list-button" onClick={() => {}}>Remove grade</button> */}
         </div>
       </div>
       

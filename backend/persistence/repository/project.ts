@@ -45,14 +45,14 @@ export class ProjectRepository {
         project.name !== undefined ? 'name = ?' : null,
         project.description !== undefined ? 'description = ?' : null,
         project.deadline !== undefined ? 'deadline = ?' : null,
-        project.subjectId !== undefined ? 'subject_id = ?' : null
+        // project.subjectId !== undefined ? 'subject_id = ?' : null
     ].filter(clause => clause !== null).join(', ');
 
     await this.tm.query(`
         UPDATE projects 
         SET ${setClauses}
         WHERE id = ?
-    `, project.name, project.description, project.deadline, project.subjectId, project.id)
+    `, project.name, project.description, project.deadline, project.id)
   }
 
   async deleteProject(projectId: number) {
