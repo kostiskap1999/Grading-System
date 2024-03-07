@@ -75,6 +75,7 @@ export default function FileUpload({ user, project }: FileUploadProps) {
         try{
             await postSubmission(submission)
             setErrorText('File uploaded successfully.')
+            window.location.reload()
         }catch{
             setErrorText('Failed to upload file.')
         }
@@ -102,6 +103,7 @@ export default function FileUpload({ user, project }: FileUploadProps) {
             try{
                 await deleteSubmission(file.id)
                 setErrorText('File deleted successfully.')
+                window.location.reload()
             }catch{
                 setErrorText('Failed to delete file.')
             }
