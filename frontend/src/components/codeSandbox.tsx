@@ -40,7 +40,7 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
       // submission.grade = null
       
       project.tests.forEach((test, index) => {
-        setLog((prevLog) => `${prevLog}Running test on ${test.mainFunction} with input <span style="color: lightblue;">(${inputCode})</span><br>`)
+        setLog((prevLog) => `${prevLog}Running test on <span style="color: lightblue;">${test.mainFunction}</span> with input <span style="color: lightblue;">(${inputCode})</span><br>`)
         let inputCode = test.inputs.map(input => {
             if (isFirstCharacterBracket(input.code) || (typeof input.code === 'string' && !isNaN(Number(input.code))))
                 return input.code
