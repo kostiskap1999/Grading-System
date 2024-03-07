@@ -86,13 +86,17 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
       });
 
 
-    let gradeVar = Math.round(passedTests/project.tests.length*10 * 2) / 2
+    let gradeVar = Math.round(Math.round(passedTests/project.tests.length*10 * 2) / 2)
     setGrade(gradeVar)
-    
     if(grading){
       submission.grade = gradeVar
       await patchSubmission(submission)
     }
+  }
+
+  const removeGrade = async () => {
+    submission.grade = null
+    await patchSubmission(submission)
   }
 
   return (
@@ -102,7 +106,7 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
         <div className="row" style={{justifyContent: "space-between"}}>
           <button className="list-button" onClick={async () => await runCode(false)}>Run tests</button>
           <button className="list-button" onClick={async () => await runCode(true)}>Run tests and grade</button>
-          {/* <button className="list-button" onClick={() => {}}>Remove grade</button> */}
+          <button className="list-button" onClick={async() => await removeGrade()}>Remove grade</button>
         </div>
       </div>
       
