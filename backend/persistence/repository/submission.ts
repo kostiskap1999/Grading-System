@@ -42,4 +42,8 @@ export class SubmissionRepository {
         WHERE id = ?
     `, submission.name, submission.code, this.formatDate(new Date(submission.date)), submission.grade, submission.id)
   }
+
+  async deleteSubmission(submissionId: number) {
+    await this.tm.query(`DELETE FROM submissions WHERE id = ?`, submissionId)
+  }
 }

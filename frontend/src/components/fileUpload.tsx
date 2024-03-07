@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import '../styles/button.scss'
 import '../styles/login.scss'
 import { UserModel } from '../model/UserModel'
-import { fetchProjectUserSubmission, postSubmission } from '../api/submissionsApi'
+import { deleteSubmission, fetchProjectUserSubmission, postSubmission } from '../api/submissionsApi'
 import { SubmissionModel } from '../model/SubmissionModel'
 import { ProjectModel } from '../model/ProjectModel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -72,7 +72,12 @@ export default function FileUpload({ user, project }: FileUploadProps) {
         submission.submiteeId = user.id
         submission.projectId = project.id
         submission.code = fileContents
-        await postSubmission(submission)
+        try{
+            await postSubmission(submission)
+            setErrorText('File uploaded successfully.')
+        }catch{
+            setErrorText('Failed to upload file.')
+        }
       }
 
       const handleDownloadClick = async () => {
@@ -93,7 +98,15 @@ export default function FileUpload({ user, project }: FileUploadProps) {
       }
 
       const handleRemoveClick = async () => {
-        if (file) {}
+        if (file instanceof SubmissionModel) {
+            try{
+                await deleteSubmission(file.id)
+                setErrorText('File deleted successfully.')
+            }catch{
+                setErrorText('Failed to delete file.')
+            }
+            
+        }
       }
       
 
@@ -136,7 +149,7 @@ export default function FileUpload({ user, project }: FileUploadProps) {
                 </>}
                 <div className='row' style={{backgroundColor: "white", minWidth: "400px", maxWidth: "400px", minHeight: "70px"}}>
                     <span className='column center' style={{backgroundColor: 'white', color: "black", flex: 3}}>{(file && file.name) ? `${file.name.length > 20 ? file.name.slice(0, 40) + "..." : file.name}` : "No file selected"}</span>
-                    {project.isWithinDeadline() &&
+                    {project.isWithinDeadline() && file &&
                         <button className="alt-button" style={{flex: 1, padding: "15px"}} onClick={handleUploadClick}>Upload File</button>
                     }
                 </div>

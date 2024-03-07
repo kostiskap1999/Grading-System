@@ -207,6 +207,11 @@ router.route('/submissions').put(async (req, res) => {
   await transact(res, tm => new SubmissionManager(tm).putSubmission(req.body, req.headers.token as string))
 });
 
+// DELETE SUBMISSIONS ROUTER
+router.route('/submissions/:id').delete(async (req, res) => {
+    await transact(res, tm => new SubmissionManager(tm).deleteSubmission(req.params.id, req.headers.token as string))
+  });
+
 
 // *******************
 // ****** TESTS ******

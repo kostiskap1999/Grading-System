@@ -57,4 +57,15 @@ export class SubmissionManager {
     
     return true
   }
+
+  async deleteSubmission(submission: any, token: string) {
+    await dbtoken.checkToken(token)
+    
+    if (!submission)
+      throw new BadRequestError("Incorrect submission")
+    
+    await this.repository.deleteSubmission(submission)
+    
+    return true
+  }
 }
