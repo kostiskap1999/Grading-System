@@ -67,19 +67,19 @@ export default function CodeSandbox({ project, submission }: { project: ProjectM
 
                 if (result == test.output.code){
                 passedTests++
-                setLog((prevLog) => `${prevLog}<span style="color: lightgreen;">Test on ${test.mainFunction} completed.</span> Got <span style="color: lightblue;">${test.output.code}</span> as output<br><br>`);
+                setLog((prevLog) => `${prevLog}<span style="color: lightgreen;">Test completed.</span> Got <span style="color: lightblue;">${test.output.code}</span> as output<br><br>`);
                 }
                 else{
-                setLog((prevLog) => `${prevLog}<span style="color: #ff9999;">Test on ${test.mainFunction} failed.</span> Expected <span style="color: lightblue;">${test.output.code}</span> as output. Got <span style="color: lightblue;">${result}</span> as output.<br><br>`);
+                setLog((prevLog) => `${prevLog}<span style="color: #ff9999;">Test failed.</span> Expected <span style="color: lightblue;">${test.output.code}</span> as output. Got <span style="color: lightblue;">${result}</span> as output.<br><br>`);
                 }
             }else{
-                setLog((prevLog) => `${prevLog}Test on ${test.mainFunction} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
+                setLog((prevLog) => `${prevLog}Test failed. <span style="color: red;">Did not find a return value</span><br><br>`);
             }
         }
         catch (error: any) {
             console.log(error)
             if(error.message === 'result is undefined')
-                setLog((prevLog) => `${prevLog}Test on ${test.mainFunction} failed. <span style="color: red;">Did not find a return value</span><br><br>`);
+                setLog((prevLog) => `${prevLog}Test failed. <span style="color: red;">Did not find a return value</span><br><br>`);
             else
                 setLog((prevLog) => `${prevLog}Could not run code. <span style="color: red;">${error}</span><br><br>`);
         }
